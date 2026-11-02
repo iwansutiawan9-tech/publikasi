@@ -1,1 +1,698 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banner Acara & Portal Tautan — Pengimbasan Gemini Academy (Iwan Sutiawan)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
+  <style>
+    :root {
+      --bg-main: #050914;
+      --bg-panel: rgba(15, 23, 42, 0.80);
+      --bg-card: rgba(30, 41, 59, 0.65);
+      --bg-subtle: rgba(15, 23, 42, 0.75);
+      --border-panel: rgba(148, 163, 184, 0.18);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+    }
+
+    html.light {
+      --bg-main: #f1f5f9;
+      --bg-panel: rgba(255, 255, 255, 0.90);
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --bg-subtle: rgba(226, 232, 240, 0.75);
+      --border-panel: rgba(100, 116, 139, 0.22);
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      transition: background-color 0.35s ease, color 0.35s ease;
+      overflow-x: hidden;
+    }
+
+    .glass-panel {
+      background: var(--bg-panel);
+      backdrop-filter: blur(18px);
+      border-color: var(--border-panel);
+    }
+
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-panel);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.25);
+      border-color: rgba(99, 102, 241, 0.5);
+    }
+
+    .theme-bg-subtle {
+      background: var(--bg-subtle);
+      border-color: var(--border-panel);
+    }
+
+    .theme-text-primary { color: var(--text-primary); }
+    .theme-text-secondary { color: var(--text-secondary); }
+    .theme-text-muted { color: var(--text-muted); }
+
+    .gemini-gradient-text {
+      background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .gemini-border-glow {
+      position: relative;
+    }
+    .gemini-border-glow::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: linear-gradient(135deg, rgba(56,189,248,0.5), rgba(168,85,247,0.5), rgba(236,72,153,0.5));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(2deg); }
+    }
+    .float-slow {
+      animation: floatSlow 5.5s ease-in-out infinite;
+    }
+
+    @keyframes floatReverse {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(10px) rotate(-2deg); }
+    }
+    .float-reverse {
+      animation: floatReverse 6s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.35; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.08); }
+    }
+    .pulse-glow {
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+
+    /* Grid Pattern Overlay */
+    .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="relative select-none bg-grid-pattern">
+
+  <!-- AMBIENT GLOW ORBS -->
+  <div class="pointer-events-none fixed inset-0 overflow-hidden z-0">
+    <div class="absolute -top-40 -left-40 w-[520px] h-[520px] rounded-full bg-indigo-600/20 blur-[110px] pulse-glow"></div>
+    <div class="absolute top-1/4 -right-40 w-[480px] h-[480px] rounded-full bg-fuchsia-600/15 blur-[110px] pulse-glow"></div>
+    <div class="absolute -bottom-40 left-1/3 w-[520px] h-[520px] rounded-full bg-sky-500/15 blur-[110px] pulse-glow"></div>
+  </div>
+
+  <!-- FLOATING NAVIGATION HEADER -->
+  <header class="fixed top-0 inset-x-0 z-40 glass-panel border-b px-4 sm:px-8 py-3 transition-all">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 shrink-0">
+          <i class="fa-solid fa-wand-magic-sparkles text-white text-lg"></i>
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30">
+              GEMINI ACADEMY
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gradient-to-r from-amber-500/15 via-indigo-500/15 to-purple-500/15 border border-amber-500/35 text-[10px] font-semibold text-amber-600 dark:text-amber-300">
+              <i class="fa-solid fa-sparkles text-[9px]"></i>
+              <span>Prompted &amp; Generated by <strong class="font-extrabold">Aby Setiawan</strong></span>
+            </span>
+          </div>
+          <p class="text-xs sm:text-sm font-bold theme-text-primary tracking-tight mt-0.5">
+            Pengimbasan Gemini for Educators &bull; <span class="text-indigo-500 dark:text-indigo-400">SDN 1 Sukahaji</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Page Switcher Pills (Halaman 1 vs Halaman 2) -->
+      <div class="flex items-center gap-1.5 p-1 rounded-2xl theme-bg-subtle border">
+        <a href="#halaman-1" onclick="setActiveNav(1)" id="navBtnPage1" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow transition flex items-center gap-1.5">
+          <i class="fa-solid fa-panorama"></i>
+          <span>1. Banner Acara</span>
+        </a>
+        <a href="#halaman-2" onclick="setActiveNav(2)" id="navBtnPage2" class="px-3.5 py-1.5 rounded-xl text-xs font-bold theme-text-secondary hover:theme-text-primary transition flex items-center gap-1.5">
+          <i class="fa-solid fa-link"></i>
+          <span>2. Portal Tautan (5)</span>
+        </a>
+      </div>
+
+      <!-- Right Controls: Theme & Fullscreen -->
+      <div class="flex items-center gap-2">
+        <button onclick="toggleTheme()" class="px-3.5 py-2 rounded-xl theme-bg-subtle hover:opacity-90 border text-xs font-semibold theme-text-primary flex items-center gap-1.5 transition" title="Ganti Mode Terang / Mode Gelap">
+          <i class="fa-solid fa-sun text-amber-400" id="themeToggleIcon"></i>
+          <span class="hidden md:inline" id="themeToggleLabel">Mode Terang</span>
+        </button>
+
+        <button onclick="toggleFullScreen()" class="px-3 py-2 rounded-xl theme-bg-subtle hover:opacity-90 border text-xs font-semibold theme-text-primary flex items-center gap-1.5 transition" title="Tampilkan Layar Penuh untuk Proyektor / IFP">
+          <i class="fa-solid fa-expand" id="fullscreenIcon"></i>
+          <span class="hidden lg:inline">Layar Penuh</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================================= -->
+  <!-- HALAMAN 1: BANNER UTAMA PANGGUNG MENUTUPI LAYAR PENUH (100% VIEWPORT)   -->
+  <!-- ======================================================================= -->
+  <section id="halaman-1" class="relative z-10 min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-8 pt-24 pb-12">
+    <div class="max-w-7xl w-full mx-auto">
+      <!-- Giant Stage Banner Card -->
+      <div class="glass-panel gemini-border-glow rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-10 lg:p-14 shadow-2xl relative overflow-hidden">
+        
+        <!-- Decorative Floating Background Icons inside Banner -->
+        <div class="pointer-events-none absolute -right-10 -top-10 w-72 h-72 rounded-full bg-gradient-to-br from-blue-500/15 via-purple-500/15 to-pink-500/15 blur-2xl"></div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
+          
+          <!-- Left Column: Grand Event Typography (7 Cols) -->
+          <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
+            <!-- Top Event Pill -->
+            <div class="inline-flex flex-wrap items-center justify-center lg:justify-start gap-2 px-4 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-600 dark:text-indigo-300 text-xs sm:text-sm font-extrabold tracking-wide">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>PENGIMBASAN GEMINI ACADEMY &bull; GEMINI FOR EDUCATORS</span>
+            </div>
+
+            <!-- Main Event Title -->
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.12] theme-text-primary">
+              Mempersiapkan Pembelajaran Inovatif Berbasis <span class="gemini-gradient-text">Kecerdasan Artifisial (AI)</span>
+            </h1>
+
+            <!-- Subtitle / Description -->
+            <p class="text-sm sm:text-base lg:text-lg theme-text-secondary leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
+              Mentransformasi Perencanaan Pembelajaran Mendalam (<em>Deep Learning</em>), Praktik Baik <em>Prompting</em> Kerangka <strong>PARTS</strong>, Pemanfaatan <strong>Gemini Canvas</strong>, <strong>Gems</strong>, dan <strong>NotebookLM</strong> secara Aman, Etis &amp; Bertanggung Jawab.
+            </p>
+
+            <!-- Feature Highlight Pills -->
+            <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1">
+              <span class="px-3 py-1.5 rounded-xl glass-card text-xs font-bold theme-text-primary flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-emerald-500"></i> Privasi Akun belajar.id
+              </span>
+              <span class="px-3 py-1.5 rounded-xl glass-card text-xs font-bold theme-text-primary flex items-center gap-1.5">
+                <i class="fa-solid fa-wand-magic-sparkles text-indigo-500"></i> Kerangka Prompt PARTS
+              </span>
+              <span class="px-3 py-1.5 rounded-xl glass-card text-xs font-bold theme-text-primary flex items-center gap-1.5">
+                <i class="fa-solid fa-laptop-code text-sky-500"></i> Gemini Canvas &amp; Gems
+              </span>
+              <span class="px-3 py-1.5 rounded-xl glass-card text-xs font-bold theme-text-primary flex items-center gap-1.5">
+                <i class="fa-solid fa-book-bookmark text-fuchsia-500"></i> Gemini NotebookLM
+              </span>
+            </div>
+
+            <!-- Action Buttons on Banner -->
+            <div class="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-3.5">
+              <a href="#halaman-2" onclick="setActiveNav(2)" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-extrabold text-sm sm:text-base shadow-xl shadow-indigo-600/30 flex items-center gap-2.5 transition transform hover:-translate-y-0.5 active:scale-95">
+                <span>Buka Portal Tautan &amp; Materi</span>
+                <i class="fa-solid fa-arrow-down animate-bounce"></i>
+              </a>
+
+              <a href="https://iwansutiawan9-tech.github.io/publikasi/gemini-academy/" target="_blank" rel="noopener noreferrer" class="px-5 py-3.5 rounded-2xl glass-card hover:border-indigo-500 theme-text-primary font-bold text-sm sm:text-base flex items-center gap-2 transition">
+                <i class="fa-solid fa-circle-play text-indigo-500"></i>
+                <span>Mulai Presentasi Interaktif</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Visual Stage Emblem & Presenter Identity Card (5 Cols) -->
+          <div class="lg:col-span-5 flex flex-col items-center">
+            <div class="w-full rounded-3xl bg-gradient-to-br from-slate-900/95 via-indigo-950/95 to-purple-950/90 border border-indigo-500/35 p-6 sm:p-8 shadow-2xl text-white relative overflow-hidden">
+              
+              <!-- Floating Decorative Badges -->
+              <div class="flex items-center justify-between mb-6">
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30 flex items-center gap-1.5">
+                  <i class="fa-brands fa-google"></i> Google Workspace for Education
+                </span>
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                  2026
+                </span>
+              </div>
+
+              <!-- Center Animated AI Emblem -->
+              <div class="relative my-4 flex flex-col items-center justify-center">
+                <div class="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center float-slow">
+                  <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 blur-2xl opacity-70 pulse-glow"></div>
+                  <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-slate-950/90 border-2 border-indigo-400/50 flex items-center justify-center shadow-2xl">
+                    <i class="fa-solid fa-wand-magic-sparkles text-5xl sm:text-6xl gemini-gradient-text"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Speaker / Presenter Information -->
+              <div class="mt-6 text-center space-y-3">
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+                  <div class="text-[11px] font-bold uppercase tracking-widest text-sky-300 mb-1">
+                    Narasumber Pengimbasan
+                  </div>
+                  <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+                    Iwan Sutiawan, S.Pd.I.
+                  </h2>
+                  <p class="text-xs sm:text-sm text-indigo-200 font-semibold mt-0.5">
+                    SDN 1 Sukahaji &bull; Pendidik Bersertifikasi Gemini
+                  </p>
+                </div>
+
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-300 flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-chalkboard-user text-amber-400"></i>
+                  <span>Materi Utama: <strong>Heris Apriadi, M.Pd.</strong> (Google Certified Trainer &amp; Innovator)</span>
+                </div>
+
+                <!-- Permanent Creator Legacy Badge -->
+                <div class="pt-1">
+                  <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-400/40 text-[11px] font-semibold text-amber-300 shadow">
+                    <i class="fa-solid fa-sparkles"></i>
+                    <span>Prompted &amp; Generated by <strong class="font-extrabold text-amber-200">Aby Setiawan</strong></span>
+                  </span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Banner Scroll Indicator -->
+        <div class="mt-8 pt-4 border-t border-slate-500/20 flex flex-wrap items-center justify-between gap-4 text-xs theme-text-muted">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-robot text-indigo-500"></i>
+            <span>Didukung Asisten AI Interaktif &bull; Siap Ditampilkan pada Layar Proyektor / IFP Kelas</span>
+          </div>
+          <a href="#halaman-2" onclick="setActiveNav(2)" class="font-bold text-indigo-500 dark:text-indigo-400 hover:underline flex items-center gap-1.5">
+            <span>Gulir ke Halaman 2: Daftar 5 Tautan Materi &amp; Praktik</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================= -->
+  <!-- HALAMAN 2: PORTAL TAUTAN MATERI, INSTRUMEN & KARYA INOVASI              -->
+  <!-- ======================================================================= -->
+  <section id="halaman-2" class="relative z-10 min-h-screen w-full flex flex-col justify-center items-center px-4 sm:px-8 pt-24 pb-16">
+    <div class="max-w-7xl w-full mx-auto space-y-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto space-y-3">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-300 text-xs font-extrabold uppercase tracking-wider">
+          <i class="fa-solid fa-compass"></i>
+          <span>Halaman 2 &bull; Portal Tautan &amp; Instrumen Praktik</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl lg:text-5xl font-black theme-text-primary tracking-tight">
+          Akses Cepat Materi &amp; <span class="gemini-gradient-text">Perangkat Pengimbasan</span>
+        </h2>
+        <p class="text-xs sm:text-base theme-text-secondary leading-relaxed">
+          Klik tombol <strong>Buka Tautan</strong> untuk mengakses langsung, <strong>Salin Link</strong> untuk membagikan ke grup peserta, atau klik <strong>Tampilkan QR &amp; Layar Besar</strong> agar mudah dipindai oleh guru-guru di ruangan.
+        </p>
+      </div>
+
+      <!-- 5 Resource Cards Grid -->
+      <div id="linksGridContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Populated dynamically via JS from the 5 official links -->
+      </div>
+
+      <!-- Quick Copy All Links Banner -->
+      <div class="glass-panel rounded-3xl p-5 sm:p-6 border flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+        <div class="flex items-center gap-4 text-center sm:text-left">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-500 text-xl shrink-0 mx-auto sm:mx-0">
+            <i class="fa-solid fa-share-nodes"></i>
+          </div>
+          <div>
+            <h3 class="text-sm sm:text-base font-extrabold theme-text-primary">Bagikan Seluruh 5 Tautan Sekaligus ke Grup WhatsApp Peserta</h3>
+            <p class="text-xs theme-text-muted mt-0.5">Menyalin rangkuman rapi kelima tautan pengimbasan dalam satu kali klik.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2.5 shrink-0">
+          <button onclick="copyAllLinksBundle()" class="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs sm:text-sm font-extrabold shadow-lg shadow-emerald-600/25 flex items-center gap-2 transition active:scale-95">
+            <i class="fa-solid fa-copy"></i>
+            <span>Salin Semua 5 Tautan</span>
+          </button>
+          <a href="#halaman-1" onclick="setActiveNav(1)" class="px-4 py-3 rounded-xl theme-bg-subtle border text-xs sm:text-sm font-bold theme-text-primary hover:opacity-90 flex items-center gap-1.5 transition">
+            <i class="fa-solid fa-arrow-up"></i>
+            <span>Ke Banner</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Footer Attribution -->
+      <footer class="pt-4 border-t border-slate-500/20 flex flex-wrap items-center justify-between gap-3 text-xs theme-text-muted">
+        <div>
+          <i class="fa-solid fa-school text-indigo-500 mr-1.5"></i>
+          <strong>Iwan Sutiawan, S.Pd.I.</strong> &bull; SDN 1 Sukahaji &bull; Pengimbasan Gemini Academy
+        </div>
+        <div class="flex items-center gap-2">
+          <span>Prompted &amp; Generated by <strong class="text-amber-500 font-bold">Aby Setiawan</strong></span>
+        </div>
+      </footer>
+
+    </div>
+  </section>
+
+  <!-- ======================================================================= -->
+  <!-- MODAL TAMPILAN LAYAR BESAR & QR CODE UNTUK PROYEKTOR / IFP              -->
+  <!-- ======================================================================= -->
+  <div id="spotlightModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-xl w-full p-6 sm:p-8 border shadow-2xl text-center relative">
+      <button onclick="closeSpotlightModal()" class="absolute top-5 right-5 p-2.5 rounded-xl theme-bg-subtle border theme-text-primary hover:opacity-80">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+
+      <div id="spotlightBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 mb-3">
+        TAUTAN PENGIMBASAN
+      </div>
+
+      <h3 id="spotlightTitle" class="text-xl sm:text-2xl font-black theme-text-primary">Judul Tautan</h3>
+      <p id="spotlightDesc" class="text-xs sm:text-sm theme-text-secondary mt-1.5">Deskripsi tautan</p>
+
+      <!-- QR Code Image Preview (via QuickChart / QRServer API with fallback) -->
+      <div class="my-6 flex flex-col items-center justify-center">
+        <div class="p-4 bg-white rounded-3xl shadow-xl border-4 border-indigo-500/30 inline-block">
+          <img id="spotlightQrImage" src="" alt="QR Code Tautan" class="w-48 h-48 sm:w-56 sm:h-56 object-contain mx-auto" onerror="this.style.display='none'" />
+        </div>
+        <span class="text-[11px] theme-text-muted mt-2"><i class="fa-solid fa-camera mr-1"></i> Pindai (Scan) QR Code di atas menggunakan kamera HP Bapak/Ibu</span>
+      </div>
+
+      <!-- Large Readable Link Box -->
+      <div class="p-3.5 rounded-2xl theme-bg-subtle border text-left break-all font-mono text-xs sm:text-sm theme-text-primary select-all" id="spotlightUrlText">
+        https://...
+      </div>
+
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <a id="spotlightOpenBtn" href="#" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/30">
+          <i class="fa-solid fa-up-right-from-square"></i>
+          <span>Buka Tautan Sekarang</span>
+        </a>
+        <button id="spotlightCopyBtn" onclick="" class="px-5 py-2.5 rounded-xl theme-bg-subtle border theme-text-primary text-xs sm:text-sm font-bold flex items-center gap-2 hover:opacity-90">
+          <i class="fa-solid fa-copy text-emerald-500"></i>
+          <span>Salin Tautan</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION (PENGGANTI ALERT) -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 hidden transform transition-all duration-300">
+    <div class="glass-panel border border-emerald-500/50 bg-emerald-950/90 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs sm:text-sm font-bold">
+      <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+      <span id="toastMessage">Tautan berhasil disalin ke papan klip!</span>
+    </div>
+  </div>
+
+  <!-- HIDDEN TEXTAREA FOR CLIPBOARD COPY -->
+  <textarea id="clipboardHelper" class="fixed -left-[9999px] -top-[9999px] opacity-0" readonly></textarea>
+
+  <script>
+    // Data 5 Tautan Resmi Pengimbasan
+    const officialLinks = [
+      {
+        id: 1,
+        badge: "1. MEDIA UTAMA",
+        title: "Presentasi Pengimbasan",
+        subtitle: "Slide Interaktif 42 Halaman + Suara Asisten AI",
+        description: "Aplikasi presentasi interaktif pengimbasan Gemini Academy dilengkapi narasi suara otomatis berpelafalan fonetik, simulasi laboratorium massa jenis, dan kustomisasi pemilik AI.",
+        url: "https://iwansutiawan9-tech.github.io/publikasi/gemini-academy/",
+        icon: "fa-chalkboard-user",
+        accentColor: "from-blue-600 to-indigo-600",
+        badgeClass: "bg-blue-500/15 text-blue-600 dark:text-blue-300 border-blue-500/30"
+      },
+      {
+        id: 2,
+        badge: "2. PUSAT MODUL",
+        title: "Materi Lengkap Gemini",
+        subtitle: "Portal Google Sites Materi Gemini Ciamis",
+        description: "Kumpulan lengkap modul pelatihan, panduan langkah demi langkah, bahan bacaan, serta referensi resmi persiapan ujian sertifikasi Gemini Certified Educator.",
+        url: "https://sites.google.com/view/gemini-ciamis",
+        icon: "fa-book-open-reader",
+        accentColor: "from-indigo-600 to-purple-600",
+        badgeClass: "bg-purple-500/15 text-purple-600 dark:text-purple-300 border-purple-500/30"
+      },
+      {
+        id: 3,
+        badge: "3. KARYA INOVASI AI",
+        title: "Pemanfaatan Prompting AI",
+        subtitle: "Sistem Informasi Digital SDN 1 Sukahaji",
+        description: "Bukti nyata hasil pemanfaatan teknik prompting AI (Gemini Canvas) untuk membangun Sistem Informasi Digital sekolah yang modern, transparan, dan terintegrasi.",
+        url: "https://sdn1sukahaji.github.io/sistem-informasi-digital-sdn1sukahaji/",
+        icon: "fa-laptop-code",
+        accentColor: "from-emerald-600 to-teal-600",
+        badgeClass: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/30"
+      },
+      {
+        id: 4,
+        badge: "4. MEDIA MURID",
+        title: "Lembar Kerja Digital (LKPM)",
+        subtitle: "LKPM Koding Bab 1: Berpikir Komputasional",
+        description: "Contoh Lembar Kerja Peserta Didik berbasis Google Sites pada akun belajar.id untuk melatih keterampilan koding dan berpikir komputasional secara interaktif.",
+        url: "https://sites.google.com/guru.sd.belajar.id/lkpm-koding-bab-1-berpikir-kom?usp=sharing",
+        icon: "fa-file-signature",
+        accentColor: "from-amber-500 to-orange-600",
+        badgeClass: "bg-amber-500/15 text-amber-600 dark:text-amber-300 border-amber-500/30"
+      },
+      {
+        id: 5,
+        badge: "5. ASISTEN KUSTOM (GEMS)",
+        title: "Gemini GEMS Pembuat RPP",
+        subtitle: "Asisten AI Khusus Penyusun RPP / Modul Ajar",
+        description: "Gem kustom yang telah ditanamkan instruksi kerangka PARTS dan pendekatan Pembelajaran Mendalam. Guru cukup mengetikkan topik materi untuk menghasilkan RPP siap pakai.",
+        url: "https://gemini.google.com/gem/1_aDMpdb09jJYDXwRP8VQbHDgvlNnx43J?usp=sharing",
+        icon: "fa-gem",
+        accentColor: "from-fuchsia-600 to-pink-600",
+        badgeClass: "bg-pink-500/15 text-pink-600 dark:text-pink-300 border-pink-500/30"
+      }
+    ];
+
+    window.onload = function () {
+      renderResourceCards();
+      setupScrollObserver();
+    };
+
+    function renderResourceCards() {
+      const container = document.getElementById('linksGridContainer');
+      if (!container) return;
+
+      container.innerHTML = officialLinks.map((item, idx) => {
+        // Kartu ke-1 dibuat menonjol atau seluruh kartu seragam proporsional
+        const spanClass = idx === 0 ? "md:col-span-2 lg:col-span-1" : "";
+        return `
+          <div class="glass-card rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden ${spanClass}">
+            <div>
+              <!-- Card Top Row -->
+              <div class="flex items-center justify-between gap-2 mb-4">
+                <span class="px-3 py-1 rounded-full text-[11px] font-extrabold border ${item.badgeClass}">
+                  ${item.badge}
+                </span>
+                <button onclick="openSpotlightModal(${item.id})" class="p-2 rounded-xl theme-bg-subtle border theme-text-secondary hover:theme-text-primary text-xs transition" title="Tampilkan QR Code & Layar Besar">
+                  <i class="fa-solid fa-qrcode"></i>
+                </button>
+              </div>
+
+              <!-- Icon & Title -->
+              <div class="flex items-start gap-4 mb-3">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br ${item.accentColor} flex items-center justify-center text-white text-xl shadow-lg shrink-0">
+                  <i class="fa-solid ${item.icon}"></i>
+                </div>
+                <div>
+                  <h3 class="text-lg font-extrabold theme-text-primary leading-snug">${item.title}</h3>
+                  <p class="text-xs font-semibold text-indigo-500 dark:text-indigo-400 mt-0.5">${item.subtitle}</p>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <p class="text-xs sm:text-sm theme-text-secondary leading-relaxed mb-4">
+                ${item.description}
+              </p>
+            </div>
+
+            <div>
+              <!-- Clean URL Box -->
+              <div class="p-2.5 rounded-xl theme-bg-subtle border mb-4 flex items-center justify-between gap-2">
+                <div class="truncate text-[11px] font-mono theme-text-muted select-all" title="${item.url}">
+                  <i class="fa-solid fa-link text-indigo-400 mr-1"></i>${item.url}
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="grid grid-cols-2 gap-2.5">
+                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-xl bg-gradient-to-r ${item.accentColor} hover:opacity-95 text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow-md transition">
+                  <span>Buka Tautan</span>
+                  <i class="fa-solid fa-up-right-from-square text-[11px]"></i>
+                </a>
+                <button onclick="copySingleLink(${item.id})" class="px-4 py-2.5 rounded-xl theme-bg-subtle hover:border-indigo-500 border theme-text-primary text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                  <i class="fa-regular fa-copy text-indigo-500"></i>
+                  <span>Salin Link</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Fungsi Salin Tautan menggunakan document.execCommand('copy') sesuai aturan iFrame
+    function copyTextToClipboard(text, successMsg) {
+      const helper = document.getElementById('clipboardHelper');
+      if (!helper) return;
+      helper.value = text;
+      helper.select();
+      helper.setSelectionRange(0, 99999);
+      try {
+        document.execCommand('copy');
+        showToast(successMsg);
+      } catch (err) {
+        showToast("Gagal menyalin otomatis, silakan salin manual.");
+      }
+    }
+
+    function copySingleLink(id) {
+      const found = officialLinks.find(x => x.id === id);
+      if (!found) return;
+      copyTextToClipboard(found.url, `Tautan "${found.title}" berhasil disalin!`);
+    }
+
+    function copyAllLinksBundle() {
+      const summary = [
+        "*PORTAL TAUTAN PENGIMBASAN GEMINI ACADEMY*",
+        "Narasumber: Iwan Sutiawan, S.Pd.I. (SDN 1 Sukahaji)",
+        "--------------------------------------------",
+        ...officialLinks.map(item => `${item.id}. *${item.title}*\n${item.url}`),
+        "--------------------------------------------",
+        "✨ _Prompted & Generated by Aby Setiawan_"
+      ].join("\n\n");
+
+      copyTextToClipboard(summary, "Seluruh 5 tautan pengimbasan berhasil disalin!");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      const label = document.getElementById('toastMessage');
+      if (!toast || !label) return;
+      label.textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3200);
+    }
+
+    // Modal QR & Tampilan Layar Besar
+    function openSpotlightModal(id) {
+      const item = officialLinks.find(x => x.id === id);
+      if (!item) return;
+
+      document.getElementById('spotlightBadge').textContent = item.badge;
+      document.getElementById('spotlightTitle').textContent = item.title;
+      document.getElementById('spotlightDesc').textContent = item.description;
+      document.getElementById('spotlightUrlText').textContent = item.url;
+      document.getElementById('spotlightOpenBtn').href = item.url;
+
+      const qrImg = document.getElementById('spotlightQrImage');
+      qrImg.style.display = 'block';
+      qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=10&data=${encodeURIComponent(item.url)}`;
+
+      const copyBtn = document.getElementById('spotlightCopyBtn');
+      copyBtn.onclick = () => copySingleLink(item.id);
+
+      document.getElementById('spotlightModal').classList.remove('hidden');
+    }
+
+    function closeSpotlightModal() {
+      document.getElementById('spotlightModal').classList.add('hidden');
+    }
+
+    // Navigasi Aktif Halaman 1 vs Halaman 2
+    function setActiveNav(pageNum) {
+      const btn1 = document.getElementById('navBtnPage1');
+      const btn2 = document.getElementById('navBtnPage2');
+      if (!btn1 || !btn2) return;
+
+      if (pageNum === 2) {
+        btn2.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow transition flex items-center gap-1.5";
+        btn1.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold theme-text-secondary hover:theme-text-primary transition flex items-center gap-1.5";
+      } else {
+        btn1.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow transition flex items-center gap-1.5";
+        btn2.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold theme-text-secondary hover:theme-text-primary transition flex items-center gap-1.5";
+      }
+    }
+
+    function setupScrollObserver() {
+      window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY || window.pageYOffset;
+        const halfScreen = window.innerHeight * 0.5;
+        if (scrollY > halfScreen) {
+          setActiveNav(2);
+        } else {
+          setActiveNav(1);
+        }
+      });
+    }
+
+    // Mode Terang & Mode Gelap
+    function toggleTheme() {
+      const htmlEl = document.documentElement;
+      const icon = document.getElementById('themeToggleIcon');
+      const label = document.getElementById('themeToggleLabel');
+
+      if (htmlEl.classList.contains('light')) {
+        htmlEl.classList.remove('light');
+        htmlEl.classList.add('dark');
+        if (icon) icon.className = "fa-solid fa-sun text-amber-400";
+        if (label) label.textContent = "Mode Terang";
+      } else {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+        if (icon) icon.className = "fa-solid fa-moon text-indigo-600";
+        if (label) label.textContent = "Mode Gelap";
+      }
+    }
+
+    // Layar Penuh
+    function toggleFullScreen() {
+      const icon = document.getElementById('fullscreenIcon');
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        if (icon) icon.className = "fa-solid fa-compress";
+      } else {
+        document.exitFullscreen().catch(() => {});
+        if (icon) icon.className = "fa-solid fa-expand";
+      }
+    }
+  </script>
+</body>
+</html>
