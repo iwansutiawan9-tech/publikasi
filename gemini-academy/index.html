@@ -1,1 +1,2352 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pengimbasan Gemini Academy — Iwan Sutiawan & Asisten AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    :root {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      --bg-primary: #070913;
+      --bg-glass: rgba(15, 23, 42, 0.74);
+      --bg-card: rgba(30, 41, 59, 0.56);
+      --bg-card-hover: rgba(30, 41, 59, 0.82);
+      --bg-subtle: rgba(15, 23, 42, 0.9);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: rgba(148, 163, 184, 0.16);
+      --aurora-opacity: 0.16;
+      --analogy-bg: linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, rgba(99, 102, 241, 0.10) 100%);
+      --analogy-text: #fef3c7;
+      --analogy-title: #fcd34d;
+    }
 
+    html.light {
+      --bg-primary: #f1f5f9;
+      --bg-glass: rgba(255, 255, 255, 0.88);
+      --bg-card: rgba(248, 250, 252, 0.92);
+      --bg-card-hover: rgba(255, 255, 255, 1);
+      --bg-subtle: rgba(226, 232, 240, 0.85);
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --border-color: rgba(100, 116, 139, 0.22);
+      --aurora-opacity: 0.22;
+      --analogy-bg: linear-gradient(90deg, rgba(254, 243, 199, 0.9) 0%, rgba(224, 231, 255, 0.75) 100%);
+      --analogy-text: #451a03;
+      --analogy-title: #b45309;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+
+    /* Soft Aurora Background Animations */
+    @keyframes auroraFloat1 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      33% { transform: translate(40px, -30px) scale(1.08); }
+      66% { transform: translate(-25px, 25px) scale(0.95); }
+    }
+    @keyframes auroraFloat2 {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(-45px, 35px) scale(1.1); }
+    }
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
+    @keyframes waveBar {
+      0%, 100% { height: 6px; }
+      50% { height: 24px; }
+    }
+    @keyframes slideEnter {
+      from { opacity: 0; transform: translateY(12px) scale(0.99); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .aurora-blob-1 { animation: auroraFloat1 18s ease-in-out infinite; opacity: var(--aurora-opacity); }
+    .aurora-blob-2 { animation: auroraFloat2 22s ease-in-out infinite; opacity: var(--aurora-opacity); }
+    .float-slow { animation: gentleFloat 4.5s ease-in-out infinite; }
+    .pulse-soft { animation: pulseGlow 3.5s ease-in-out infinite; }
+    .slide-animate { animation: slideEnter 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    /* Audio Visualizer Bars */
+    .sound-bar {
+      width: 4px;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(to top, #38bdf8, #a855f7, #ec4899);
+      transition: height 0.15s ease;
+    }
+    .speaking .sound-bar:nth-child(1) { animation: waveBar 0.55s ease-in-out infinite 0.0s; }
+    .speaking .sound-bar:nth-child(2) { animation: waveBar 0.45s ease-in-out infinite 0.12s; }
+    .speaking .sound-bar:nth-child(3) { animation: waveBar 0.65s ease-in-out infinite 0.24s; }
+    .speaking .sound-bar:nth-child(4) { animation: waveBar 0.40s ease-in-out infinite 0.08s; }
+    .speaking .sound-bar:nth-child(5) { animation: waveBar 0.60s ease-in-out infinite 0.18s; }
+    .speaking .sound-bar:nth-child(6) { animation: waveBar 0.50s ease-in-out infinite 0.30s; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.2); }
+    ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.45); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.75); }
+
+    .gemini-gradient-text {
+      background: linear-gradient(135deg, #3b82f6 0%, #9333ea 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .glass-panel {
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      transition: all 0.25s ease;
+    }
+    .glass-card:hover {
+      border-color: rgba(99, 102, 241, 0.45);
+      background: var(--bg-card-hover);
+      box-shadow: 0 8px 25px -5px rgba(99, 102, 241, 0.12);
+    }
+
+    .theme-text-primary { color: var(--text-primary); }
+    .theme-text-secondary { color: var(--text-secondary); }
+    .theme-text-muted { color: var(--text-muted); }
+    .theme-bg-subtle { background-color: var(--bg-subtle); border-color: var(--border-color); }
+
+    .analogy-box {
+      background: var(--analogy-bg);
+      color: var(--analogy-text);
+    }
+    .analogy-title {
+      color: var(--analogy-title);
+    }
+
+    /* Light mode adaptive adjustments for visual right-hand boxes */
+    html.light .visual-box-dark {
+      background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 50%, #fdf4ff 100%) !important;
+      border-color: rgba(99, 102, 241, 0.28) !important;
+      color: #0f172a !important;
+      box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.15);
+    }
+    html.light .visual-box-dark .text-white {
+      color: #0f172a !important;
+    }
+    html.light .visual-box-dark .text-slate-300,
+    html.light .visual-box-dark .text-slate-200 {
+      color: #334155 !important;
+    }
+    html.light .visual-box-dark .text-slate-400 {
+      color: #475569 !important;
+    }
+    html.light .visual-box-dark .bg-slate-900,
+    html.light .visual-box-dark .bg-slate-900\/90,
+    html.light .visual-box-dark .bg-slate-900\/80,
+    html.light .visual-box-dark .bg-slate-950\/80,
+    html.light .visual-box-dark .bg-slate-800\/90,
+    html.light .visual-box-dark .bg-slate-800\/80,
+    html.light .visual-box-dark .bg-slate-800\/70 {
+      background-color: rgba(255, 255, 255, 0.9) !important;
+      border-color: rgba(148, 163, 184, 0.35) !important;
+    }
+    html.light .visual-box-dark .bg-slate-700\/80,
+    html.light .visual-box-dark .bg-slate-700 {
+      background-color: #e2e8f0 !important;
+      color: #0f172a !important;
+    }
+    html.light .visual-box-dark .text-indigo-300,
+    html.light .visual-box-dark .text-indigo-200 {
+      color: #4338ca !important;
+    }
+    html.light .visual-box-dark .text-sky-300,
+    html.light .visual-box-dark .text-blue-300 {
+      color: #0369a1 !important;
+    }
+    html.light .visual-box-dark .text-purple-300 {
+      color: #6b21a8 !important;
+    }
+    html.light .visual-box-dark .text-emerald-300,
+    html.light .visual-box-dark .text-emerald-200,
+    html.light .visual-box-dark .text-teal-200 {
+      color: #047857 !important;
+    }
+    html.light .visual-box-dark .text-amber-200,
+    html.light .visual-box-dark .text-amber-300 {
+      color: #b45309 !important;
+    }
+    html.light .visual-box-dark .text-rose-200 {
+      color: #be123c !important;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative select-none">
+
+  <!-- AMBIENT AURORA BACKGROUND -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="aurora-blob-1 absolute -top-28 -left-28 w-[34rem] h-[34rem] rounded-full bg-blue-500 blur-[110px]"></div>
+    <div class="aurora-blob-2 absolute top-1/4 -right-28 w-[36rem] h-[36rem] rounded-full bg-purple-500 blur-[120px]"></div>
+    <div class="aurora-blob-1 absolute -bottom-32 left-1/3 w-[32rem] h-[32rem] rounded-full bg-teal-400 blur-[110px]"></div>
+  </div>
+
+  <!-- HIDDEN AUDIO ELEMENT FOR MP3 RECORDINGS & FILE INPUT FOR LOCAL MP3 TESTING -->
+  <audio id="recordedAudioPlayer" preload="auto"></audio>
+  <input type="file" id="localMp3FolderInput" webkitdirectory directory multiple accept="audio/*" class="hidden" onchange="handleLocalAudioFiles(this.files)" />
+  <input type="file" id="localSingleMp3Input" multiple accept="audio/*" class="hidden" onchange="handleLocalAudioFiles(this.files)" />
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="relative z-20 glass-panel border-b px-4 lg:px-8 py-2.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Left: Brand & Presenter Info -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-indigo-500/25 shrink-0">
+          <i class="fa-solid fa-wand-magic-sparkles text-white text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-500 dark:text-indigo-300 border border-indigo-500/30" id="headerModuleBadge">
+              PEMBUKAAN
+            </span>
+            <span class="text-xs theme-text-muted hidden sm:inline">Pengimbasan Gemini Academy</span>
+          </div>
+          <h1 class="text-sm sm:text-base font-bold theme-text-primary tracking-tight">
+            Iwan Sutiawan <span class="theme-text-muted font-normal text-xs sm:text-sm">(SDN 1 Sukahaji) &amp; Asisten AI</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- Center: AI Assistant & Quick Voice Mode Selector -->
+      <div class="flex flex-wrap items-center gap-2">
+        <div id="aiAssistantWidget" class="flex items-center gap-2.5 px-3 py-1.5 rounded-2xl theme-bg-subtle border shadow-inner">
+          <div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shrink-0">
+            <i class="fa-solid fa-robot text-white text-xs" id="narratorAvatarIcon"></i>
+            <span id="aiPulseRing" class="hidden absolute inset-0 rounded-full border-2 border-sky-400 animate-ping"></span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-[11px] font-bold text-indigo-600 dark:text-indigo-300 leading-none" id="narratorTitleLabel">Asisten AI Pak Iwan</span>
+            <span id="aiStatusText" class="text-[10px] theme-text-muted mt-0.5">Siap Memandu Materi</span>
+          </div>
+          <div id="soundWaveContainer" class="flex items-center gap-1 h-6 px-1">
+            <div class="sound-bar"></div>
+            <div class="sound-bar"></div>
+            <div class="sound-bar"></div>
+            <div class="sound-bar"></div>
+            <div class="sound-bar"></div>
+            <div class="sound-bar"></div>
+          </div>
+        </div>
+
+        <!-- Quick Voice Mode Selector Dropdown -->
+        <div class="flex items-center">
+          <select id="quickVoiceModeSelect" onchange="handleQuickVoiceModeChange(this.value)" class="rounded-xl theme-bg-subtle border text-xs font-semibold theme-text-primary px-3 py-2 focus:outline-none focus:border-indigo-500 cursor-pointer transition" title="Pilih Sumber Suara Presentasi">
+            <option value="AI_FEMALE">🎙️ AI Perempuan (Fonetik Halus)</option>
+            <option value="AI_MALE">🎙️ AI Laki-Laki (Fonetik Halus)</option>
+            <option value="MP3_RECORDING">👨‍🏫 Suara Asli Pak Iwan (MP3)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Right: Utility Controls (Theme Toggle, Voice Config, Script, Slide Drawer, Fullscreen) -->
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <!-- Light / Dark Theme Toggle Button -->
+        <button onclick="toggleTheme()" id="btnThemeToggle" class="px-3 py-2 rounded-xl theme-bg-subtle hover:opacity-90 border text-xs font-semibold theme-text-primary flex items-center gap-1.5 transition" title="Ganti Mode Terang / Mode Gelap">
+          <i class="fa-solid fa-sun text-amber-400" id="themeToggleIcon"></i>
+          <span class="hidden xl:inline" id="themeToggleLabel">Mode Terang</span>
+        </button>
+
+        <!-- Voice & MP3 Settings Modal Button -->
+        <button onclick="toggleVoiceModal()" class="px-3 py-2 rounded-xl theme-bg-subtle hover:opacity-90 border text-xs font-semibold theme-text-primary flex items-center gap-1.5 transition" title="Pengaturan Suara & File MP3">
+          <i class="fa-solid fa-sliders text-indigo-500"></i>
+          <span class="hidden md:inline">Atur Suara</span>
+        </button>
+
+        <!-- Teleprompter Toggle -->
+        <button id="btnToggleScript" onclick="toggleTeleprompter()" class="px-3 py-2 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-700 dark:text-indigo-200 border border-indigo-500/40 text-xs font-semibold flex items-center gap-1.5 transition" title="Tampilkan/Sembunyikan Naskah Narasi">
+          <i class="fa-solid fa-closed-captioning text-indigo-500 dark:text-indigo-400"></i>
+          <span class="hidden lg:inline">Naskah</span>
+        </button>
+
+        <!-- Slide Index Drawer Toggle -->
+        <button onclick="toggleSlideDrawer()" class="px-3 py-2 rounded-xl theme-bg-subtle hover:opacity-90 border text-xs font-bold theme-text-primary flex items-center gap-1.5 transition" title="Daftar Semua 42 Slide">
+          <i class="fa-solid fa-table-cells-large text-sky-500"></i>
+          <span id="slideCounterBadge">1 / 42</span>
+        </button>
+
+        <!-- Fullscreen Button -->
+        <button onclick="toggleFullScreen()" class="p-2 rounded-xl theme-bg-subtle hover:opacity-90 border text-xs theme-text-primary transition" title="Layar Penuh">
+          <i class="fa-solid fa-expand" id="fullscreenIcon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="w-full h-1 bg-slate-400/20 dark:bg-slate-800/80 mt-2 rounded-full overflow-hidden">
+      <div id="slideProgressBar" class="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-300" style="width: 2.38%"></div>
+    </div>
+  </header>
+
+  <!-- MAIN PRESENTATION STAGE -->
+  <main class="relative z-10 flex-1 flex flex-col justify-center px-4 sm:px-6 lg:px-10 py-3 max-w-7xl w-full mx-auto overflow-hidden">
+    <!-- Dynamic Slide Container -->
+    <div id="slideStage" class="glass-panel rounded-3xl p-5 sm:p-7 lg:p-9 shadow-2xl min-h-[470px] lg:min-h-[520px] flex flex-col justify-between relative overflow-hidden">
+      <!-- Populated dynamically by JS -->
+    </div>
+
+    <!-- TELEPROMPTER / LIVE NARRATION SCRIPT PANEL -->
+    <div id="teleprompterPanel" class="mt-3 glass-panel rounded-2xl p-3.5 border border-indigo-500/30 transition-all duration-300">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300" id="teleprompterHeaderTitle">
+            Naskah Suara Asisten AI Pak Iwan (Pelafalan Fonetik Aktif)
+          </span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="audioSourceIndicator" class="text-[11px] font-semibold px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-600 dark:text-indigo-300">
+            Mode: AI Perempuan (Fonetik)
+          </span>
+          <span id="sentenceProgressBadge" class="text-[11px] theme-text-muted">Kalimat 0 / 0</span>
+        </div>
+      </div>
+      <div id="teleprompterText" class="text-xs sm:text-sm theme-text-secondary leading-relaxed max-h-24 overflow-y-auto pr-2 select-text">
+        Memuat naskah narasi...
+      </div>
+    </div>
+  </main>
+
+  <!-- BOTTOM CONTROL BAR -->
+  <footer class="relative z-20 glass-panel border-t px-4 lg:px-8 py-2.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <!-- Left: Slide Navigation -->
+      <div class="flex items-center gap-2">
+        <button onclick="prevSlide()" id="btnPrevSlide" class="px-4 py-2.5 rounded-xl theme-bg-subtle hover:opacity-90 disabled:opacity-40 theme-text-primary text-xs sm:text-sm font-semibold flex items-center gap-2 border transition">
+          <i class="fa-solid fa-chevron-left"></i>
+          <span>Sebelumnya</span>
+        </button>
+        <button onclick="nextSlide()" id="btnNextSlide" class="px-4 py-2.5 rounded-xl theme-bg-subtle hover:opacity-90 disabled:opacity-40 theme-text-primary text-xs sm:text-sm font-semibold flex items-center gap-2 border transition">
+          <span>Berikutnya</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Center: Primary Audio Narration Controls -->
+      <div class="flex items-center gap-2.5">
+        <button onclick="toggleNarration()" id="btnPlayNarration" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-xs sm:text-sm font-bold flex items-center gap-2.5 shadow-lg shadow-indigo-600/30 transition transform active:scale-95">
+          <i class="fa-solid fa-volume-high" id="playNarrationIcon"></i>
+          <span id="playNarrationLabel">Putar Suara Presentasi</span>
+        </button>
+
+        <button onclick="replayNarration()" class="p-2.5 rounded-xl theme-bg-subtle hover:opacity-90 theme-text-primary border text-xs sm:text-sm transition" title="Ulangi Suara Slide Ini">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </div>
+
+      <!-- Right: Auto-Present Toggle -->
+      <div class="flex items-center gap-3">
+        <label class="flex items-center gap-2 cursor-pointer text-xs sm:text-sm theme-text-primary theme-bg-subtle px-3.5 py-2 rounded-xl border">
+          <input type="checkbox" id="autoAdvanceToggle" onchange="toggleAutoAdvance()" class="sr-only peer">
+          <div class="w-9 h-5 bg-slate-500 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all relative peer-checked:bg-emerald-500"></div>
+          <span class="font-semibold text-xs">Otomatis Lanjut Slide</span>
+        </label>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SLIDE DRAWER MODAL (42 SLIDES OVERVIEW) -->
+  <div id="slideDrawerModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-5xl w-full max-h-[85vh] flex flex-col border shadow-2xl overflow-hidden">
+      <div class="p-5 border-b border-slate-500/20 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold theme-text-primary flex items-center gap-2">
+            <i class="fa-solid fa-layer-group text-indigo-500"></i>
+            Daftar Lengkap 42 Slide Pengimbasan Gemini Academy
+          </h2>
+          <p class="text-xs theme-text-muted">Klik pada slide mana saja untuk langsung melompat ke bagian tersebut</p>
+        </div>
+        <button onclick="toggleSlideDrawer()" class="p-2 rounded-xl theme-bg-subtle border theme-text-primary">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <!-- Filter Tabs -->
+      <div class="px-5 py-2.5 theme-bg-subtle border-b flex flex-wrap gap-2" id="drawerFilterTabs">
+        <button onclick="filterDrawer('ALL')" class="px-3 py-1 rounded-lg bg-indigo-600 text-white text-xs font-semibold">Semua (42)</button>
+        <button onclick="filterDrawer('MODUL 01')" class="px-3 py-1 rounded-lg glass-card theme-text-primary text-xs font-medium">Modul 01 (Pengantar AI)</button>
+        <button onclick="filterDrawer('MODUL 02')" class="px-3 py-1 rounded-lg glass-card theme-text-primary text-xs font-medium">Modul 02 (Etika & Keamanan)</button>
+        <button onclick="filterDrawer('MODUL 03')" class="px-3 py-1 rounded-lg glass-card theme-text-primary text-xs font-medium">Modul 03 (belajar.id & PARTS)</button>
+        <button onclick="filterDrawer('MODUL 04')" class="px-3 py-1 rounded-lg glass-card theme-text-primary text-xs font-medium">Modul 04 (Transformasi & Fitur)</button>
+        <button onclick="filterDrawer('SUPLEMEN')" class="px-3 py-1 rounded-lg glass-card theme-text-primary text-xs font-medium">Suplemen (Gemini Notebook)</button>
+      </div>
+      <div id="slideDrawerGrid" class="p-5 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- VOICE & HYBRID AUDIO SETTINGS MODAL -->
+  <div id="voiceModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-panel rounded-3xl max-w-xl w-full p-6 border shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-500/20">
+        <h3 class="text-base font-bold theme-text-primary flex items-center gap-2">
+          <i class="fa-solid fa-microphone-lines text-indigo-500"></i>
+          Pengaturan Suara Hibrida (Rekaman MP3 &amp; AI Fonetik)
+        </h3>
+        <button onclick="toggleVoiceModal()" class="theme-text-muted hover:opacity-80">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 mt-4 text-xs">
+        <!-- 1. Pilih Mode Suara Utama -->
+        <div class="p-3.5 rounded-2xl glass-card">
+          <label class="block font-bold theme-text-primary mb-2">1. Pilih Mode Suara Presentasi:</label>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <button onclick="handleQuickVoiceModeChange('AI_FEMALE')" id="modalBtnAiFemale" class="p-2.5 rounded-xl border text-left transition flex flex-col justify-between">
+              <div class="font-bold text-indigo-500"><i class="fa-solid fa-person-dress mr-1"></i> AI Perempuan</div>
+              <div class="text-[11px] theme-text-muted mt-1">Suara Google ID / Gadis + Ejaan Fonetik</div>
+            </button>
+            <button onclick="handleQuickVoiceModeChange('AI_MALE')" id="modalBtnAiMale" class="p-2.5 rounded-xl border text-left transition flex flex-col justify-between">
+              <div class="font-bold text-sky-500"><i class="fa-solid fa-person mr-1"></i> AI Laki-Laki</div>
+              <div class="text-[11px] theme-text-muted mt-1">Andika / Karakter Suara Bariton Laki-Laki</div>
+            </button>
+            <button onclick="handleQuickVoiceModeChange('MP3_RECORDING')" id="modalBtnMp3" class="p-2.5 rounded-xl border text-left transition flex flex-col justify-between">
+              <div class="font-bold text-emerald-500"><i class="fa-solid fa-file-audio mr-1"></i> Rekaman Pak Iwan</div>
+              <div class="text-[11px] theme-text-muted mt-1">Memutar file <code>audio/slide1.mp3</code> dst.</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Pengaturan Folder Rekaman MP3 Asli Pak Iwan -->
+        <div class="p-3.5 rounded-2xl glass-card space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold theme-text-primary"><i class="fa-solid fa-folder-open text-emerald-500 mr-1.5"></i> Opsi Rekaman Suara Asli Pak Iwan (GitHub / Lokal)</span>
+            <span id="localMp3CountBadge" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-500 text-[10px] font-bold">Path: audio/slide[N].mp3</span>
+          </div>
+          <p class="text-[11px] theme-text-secondary leading-relaxed">
+            Saat diunggah ke GitHub Pages, cukup buat folder bernama <code>audio</code> di sebelah <code>index.html</code> dan simpan rekaman dengan nama <code>slide1.mp3</code> s.d. <code>slide42.mp3</code>. Jika file MP3 untuk suatu slide belum ada, sistem otomatis beralih membacakan dengan Suara AI Fonetik agar presentasi tetap berjalan mulus!
+          </p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            <button onclick="document.getElementById('localMp3FolderInput').click()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-[11px] flex items-center gap-1.5">
+              <i class="fa-solid fa-folder-plus"></i> Pilih Folder Audio Lokal
+            </button>
+            <button onclick="document.getElementById('localSingleMp3Input').click()" class="px-3 py-1.5 rounded-xl theme-bg-subtle border theme-text-primary font-semibold text-[11px] flex items-center gap-1.5">
+              <i class="fa-solid fa-file-arrow-up"></i> Pilih File MP3 (slide1.mp3, dll)
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Pengaturan Mesin Suara AI & Fonetik -->
+        <div class="p-3.5 rounded-2xl glass-card space-y-3">
+          <div class="flex items-center justify-between">
+            <label class="font-bold theme-text-primary">2. Mesin Suara TTS Perangkat &amp; Kamus Fonetik:</label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" id="phoneticToggleCheckbox" checked onchange="togglePhoneticDictionary(this.checked)" class="accent-indigo-500">
+              <span class="text-[11px] font-semibold text-indigo-500">Aktifkan Pelafalan Inggris Fonetik</span>
+            </label>
+          </div>
+
+          <select id="voiceSelect" onchange="handleManualVoiceSelect()" class="w-full rounded-xl theme-bg-subtle border text-xs theme-text-primary p-2.5 focus:outline-none focus:border-indigo-500">
+            <option value="">Mendeteksi suara bahasa Indonesia...</option>
+          </select>
+
+          <div id="maleVoiceHintBox" class="p-2.5 rounded-xl bg-sky-500/10 border border-sky-500/30 text-[11px] theme-text-secondary">
+            <i class="fa-solid fa-circle-info text-sky-400 mr-1"></i>
+            <strong>Info Suara Laki-Laki:</strong> Jika di laptop hanya terdeteksi <em>Google Bahasa Indonesia</em> (Perempuan), memilih mode <strong>AI Laki-Laki</strong> akan otomatis menyesuaikan intonasi <em>pitch</em> menjadi bariton yang lebih berat. Untuk memasang suara laki-laki asli di Windows, buka <em>Settings &rarr; Time &amp; Language &rarr; Speech &rarr; Add Voices &rarr; Bahasa Indonesia (Microsoft Andika)</em>.
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold theme-text-secondary mb-1">Kecepatan Bicara (<span id="rateValueLabel">1.00x</span>):</label>
+              <input type="range" id="rateRange" min="0.80" max="1.25" step="0.05" value="1.0" onchange="handleRateChange(this.value)" class="w-full accent-indigo-500">
+            </div>
+            <div>
+              <label class="block font-semibold theme-text-secondary mb-1">Nada Suara / Pitch (<span id="pitchValueLabel">1.00</span>):</label>
+              <input type="range" id="pitchRange" min="0.70" max="1.20" step="0.05" value="1.0" onchange="handlePitchChange(this.value)" class="w-full accent-indigo-500">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 flex justify-end gap-2">
+        <button onclick="testVoiceSample()" class="px-4 py-2 rounded-xl bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-500 border border-indigo-500/40 text-xs font-bold">
+          <i class="fa-solid fa-play mr-1"></i> Tes Pelafalan Fonetik
+        </button>
+        <button onclick="toggleVoiceModal()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">
+          Simpan &amp; Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLETE 42 SLIDES DATA, PHONETIC ENGINE, & HYBRID AUDIO SCRIPT -->
+  <script>
+    // =========================================================================
+    // 1. KAMUS PELAFALAN FONETIK BAHASA INGGRIS -> LIDAH INDONESIA NATURAL
+    // =========================================================================
+    let usePhoneticDictionary = true;
+
+    const phoneticReplacements = [
+      // Frasa Panjang & Istilah Spesifik terlebih dahulu agar tidak terpotong
+      [/\bGoogle Workspace for Education\b/gi, "Gugel Wokspeis for Edukesyen"],
+      [/\bGoogle AI Pro for Education\b/gi, "Gugel E-Ai Pro for Edukesyen"],
+      [/\bGoogle Certified Trainer\b/gi, "Gugel Sertifaid Treiner"],
+      [/\bGoogle Certified Innovator\b/gi, "Gugel Sertifaid Inovetor"],
+      [/\bGemini Certified Educator\b/gi, "Jeminai Sertifaid Eduketor"],
+      [/\bGemini for Educators\b/gi, "Jeminai for Eduketors"],
+      [/\bGemini Educator\b/gi, "Jeminai Eduketor"],
+      [/\bGemini Academy\b/gi, "Jeminai Akademi"],
+      [/\bGemini Notebook\b/gi, "Jeminai Notbuk"],
+      [/\bNotebookLM\b/gi, "Notbuk El Em"],
+      [/\bGemini Canvas\b/gi, "Jeminai Kanvas"],
+      [/\bArtificial Intelligence\b/gi, "Artifisyel Intelijens"],
+      [/\bLarge Language Models\b/gi, "Larj Lengwij Models"],
+      [/\bLarge Language Model\b/gi, "Larj Lengwij Model"],
+      [/\bMachine Learning\b/gi, "Mesin Lerning"],
+      [/\bGenerative AI\b/gi, "Jeneratif E-Ai"],
+      [/\bGen AI\b/gi, "Jen E-Ai"],
+      [/\bHuman-in-the-loop\b/gi, "Hyumen in de lup"],
+      [/\bHuman in the loop\b/gi, "Hyumen in de lup"],
+      [/\bBias and Fairness\b/gi, "Bayes end Fernes"],
+      [/\bsystematically prejudiced\b/gi, "sistematikeli prejedist"],
+      [/\bSpeech Recognition\b/gi, "Spic Rekognisyen"],
+      [/\bFrequently Asked Questions\b/gi, "Frikwentli Ask Kwesyens"],
+      [/\bmixed-ability classroom\b/gi, "miks ebiliti klesrum"],
+      [/\bmixed ability classroom\b/gi, "miks ebiliti klesrum"],
+      [/\bdifferent reading abilities\b/gi, "diferen riding ebilites"],
+      [/\badaptive teaching\b/gi, "adaptif ticing"],
+      [/\bDeep Learning\b/gi, "Dip Lerning"],
+      [/\bGuided Learning\b/gi, "Gaided Lerning"],
+      [/\bGuided learning\b/gi, "Gaided lerning"],
+      [/\bAudio Overviews\b/gi, "Audio Overvyus"],
+      [/\bAudio Overview\b/gi, "Audio Overvyu"],
+      [/\bStudy Guide\b/gi, "Stadi Gaid"],
+      [/\bVersion History\b/gi, "Versyen Histori"],
+      [/\bversion history\b/gi, "versyen histori"],
+      [/\bCreate Image\b/gi, "Krieit Imej"],
+      [/\bCreate image\b/gi, "Krieit imej"],
+      [/\bGenerate images\b/gi, "Jenereit imejis"],
+      [/\bCreate music\b/gi, "Krieit myuzik"],
+      [/\bCreate custom quizzes\b/gi, "Krieit kastem kwizis"],
+      [/\bCreate HTML websites\b/gi, "Krieit Ha-Te-Em-El websaits"],
+      [/\bCreate interactive infographics\b/gi, "Krieit interaktif infografiks"],
+      [/\bCreate Docs and apps\b/gi, "Krieit Doks end eps"],
+      [/\bRecent Chats\b/gi, "Risen Cets"],
+      [/\bRecent chats\b/gi, "Risen cets"],
+      [/\bNew Chat\b/gi, "Nyu Cet"],
+      [/\bNew chat\b/gi, "Nyu cet"],
+      [/\bNew Gem\b/gi, "Nyu Jem"],
+      [/\bSide Menu\b/gi, "Said Menyu"],
+      [/\bside menu\b/gi, "said menyu"],
+      [/\bUpload files\b/gi, "Aplod fails"],
+      [/\bGoogle Drive\b/gi, "Gugel Draif"],
+      [/\bGoogle Docs\b/gi, "Gugel Doks"],
+      [/\bGoogle Slides\b/gi, "Gugel Slaids"],
+      [/\bGoogle Classroom\b/gi, "Gugel Klesrum"],
+      [/\bGoogle Search\b/gi, "Gugel Serc"],
+      [/\bbelajar\.id\b/gi, "belajar dot ai di"],
+      [/\bgemini\.google\.com\b/gi, "jeminai dot gugel dot kom"],
+      [/\bnotebooklm\.google\.com\b/gi, "notbuk el em dot gugel dot kom"],
+      [/\bbit\.ly\/asistenpm\b/gi, "bit dot li garis miring asisten pe em"],
+      [/\bwriter's block\b/gi, "raiters blok"],
+      [/\bice breaking\b/gi, "ais breking"],
+      [/\bcross-referencing\b/gi, "kros referensing"],
+      [/\bbrainstorming\b/gi, "breinstorming"],
+      [/\bHallucinations\b/gi, "Halusinesyens"],
+      [/\bHallucination\b/gi, "Halusinesyen"],
+      [/\bGlitches\b/gi, "Glicis"],
+      [/\bAccurate\b/gi, "Ekyuret"],
+      [/\bAligned\b/gi, "Elaind"],
+      [/\bAppropriate\b/gi, "Epropriet"],
+      [/\bRecipients\b/gi, "Resipiens"],
+      [/\bStructure\b/gi, "Strakcer"],
+      [/\bTheme\b/gi, "Tim"],
+      [/\bAim\b/gi, "Eim"],
+      [/\bPrompting\b/gi, "Promting"],
+      [/\bprompting\b/gi, "promting"],
+      [/\bPrompts\b/gi, "Proms"],
+      [/\bPrompt\b/gi, "Prom"],
+      [/\bprompt\b/gi, "prom"],
+      [/\bGemini\b/gi, "Jeminai"],
+      [/\bGoogle\b/gi, "Gugel"],
+      [/\bWorkspace\b/gi, "Wokspeis"],
+      [/\bCanvas\b/gi, "Kanvas"],
+      [/\bGems\b/gi, "Jems"],
+      [/\bGem\b/gi, "Jem"],
+      [/\bCustom\b/gi, "Kastem"],
+      [/\bcustom\b/gi, "kastem"],
+      [/\bCoding\b/gi, "Koding"],
+      [/\bcoding\b/gi, "koding"],
+      [/\bPodcast\b/gi, "Podkes"],
+      [/\bpodcast\b/gi, "podkes"],
+      [/\bOutline\b/gi, "Autlain"],
+      [/\boutline\b/gi, "autlain"],
+      [/\bChip\b/gi, "Cip"],
+      [/\bchip\b/gi, "cip"],
+      [/\bTools\b/gi, "Tuls"],
+      [/\btools\b/gi, "tuls"],
+      [/\bTool\b/gi, "Tul"],
+      [/\btool\b/gi, "tul"],
+      [/\bTrue\b/gi, "Tru"],
+      [/\bFalse\b/gi, "Fols"],
+      [/\bFAQ\b/g, "Ef Ei Kyu"],
+      [/\bLLM\b/g, "El-El-Em"],
+      [/\bML\b/g, "Em-El"],
+      [/\bAI\b/g, "E-Ai"],
+      [/\bPDF\b/g, "Pe-De-Ef"],
+      [/\bGmail\b/gi, "Jimeil"],
+      [/\bemail\b/gi, "imeil"],
+      [/\bEmail\b/gi, "Imeil"],
+      [/\bwebsite\b/gi, "websait"],
+      [/\bWebsite\b/gi, "Websait"],
+      [/\boffline\b/gi, "oflain"],
+      [/\bonline\b/gi, "onlain"],
+      [/\bdownload\b/gi, "daunlod"],
+      [/\bdownloaded\b/gi, "didaunlod"],
+      [/\bfile\b/gi, "fail"],
+      [/\bFile\b/gi, "Fail"],
+      [/\bgame\b/gi, "geim"],
+      [/\bGame\b/gi, "Geim"],
+      [/\bslide\b/gi, "slaid"],
+      [/\bSlide\b/gi, "Slaid"],
+      [/\bchat\b/gi, "cet"],
+      [/\bChat\b/gi, "Cet"],
+      [/\bchatbot\b/gi, "cetbot"],
+      [/\bChatbot\b/gi, "Cetbot"]
+    ];
+
+    function toPhoneticSpeech(text) {
+      if (!usePhoneticDictionary) return text;
+      let processed = text;
+      for (const [regex, replacement] of phoneticReplacements) {
+        processed = processed.replace(regex, replacement);
+      }
+      return processed;
+    }
+
+    // =========================================================================
+    // 2. DATA LENGKAP 42 SLIDE PRESENTASI PENGIMBASAN GEMINI ACADEMY
+    // =========================================================================
+    const slidesData = [
+      // SLIDE 1
+      {
+        id: 1,
+        module: "PEMBUKAAN",
+        timeTag: "Pengimbasan Gemini Academy",
+        title: "Mempersiapkan Pembelajaran Inovatif Berbasis AI",
+        subtitle: "Kolaborasi Harmonis Pendidik Hebat & Asisten Kecerdasan Artifisial",
+        visualType: "hero-cover",
+        badge: "Slide 1 dari 42",
+        analogy: "Analogi Pilot & Kopilot: Bapak dan Ibu Guru adalah Pilot Utama yang memegang kendali empati, hati, dan karakter siswa. AI adalah Kopilot cerdas yang membantu meringankan administrasi dan memperkaya ide pembelajaran.",
+        highlights: [
+          { icon: "fa-chalkboard-user", title: "Pemateri Pengimbasan", desc: "Iwan Sutiawan (SDN 1 Sukahaji) — Berbagi praktik baik pemanfaatan ekosistem Google Gemini untuk pendidik." },
+          { icon: "fa-robot", title: "Pemandu Suara Interaktif", desc: "Asisten AI Pak Iwan — Mendampingi penjelasan materi secara sistematis, humanis, dan bebas miskonsepsi." },
+          { icon: "fa-award", title: "Sumber Materi Utama", desc: "Adaptasi & Pengayaan Materi Gemini Academy oleh Heris Apriadi, M.Pd. (Google Certified Trainer & Innovator, SDN 3 Sukahurip)." }
+        ],
+        narration: "Assalamualaikum warahmatullahi wabarakatuh, salam sejahtera, dan selamat pagi Bapak serta Ibu Guru Hebat semuanya! Perkenalkan, saya adalah Asisten AI dari Bapak Iwan Sutiawan dari SD Negeri Satu Sukahaji. Hari ini, saya ditugaskan oleh Pak Iwan untuk menemani beliau memandu sesi pengimbasan Gemini Academy: Mempersiapkan Pembelajaran Inovatif Berbasis AI, mengadaptasi materi dari Bapak Heris Apriadi. Bapak dan Ibu, kehadiran saya di layar ini bukanlah untuk menggantikan peran Pak Iwan maupun Bapak Ibu di kelas. Analogi sederhananya: Bapak dan Ibu adalah pilot utama yang memegang kendali penuh atas empati, hati, dan karakter siswa, sedangkan AI seperti saya adalah kopilot yang siap meringankan beban administrasi dan memperkaya ide mengajar Anda. Mari kita mulai perjalanan seru ini!"
+      },
+
+      // SLIDE 2
+      {
+        id: 2,
+        module: "MODUL 01",
+        timeTag: "Fondasi Dasar",
+        title: "Pengantar Kecerdasan Artifisial (AI)",
+        subtitle: "Memahami Mesin Cerdas di Balik Teknologi Pembelajaran Modern",
+        visualType: "module-banner",
+        moduleNumber: "01",
+        analogy: "Mengenal mesin sebelum mengemudi: Memahami cara kerja dasar AI membuat kita mampu mengarahkannya dengan tepat dan tidak mudah tertipu oleh keterbatasannya.",
+        highlights: [
+          { icon: "fa-brain", title: "Definisi Fundamental AI", desc: "Bagaimana komputer dilatih meniru perilaku cerdas manusia dan beradaptasi." },
+          { icon: "fa-diagram-project", title: "Peta Ekosistem AI", desc: "Membedakan Machine Learning (ML), Large Language Models (LLM), dan Generative AI." },
+          { icon: "fa-compass", title: "Relevansi bagi Guru", desc: "Menempatkan teknologi sebagai mitra berpikir di ruang kelas." }
+        ],
+        narration: "Kita masuki Modul Pertama: Pengantar Kecerdasan Artifisial atau AI. Sebelum kita menggunakan Gemini di ruang kelas, penting bagi kita untuk memahami bagaimana cara kerja mesin pintar ini secara mendasar agar kita dapat mengarahkannya dengan tepat."
+      },
+
+      // SLIDE 3
+      {
+        id: 3,
+        module: "MODUL 01",
+        timeTag: "Konsep Dasar AI",
+        title: "Apa itu Artificial Intelligence (AI)?",
+        subtitle: "Ilmu Mengajarkan Mesin untuk Meniru Perilaku Cerdas Manusia",
+        visualType: "comparison-ai",
+        analogy: "Program komputer biasa seperti kalkulator kaku yang hanya patuh pada rumus statis. Sistem AI seperti murid magang yang dilatih menggunakan data sehingga mampu belajar dari pengalaman dan beradaptasi.",
+        highlights: [
+          { icon: "fa-microchip", title: "Program Tradisional vs Sistem AI", desc: "Sistem AI tidak sekadar mengikuti instruksi kaku, melainkan dilatih menggunakan data agar dapat belajar dan beradaptasi secara mandiri." },
+          { icon: "fa-microphone-lines", title: "Contoh 1: Pengenalan Suara", desc: "Komputer diajarkan mengenali beragam logat dan intonasi suara manusia (Speech Recognition)." },
+          { icon: "fa-chess-board", title: "Contoh 2: Permainan Strategi Go", desc: "AI mempelajari jutaan kemungkinan langkah dalam permainan papan Go yang jauh lebih rumit dari catur." }
+        ],
+        narration: "Apa sebenarnya Artificial Intelligence itu? AI adalah ilmu yang mengajarkan mesin komputer untuk meniru perilaku cerdas manusia. Analoginya begini, Bapak dan Ibu: program komputer biasa itu seperti kalkulator yang kaku, hanya menjalankan rumus yang diketik pembuatnya. Namun, sistem AI dilatih menggunakan data sehingga mampu belajar dan beradaptasi sendiri, seperti mengenali suara manusia atau mempelajari strategi permainan Go yang sangat kompleks."
+      },
+
+      // SLIDE 4
+      {
+        id: 4,
+        module: "MODUL 01",
+        timeTag: "Klasifikasi Teknologi",
+        title: "Memahami Jenis-Jenis AI: ML, LLM, dan Gen AI",
+        subtitle: "Tiga Istilah Utama yang Membentuk Teknologi Google Gemini",
+        visualType: "concentric-ai",
+        analogy: "Bayangkan sebuah perpustakaan: Machine Learning adalah cara belajarnya, Large Language Model adalah kemampuan berbahasanya, dan Generative AI adalah keahliannya menciptakan karya baru.",
+        highlights: [
+          { icon: "fa-gears", title: "Machine Learning (ML)", desc: "Sistem yang dilatih dengan kumpulan data untuk belajar mandiri dan mengenali pola tanpa harus diprogram secara khusus untuk setiap tugas baru." },
+          { icon: "fa-comments", title: "Large Language Models (LLM)", desc: "Model AI yang dilatih membaca miliaran teks untuk memahami, memprediksi, dan menghasilkan bahasa manusia secara alami." },
+          { icon: "fa-wand-magic-sparkles", title: "Generative AI (Gen AI)", desc: "AI yang mampu menciptakan konten baru dan orisinal—seperti teks, gambar, musik, audio, kode pemrograman, dan video." }
+        ],
+        narration: "Di dalam dunia AI, ada tiga istilah utama yang saling berkaitan. Pertama, Machine Learning atau ML, yaitu sistem yang dilatih belajar mandiri dari kumpulan data untuk mengenali pola tanpa diprogram satu per satu. Kedua, Large Language Models atau LLM, yaitu model yang dilatih khusus untuk memahami, memprediksi, dan menghasilkan bahasa manusia. Ketiga, Generative AI atau Gen AI, yaitu AI yang mampu menciptakan konten baru yang orisinal seperti teks, gambar, audio, kode pemrograman, dan video. Gemini merupakan perpaduan mutakhir dari LLM dan Generative AI ini."
+      },
+
+      // SLIDE 5
+      {
+        id: 5,
+        module: "MODUL 02",
+        timeTag: "Etika & Keamanan",
+        title: "Menggunakan AI dengan Aman dan Bertanggung Jawab",
+        subtitle: "Mengenali Bias, Halusinasi, Evaluasi Kritis, dan Privasi Data",
+        visualType: "module-banner",
+        moduleNumber: "02",
+        analogy: "Sabuk pengaman dan rem pada mobil cepat: Semakin canggih teknologi AI yang kita gunakan, semakin kuat pula pemahaman etika dan verifikasi kritis yang harus dimiliki pendidik.",
+        highlights: [
+          { icon: "fa-scale-unbalanced", title: "Bias & Keadilan (Fairness)", desc: "Memahami mengapa AI bisa berprasangka secara sistematis dan cara mengatasinya." },
+          { icon: "fa-ghost", title: "Halusinasi & Akurasi", desc: "Mendeteksi informasi keliru yang terdengar meyakinkan beserta cara verifikasinya." },
+          { icon: "fa-user-shield", title: "Human-in-the-Loop & Privasi", desc: "Menjaga kendali profesional guru serta melindungi privasi data siswa." }
+        ],
+        narration: "Sekarang kita melangkah ke Modul Kedua: Menggunakan AI dengan Aman dan Bertanggung Jawab. Kecanggihan teknologi harus selalu diimbangi dengan etika, keamanan privasi, serta ketajaman berpikir kritis dari seorang pendidik."
+      },
+
+      // SLIDE 6
+      {
+        id: 6,
+        module: "MODUL 02",
+        timeTag: "Keterbatasan AI #1",
+        title: "Bias dan Keadilan (Bias and Fairness)",
+        subtitle: "Mengapa Sistem AI Dapat Menghasilkan Keluaran yang Berprasangka?",
+        visualType: "bias-scale",
+        analogy: "Analogi Cermin Data: Ketika sebuah sistem AI menunjukkan kecenderungan menghasilkan hasil yang secara sistematis berprasangka (systematically prejudiced) akibat data pelatihannya, hal itu disebut BIAS.",
+        highlights: [
+          { icon: "fa-database", title: "Definisi Teknis Bias pada AI", desc: "Kecenderungan sistem AI menghasilkan keluaran yang secara sistematis berprasangka atau berat sebelah karena pengaruh data yang digunakan saat pelatihannya." },
+          { icon: "fa-globe", title: "Cerminan Prasangka Sosial", desc: "AI belajar dari data buatan manusia di internet yang dapat mencerminkan stereotip seputar ras, gender, usia, atau budaya." },
+          { icon: "fa-user-check", title: "Peran Penting Pendidik", desc: "Pendidik memegang peran kunci untuk mengidentifikasi dan menyaring bias agar pembelajaran di kelas tetap adil dan inklusif." }
+        ],
+        narration: "Keterbatasan pertama yang wajib kita waspadai adalah Bias. Ketika sebuah sistem AI menunjukkan kecenderungan untuk menghasilkan keluaran yang secara sistematis berprasangka atau memihak akibat data yang digunakan saat pelatihannya, fenomena ini secara teknis disebut sebagai Bias. Analoginya seperti cermin: karena AI belajar dari jutaan data buatan manusia di internet yang mungkin mengandung stereotip ras, gender, atau budaya, maka AI bisa ikut mereplikasi prasangka tersebut. Di sinilah peran vital pendidik untuk mengidentifikasi dan menyaring bias sebelum materi sampai ke tangan siswa."
+      },
+
+      // SLIDE 7
+      {
+        id: 7,
+        module: "MODUL 02",
+        timeTag: "Mitigasi Bias di Kelas",
+        title: "Bagaimana Pendidik Mengatasi Bias?",
+        subtitle: "Langkah Strategis & Studi Kasus Kurasi Materi Pembelajaran",
+        visualType: "cards-case-study",
+        analogy: "Guru sebagai Kurator Utama: AI boleh mengusulkan seratus ide, namun kacamata kearifan gurulah yang memutuskan mana yang layak masuk ke ruang kelas.",
+        highlights: [
+          { icon: "fa-users-viewfinder", title: "1. Perspektif Beragam & Evaluasi Berkala", desc: "Libatkan rekan dengan latar belakang beragam saat mengevaluasi alat AI dan tinjau secara berkala karena model terus berubah." },
+          { icon: "fa-graduation-cap", title: "2. Edukasi & Berpikir Kritis Siswa", desc: "Ajarkan penggunaan AI yang jujur dan latih siswa mengenali potensi bias dalam teks maupun gambar." },
+          { icon: "fa-clipboard-check", title: "Studi Kasus: Topik Esai Persuasif Kontroversial", desc: "Jika Gemini menyarankan daftar topik esai yang berpotensi kontroversial, guru WAJIB meninjau secara kritis setiap topik (kesesuaian usia, potensi debat santun, netralitas fakta, dan bias bawaan) lalu merevisinya sebelum diberikan ke siswa." }
+        ],
+        narration: "Bagaimana cara kita sebagai pendidik mengatasi bias? Ada empat langkah utama: libatkan rekan dengan latar belakang beragam saat mengevaluasi alat AI, evaluasi secara berkala karena model AI terus berubah, edukasi penggunaan yang jujur, dan ajari siswa berpikir kritis. Sebagai contoh nyata di kelas: jika seorang guru Bahasa Inggris meminta Gemini membuat daftar topik esai persuasif dan AI memunculkan beberapa topik yang berpotensi kontroversial, guru tidak boleh langsung membagikannya kepada siswa. Guru wajib meninjau secara kritis setiap topik demi memastikan kesesuaian usia, potensi debat yang santun, netralitas fakta, serta bebas dari bias bawaan, lalu merevisinya terlebih dahulu."
+      },
+
+      // SLIDE 8
+      {
+        id: 8,
+        module: "MODUL 02",
+        timeTag: "Keterbatasan AI #2",
+        title: "Halusinasi dan Akurasi",
+        subtitle: "Ketika AI Menghasilkan Informasi Keliru yang Terdengar Sangat Meyakinkan",
+        visualType: "hallucination-plant",
+        analogy: "Analogi Siswa yang Pandai Mengarang: Ketika chatbot AI menghasilkan output yang salah, tidak masuk akal (nonsensical), atau menyesatkan tetapi tampak sangat dapat dipercaya (believable), kesalahan ini disebut HALUSINASI.",
+        highlights: [
+          { icon: "fa-seedling", title: "Contoh Nyata: Tanaman ZZ", desc: "AI pernah keliru menulis nama ilmiah tanaman ZZ sebagai 'Zamioculcas zamioculcas', padahal fakta ilmiah yang benar adalah 'Zamioculcas zamiifolia'." },
+          { icon: "fa-triangle-exclamation", title: "Risiko 1: Ketidakakuratan Faktual", desc: "Jika guru langsung memakai kuis atau petunjuk praktikum buatan AI tanpa diperiksa, informasi yang salah secara faktual (factual inaccuracies) akan langsung menyesatkan siswa." },
+          { icon: "fa-stairs", title: "Risiko 2: Tingkat Bahasa Tidak Sesuai", desc: "Materi yang belum ditinjau guru berisiko ditulis pada tingkat keterbacaan atau kesulitan yang tidak sesuai (inappropriate level) bagi siswa di kelas." }
+        ],
+        narration: "Keterbatasan kedua dari chatbot AI adalah Halusinasi. Ketika chatbot AI menghasilkan informasi yang salah, tidak masuk akal, atau menyesatkan namun disajikan dengan kalimat yang terdengar sangat meyakinkan dan dapat dipercaya, kesalahan ini disebut sebagai Hallucinations atau Halusinasi. Contohnya pada slide ini, AI sempat keliru menyebut nama ilmiah tanaman ZZ sebagai Zamioculcas zamioculcas, padahal yang benar adalah Zamioculcas zamiifolia. Bayangkan jika seorang guru IPA langsung membagikan soal kuis dan petunjuk praktikum buatan AI tanpa memeriksanya terlebih dahulu; ada dua risiko besar yang mengintai, yaitu materi tersebut bisa mengandung ketidakakuratan faktual, dan tingkat kesulitan bahasanya bisa jadi tidak sesuai dengan kemampuan siswa."
+      },
+
+      // SLIDE 9
+      {
+        id: 9,
+        module: "MODUL 02",
+        timeTag: "Pola Kesalahan AI",
+        title: "3 Cara Umum Chatbot Menghasilkan Informasi Tidak Akurat",
+        subtitle: "Mengenali Bentuk-Bentuk Halusinasi agar Tidak Mudah Terkecoh",
+        visualType: "three-pillars",
+        analogy: "Tiga jebakan halusinasi: Mengarang fakta, melompati logika, dan memalsukan daftar pustaka.",
+        highlights: [
+          { icon: "fa-masks-theater", title: "1. Fakta Buatan", desc: "Chatbot dapat mengarang pernyataan atau peristiwa yang sama sekali tidak ada di dunia nyata agar jawabannya terlihat lengkap." },
+          { icon: "fa-link-slash", title: "2. Logika yang Salah", desc: "Penalaran yang digunakan AI terkadang tidak nyambung sehingga kesimpulan akhirnya bertentangan dengan premis awal." },
+          { icon: "fa-book-skull", title: "3. Kutipan Palsu", desc: "Saat diminta referensi ilmiah, AI dapat mengarang nama penulis, judul buku, tautan web, atau jurnal penelitian yang sebenarnya fiktif." }
+        ],
+        narration: "Secara umum, ada tiga cara chatbot menghasilkan informasi yang tidak akurat atau misinformasi. Pertama, Fakta Buatan, di mana AI mengarang pernyataan yang tidak pernah ada agar terdengar meyakinkan. Kedua, Logika yang Salah, ketika kesimpulan yang ditarik tidak sesuai dengan penalaran argumennya. Ketiga, Kutipan Palsu, di mana saat diminta sumber referensi, AI bisa mengarang nama pengarang, judul publikasi, hingga studi penelitian fiktif. Karena itu, jangan pernah menelan bulat-bulat kutipan dari AI tanpa verifikasi."
+      },
+
+      // SLIDE 10
+      {
+        id: 10,
+        module: "MODUL 02",
+        timeTag: "Kendali Pendidik",
+        title: "Evaluasi Kritis (Kerangka AAA) & Human-in-the-Loop",
+        subtitle: "Panduan Praktis bagi Guru dan Pedoman Integritas Akademik Siswa",
+        visualType: "aaa-human-loop",
+        analogy: "Prinsip Human-in-the-Loop: AI yang membuat draf awal, namun penilaian profesional gurulah yang menjadi penentu akhir.",
+        highlights: [
+          { icon: "fa-check-double", title: "Kerangka AAA & Draf RPP Guru", desc: "Pastikan Accurate (Akurat), Aligned (Sesuai), Appropriate (Layak). Setelah AI membuat draf pertama RPP, langkah paling kritis adalah menggunakan penilaian profesional guru untuk meninjau, mengedit, dan mengadaptasinya sesuai kurikulum & kebutuhan siswa." },
+          { icon: "fa-magnifying-glass-chart", title: "Melatih Berpikir Kritis Siswa saat Riset", desc: "Tugaskan siswa melakukan pemeriksaan silang (cross-referencing) minimal 3 fakta utama dari Gemini dengan sumber independen yang kredibel, lalu diskusikan perbedaannya." },
+          { icon: "fa-quote-left", title: "Pedoman Etika Kelas & Histori Versi", desc: "Wajibkan siswa mencantumkan sitasi/pengakuan eksplisit saat memakai AI untuk brainstorming/draf. Jika curiga tugas siswa buatan AI, periksa proses pengetikan dari waktu ke waktu lewat fitur Version History (Histori Versi) di Google Docs." }
+        ],
+        narration: "Untuk mengevaluasi respons AI secara kritis, gunakan Kerangka Tiga A: Accurate, yaitu periksa apakah faktanya akurat; Aligned, apakah sesuai dengan instruksi tugas kita; dan Appropriate, apakah layak untuk usia siswa kita. Prinsip utamanya adalah menjaga diri kita tetap berada dalam kendali atau Human-in-the-loop. Saat membuat draf pertama RPP dengan AI, langkah paling kritis selanjutnya adalah menggunakan penilaian profesional kita untuk meninjau, mengedit, dan mengadaptasi hasilnya agar selaras dengan kurikulum dan kebutuhan spesifik siswa. Bagi siswa yang menggunakan Gemini untuk riset berita terkini, latih berpikir kritis mereka dengan menugaskan pemeriksaan silang atau cross-referencing minimal tiga fakta utama dari Gemini dengan sumber independen yang kredibel, lalu diskusikan perbedaannya. Buat juga pedoman kelas yang sehat, yaitu mewajibkan siswa mencantumkan kutipan atau pengakuan secara eksplisit ketika menggunakan AI untuk brainstorming atau membuat draf. Dan jika Bapak Ibu mencurigai siswa menyalin tugas langsung dari AI, jangan bertanya pada Gemini apakah ia yang menulisnya, melainkan gunakan fitur Version History atau Histori Versi di Google Docs untuk melihat proses pengetikan dokumen dari waktu ke waktu."
+      },
+
+      // SLIDE 11
+      {
+        id: 11,
+        module: "MODUL 02",
+        timeTag: "Verifikasi Terintegrasi",
+        title: "Akurasi dan Fitur Periksa Ulang Respons di Gemini",
+        subtitle: "Memanfaatkan Tombol Pemeriksaan Google & Chip Kutipan Sumber",
+        visualType: "double-check-ui",
+        analogy: "Detektor fakta bawaan: Satu klik pada ikon Google untuk mencocokkan kalimat AI dengan sumber web yang sesungguhnya.",
+        highlights: [
+          { icon: "fa-brands fa-google", title: "Fitur Periksa Ulang Respons", desc: "Gunakan tombol 'Periksa ulang respons' (ikon G) di bawah jawaban Gemini untuk memvalidasi pernyataan dengan Google Search." },
+          { icon: "fa-link", title: "Chip Kutipan Abu-Abu", desc: "Ketuk chip abu-abu di akhir paragraf untuk membuka tautan situs web yang menguatkan informasi dalam kalimat tersebut." },
+          { icon: "fa-envelope-open-text", title: "Tautan Sumber Gmail di Workspace", desc: "Jika respons merujuk pada email melalui ekstensi Google Workspace, Gemini akan menampilkan tautan langsung ke email terkait." }
+        ],
+        narration: "Kabar baiknya, Gemini dilengkapi fitur untuk membantu kita memeriksa akurasi. Dalam respons Gemini, kita dapat menggunakan fitur Periksa Ulang Respons dan mengetuk chip kutipan berwarna abu-abu di akhir paragraf untuk melihat sumber situs web yang menguatkan informasi tersebut. Bahkan jika terhubung dengan ekstensi Workspace seperti Gmail, Gemini akan menyertakan tautan langsung ke email yang relevan."
+      },
+
+      // SLIDE 12
+      {
+        id: 12,
+        module: "MODUL 02",
+        timeTag: "Perlindungan Data Pribadi",
+        title: "Literasi Data dan Privasi Anda",
+        subtitle: "3 Pertanyaan Wajib Sebelum Memasukkan Data ke Dalam Prompt AI",
+        visualType: "privacy-shield",
+        analogy: "Saringan Tiga Lapis: Jangan pernah memasukkan identitas mentah siswa ke ruang obrolan AI.",
+        highlights: [
+          { icon: "fa-user-secret", title: "1. Apakah Sudah Dianonimkan?", desc: "Hapus semua informasi identitas pribadi (nama lengkap siswa, NISN, alamat) dan ganti dengan nama samaran atau pengenal umum." },
+          { icon: "fa-compress", title: "2. Apakah Sudah Diminimalkan?", desc: "Gunakan sesedikit mungkin data sensitif—hanya masukkan konteks yang benar-benar diperlukan untuk menyelesaikan tugas." },
+          { icon: "fa-shield-halved", title: "3. Bisakah Direkayasa Ulang?", desc: "Pastikan meskipun nama sudah dihapus, detail informasinya tidak membuat orang lain mudah menebak identitas individu tersebut." }
+        ],
+        narration: "Slide kedua belas mengingatkan kita tentang Literasi Data. Sebelum memasukkan data ke dalam prompt AI, pastikan tiga hal: Pertama, apakah sudah dianonimkan? Hapus semua nama asli siswa atau identitas pribadi dan ganti dengan nama samaran. Kedua, apakah sudah diminimalkan? Gunakan hanya data yang benar-benar diperlukan. Ketiga, pastikan data tersebut tidak mudah ditebak atau direkayasa ulang oleh pihak lain."
+      },
+
+      // SLIDE 13
+      {
+        id: 13,
+        module: "MODUL 03",
+        timeTag: "Akses & Seni Instruksi",
+        title: "Berkenalan dengan Gemini dan Praktik Baik Prompting",
+        subtitle: "Mengoptimalkan Akun belajar.id serta Merancang Prompt Kerangka PARTS",
+        visualType: "module-banner",
+        moduleNumber: "03",
+        analogy: "Kunci emas komunikasi dengan AI: Semakin terstruktur instruksi yang kita berikan, semakin presisi dan relevan solusi yang dihasilkan Gemini.",
+        highlights: [
+          { icon: "fa-id-card-clip", title: "Keunggulan Akun belajar.id", desc: "Perlindungan privasi tingkat institusi pendidikan pada Google Workspace for Education." },
+          { icon: "fa-sliders", title: "Navigasi Antarmuka & Multimodal", desc: "Memahami menu samping Gemini, ekstensi ruang kerja, serta analisis berbasis gambar." },
+          { icon: "fa-puzzle-piece", title: "Kerangka Prompt PARTS", desc: "Rumus praktis menyusun Persona, Aim, Recipients, Theme, dan Structure." }
+        ],
+        narration: "Kita masuki Modul Ketiga: Berkenalan dengan Gemini dan Praktik Baik Prompting. Di modul ini, kita akan melihat perlindungan khusus pada akun pendidikan serta seni menyusun instruksi agar Gemini memberikan hasil terbaik."
+      },
+
+      // SLIDE 14
+      {
+        id: 14,
+        module: "MODUL 03",
+        timeTag: "Ekosistem Pendidikan",
+        title: "Aplikasi Gemini dengan Akun belajar.id",
+        subtitle: "Akses Gratis dengan Perlindungan Data Tambahan untuk Pendidik",
+        visualType: "belajar-id-card",
+        analogy: "Ruang kerja VIP khusus guru: Akses mudah di ponsel maupun laptop dengan perisai keamanan ekstra.",
+        highlights: [
+          { icon: "fa-mobile-screen-button", title: "Tersedia di Web & Aplikasi Mobile", desc: "Akses langsung melalui peramban di gemini.google.com atau unduh aplikasi Gemini di perangkat seluler." },
+          { icon: "fa-graduation-cap", title: "Dirancang untuk Pendidikan", desc: "Masuk menggunakan akun belajar.id (Google Workspace for Education) tanpa biaya tambahan." },
+          { icon: "fa-lock", title: "Perlindungan Data Tingkat Institusi", desc: "Memberikan jaminan keamanan data sekolah yang tidak dimiliki oleh akun konsumen biasa." }
+        ],
+        narration: "Bapak dan Ibu dapat mengunduh aplikasi Gemini di ponsel atau mengaksesnya melalui peramban di gemini.google.com menggunakan akun belajar.id. Fasilitas ini gratis, dibuat untuk pendidikan, dan dilengkapi perlindungan data tambahan tingkat institusi."
+      },
+
+      // SLIDE 15
+      {
+        id: 15,
+        module: "MODUL 03",
+        timeTag: "Jaminan Privasi Workspace",
+        title: "Menggunakan Gemini dengan Akun belajar.id",
+        subtitle: "Data Anda Tidak Digunakan untuk Melatih Model AI",
+        visualType: "vault-guarantee",
+        analogy: "Brankas Privat Sekolah: Apa yang Bapak/Ibu tulis di dalam Gemini akun Google Workspace for Education tetap menjadi milik institusi dan tidak dipakai melatih model AI publik.",
+        highlights: [
+          { icon: "fa-shield-heart", title: "Tidak Melatih Model AI (True)", desc: "Gemini pada akun Google Workspace for Education (seperti belajar.id) TIDAK menggunakan data atau percakapan Anda untuk melatih model AI generatif." },
+          { icon: "fa-eye-slash", title: "Tidak Ditinjau Manusia", desc: "Percakapan Anda bersifat privat di dalam organisasi dan tidak diperiksa oleh peninjau manusia eksternal." },
+          { icon: "fa-file-shield", title: "Aman untuk Dokumen Pembelajaran", desc: "Sangat aman digunakan untuk menyusun kurikulum, modul ajar, dan administrasi pembelajaran." }
+        ],
+        narration: "Satu prinsip keamanan yang sangat penting untuk dipahami bersama: ketika kita menggunakan Gemini dengan akun Google Workspace for Education seperti akun belajar.id, seluruh percakapan dan data yang kita masukkan TIDAK digunakan untuk melatih model AI generatif publik, dan tidak akan ditinjau oleh peninjau manusia. Data sekolah kita tetap aman dan terlindungi."
+      },
+
+      // SLIDE 16
+      {
+        id: 16,
+        module: "MODUL 03",
+        timeTag: "Batasan Akun Pribadi",
+        title: "Menggunakan Gemini dengan Akun Personal",
+        subtitle: "Hal-Hal yang Harus Dihindari Saat Menggunakan Gmail Pribadi",
+        visualType: "warning-comparison",
+        analogy: "Memisahkan dompet pribadi dan brankas sekolah: Gunakan akun personal hanya untuk keperluan umum sehari-hari.",
+        highlights: [
+          { icon: "fa-circle-check", title: "Boleh untuk Pertanyaan Umum", desc: "Akun Gmail personal cocok untuk hobi, resep masakan, atau eksplorasi pengetahuan umum." },
+          { icon: "fa-ban", title: "Jangan Masukkan Data Sekolah & Nilai", desc: "Hindari memasukkan analisis nilai siswa, laporan rapat internal, atau dokumen rahasia sekolah di akun personal." },
+          { icon: "fa-arrows-rotate", title: "Selalu Beralih ke Akun Pendidikan", desc: "Pastikan profil di pojok kanan atas sudah menggunakan akun belajar.id saat bekerja untuk sekolah." }
+        ],
+        narration: "Sebaliknya, jika Bapak atau Ibu menggunakan Gemini dengan akun Gmail personal biasa, gunakanlah hanya untuk pertanyaan umum sehari-hari. Hindari memasukkan data sekolah, rencana pelajaran internal, analisis nilai siswa, laporan rapat, maupun dokumen sekolah ke dalam akun personal."
+      },
+
+      // SLIDE 17
+      {
+        id: 17,
+        module: "MODUL 03",
+        timeTag: "Transformasi Pedagogis",
+        title: "Bagaimana Gemini Membantu Proses Pembelajaran & Multimodal",
+        subtitle: "3 Pilar Pembelajaran & 4 Langkah Membantu Siswa yang Kesulitan",
+        visualType: "multimodal-steps",
+        analogy: "Asisten Multimodal: Gemini tidak hanya bisa membaca teks, tetapi juga bisa melihat foto hasil kerja siswa untuk mendiagnosis letak kesalahpahaman konsepnya.",
+        highlights: [
+          { icon: "fa-lightbulb", title: "3 Pilar Dukungan Pembelajaran", desc: "1) Memfasilitasi riset & berpikir kritis, 2) Membantu penulisan akademik (outline & mengatasi writer's block), 3) Mempersonalisasi pembelajaran & penilaian." },
+          { icon: "fa-camera", title: "Langkah 1 & 2 Solusi Siswa Kesulitan (Misal Kimia)", desc: "1. Ambil foto/gambar dari hasil kerja siswa. 2. Unggah gambar tersebut ke Gemini." },
+          { icon: "fa-stethoscope", title: "Langkah 3 & 4 Diagnosis & Latihan Baru", desc: "3. Minta Gemini mengidentifikasi miskonsepsi umum siswa. 4. Minta Gemini menyarankan soal latihan baru untuk diselesaikan." }
+        ],
+        narration: "Pada Slide ketujuh belas, kita melihat bagaimana Gemini mendukung tiga area utama: memfasilitasi riset dan berpikir kritis, membantu penulisan akademik seperti membuat outline dan mengatasi writer's block, serta mempersonalisasi pembelajaran dan penilaian. Karena Gemini bersifat multimodal, kita bahkan bisa memanfaatkannya untuk mendampingi siswa yang kesulitan memahami konsep rumit, misalnya pada pelajaran Kimia. Caranya sangat sistematis melalui empat langkah berurutan: Pertama, ambil foto atau gambar dari hasil kerja siswa. Kedua, unggah gambar tersebut ke Gemini. Ketiga, minta Gemini mengidentifikasi miskonsepsi umum dari jawaban siswa tersebut. Dan keempat, minta Gemini menyarankan soal-soal latihan baru yang relevan untuk diselesaikan oleh siswa."
+      },
+
+      // SLIDE 18
+      {
+        id: 18,
+        module: "MODUL 03",
+        timeTag: "Integrasi Ekosistem",
+        title: "Google Workspace for Education & Integrasi Langsung Gmail",
+        subtitle: "Dukungan Multibahasa & Pembuatan Draf Email Tanpa Keluar Aplikasi",
+        visualType: "workspace-gmail",
+        analogy: "Asisten yang hadir langsung di meja surat: Menulis dan membalas surat resmi langsung dari dalam kotak masuk Gmail.",
+        highlights: [
+          { icon: "fa-earth-asia", title: "Tersedia di Semua Edisi Workspace", desc: "Mendukung lebih dari 40 bahasa di seluruh dunia dengan perlindungan data tingkat perusahaan." },
+          { icon: "fa-envelope-circle-check", title: "Integrasi Langsung di Dalam Gmail", desc: "Dengan Google AI Pro for Education, pendidik dapat langsung membuat draf balasan email di dalam Gmail tanpa harus keluar dari aplikasi Gmail." },
+          { icon: "fa-bolt", title: "Efisiensi Komunikasi Sekolah", desc: "Mempercepat komunikasi dengan orang tua siswa, rekan sejawat, dan komite sekolah." }
+        ],
+        narration: "Aplikasi Gemini disertakan dalam semua edisi Google Workspace for Education dalam lebih dari empat puluh bahasa dengan perlindungan privasi penuh. Selain melalui situs gemini.google.com, dalam ekosistem Google AI Pro for Education, pendidik bahkan dapat langsung membuat draf balasan email menggunakan Gemini langsung di dalam antarmuka Gmail tanpa harus berpindah atau keluar dari aplikasi Gmail."
+      },
+
+      // SLIDE 19
+      {
+        id: 19,
+        module: "MODUL 03",
+        timeTag: "Prompt & Navigasi Layar",
+        title: "Membuat Prompt di Gemini: Apa Tujuan Utama Prompt?",
+        subtitle: "Memberikan Instruksi, Pertanyaan, atau Tugas Spesifik kepada AI",
+        visualType: "prompt-purpose",
+        analogy: "Kemudi Pesawat: Kualitas arah terbang AI sangat ditentukan oleh seberapa jelas instruksi yang kita berikan pada kemudi prompt.",
+        highlights: [
+          { icon: "fa-terminal", title: "Definisi & Tujuan Utama Prompt", desc: "Tujuan utama sebuah prompt saat berinteraksi dengan AI adalah memberikan instruksi, pertanyaan, atau tugas spesifik kepada AI untuk dikerjakan." },
+          { icon: "fa-comments", title: "Cara Menyampaikan Prompt", desc: "Dapat berupa teks tertulis, suara lisan, maupun lampiran gambar/dokumen di kolom percakapan Gemini." },
+          { icon: "fa-ban", title: "Bukan Fungsi Teknis Sistem", desc: "Prompt bukanlah alat untuk mengecek apakah sistem AI sedang aktif, bukan untuk memperbarui perangkat lunak, dan bukan untuk menghapus memori AI." }
+        ],
+        narration: "Mari kita pahami konsep dasar Prompt pada Slide kesembilan belas. Apa tujuan utama dari sebuah prompt saat kita berinteraksi dengan AI? Tujuan utama prompt adalah untuk memberikan instruksi, pertanyaan, atau tugas yang spesifik kepada AI untuk dikerjakan. Jadi prompt itu bukan untuk mengecek apakah sistem menyala, bukan untuk memperbarui perangkat lunak, dan bukan untuk menghapus memori AI. Semakin jelas konteks dan detail pada prompt kita, semakin akurat pula hasil yang diberikan Gemini."
+      },
+
+      // SLIDE 20
+      {
+        id: 20,
+        module: "MODUL 03",
+        timeTag: "Rumus Menyusun Prompt",
+        title: "Kerangka Prompt PARTS",
+        subtitle: "5 Komponen Kunci agar Instruksi AI Menghasilkan Jawaban Terbaik",
+        visualType: "parts-framework",
+        analogy: "Resep Masakan Presisi: Persona, Aim, Recipients, Theme, dan Structure memastikan hidangan materi dari Gemini pas dengan selera kelas kita.",
+        highlights: [
+          { icon: "fa-user-tie", title: "P — Persona & A — Aim (Tujuan)", desc: "Persona: Jelaskan peran Anda atau peran yang diambil AI. Aim: Nyatakan tugas spesifik dengan kata kerja yang jelas (buat, rancang, ringkas)." },
+          { icon: "fa-children", title: "R — Recipients (Penerima) & T — Theme (Tema)", desc: "Recipients: Sebutkan detail audiens/siswa (jenjang kelas, kemampuan). Theme: Jelaskan gaya bahasa, nada, dan pendekatan yang diinginkan." },
+          { icon: "fa-table-list", title: "S — Structure (Struktur Keluaran)", desc: "Catat format yang diinginkan secara spesifik: tabel, poin-poin, kuis, sketsa, atau kerangka berjudul." }
+        ],
+        narration: "Agar Gemini tidak memberikan jawaban yang terlalu umum, gunakan kerangka kerja PARTS saat menyusun prompt. P adalah Persona, jelaskan peran Anda atau peran yang harus diambil AI. A adalah Aim, sebutkan tujuan atau tugas yang ingin dicapai dengan jelas. R adalah Recipients, tentukan siapa target audiensnya, misalnya siswa kelas tertentu atau sesama guru. T adalah Theme, jelaskan gaya bahasa, nada, dan parameter yang diinginkan. Dan S adalah Structure, tentukan format keluarannya, apakah berbentuk tabel, daftar poin, atau naskah."
+      },
+
+      // SLIDE 21
+      {
+        id: 21,
+        module: "MODUL 03",
+        timeTag: "Praktik Baik Prompting",
+        title: "Transformasi Prompt Dasar Menjadi Prompt PARTS",
+        subtitle: "Contoh Aktivitas Diskusi & Eksplorasi Pembelajaran Berdiferensiasi",
+        visualType: "parts-comparison",
+        analogy: "Dari instruksi kabur menjadi instruksi tajam: Menyertakan peran guru dan kondisi kelas yang beragam menghasilkan strategi yang langsung siap pakai.",
+        highlights: [
+          { icon: "fa-wand-sparkles", title: "Contoh Aktivitas Diskusi Kelas 8", desc: "'Bertindaklah sebagai desainer pembelajaran ahli SMP (P). Buat catatan guru untuk 2 aktivitas diskusi pengurangan sisa makanan (A) bagi siswa kelas 8 di Jakarta (R) dengan nada santai (T) dalam judul dan subjudul terorganisir (S).'" },
+          { icon: "fa-people-arrows", title: "Prompt Terbaik untuk Kelas Kemampuan Campuran", desc: "Untuk mengeksplorasi teknik pengajaran adaptif/diferensiasi di mixed-ability classroom: 'Saya adalah guru SMP berpengalaman (P). Bantu saya membuat daftar strategi (A/S) untuk mendukung saya memenuhi kebutuhan seluruh siswa di kelas saya yang memiliki kemampuan campuran (R).'" },
+          { icon: "fa-ban", title: "Hindari Prompt Terlalu Sempit atau Terlalu Kabur", desc: "Hindari prompt yang hanya menyebut satu topik sempit atau terlalu umum seperti 'Saya bekerja di sekolah, bagaimana cara mendukung siswa?'" }
+        ],
+        narration: "Perhatikan perbandingan di Slide dua puluh satu ini. Prompt dasar hanya berbunyi: Buat dua aktivitas diskusi tentang pengurangan sisa makanan. Dengan kerangka PARTS, instruksinya menjadi jauh lebih tajam karena menyertakan persona desainer pembelajaran ahli, tujuan membuat catatan guru, audiens siswa kelas delapan di Jakarta, nada santai, dan struktur berjudul. Hal yang sama berlaku ketika seorang guru ingin mengeksplorasi strategi adaptive teaching atau diferensiasi untuk mixed-ability classroom. Prompt yang paling efektif adalah menyebutkan persona dan konteks dengan jelas, yaitu: Saya adalah guru sekolah menengah yang berpengalaman, bantu saya membuat daftar strategi untuk mendukung saya dalam memenuhi kebutuhan seluruh siswa di kelas saya yang memiliki kemampuan beragam."
+      },
+
+      // SLIDE 22
+      {
+        id: 22,
+        module: "MODUL 04",
+        timeTag: "Aksi Nyata di Sekolah",
+        title: "10 Cara Mentransformasi Pembelajaran dengan Gemini",
+        subtitle: "Perjalanan Sehari Guru Bersama Alat Resmi Ekosistem Gemini",
+        visualType: "module-banner",
+        moduleNumber: "04",
+        analogy: "Kotak Perkakas Digital Guru: Di dalam menu alat (tools) Gemini tersedia 3 perkakas utama: Create Image (membuat gambar), Canvas (membuat dokumen & aplikasi web), serta Guided Learning (pembelajaran terpandu).",
+        highlights: [
+          { icon: "fa-toolbox", title: "3 Alat Resmi yang Tersedia di Menu Gemini", desc: "1) Canvas - Create Docs and apps, 2) Guided learning - Learn and understand topics, 3) Create image - Generate images." },
+          { icon: "fa-volume-xmark", title: "Batas Fitur: Tidak Ada Create Music", desc: "Antarmuka obrolan Gemini TIDAK memiliki alat bawaan 'Create music' untuk menghasilkan file lagu baru." },
+          { icon: "fa-clock", title: "Alur Waktu Harian Guru", desc: "06.30 Persiapan RPP -> 09.00 Media & Visual Kelas -> 11.30 Kuis & Simulasi Canvas -> 13.00 Otomasi Administrasi dengan Gems." }
+        ],
+        narration: "Kita masuki Modul Keempat: Sepuluh Cara Mentransformasi Pembelajaran dengan Gemini! Di bagian ini, kita akan mengikuti perjalanan sehari penuh seorang guru bersama Gemini, sekaligus membedah secara mendalam fitur-fitur utama yang tersedia di menu tools Gemini, yaitu Create image untuk membuat gambar, Canvas untuk membuat dokumen dan aplikasi interaktif, serta Guided learning untuk pembelajaran terpandu. Perlu dicatat bahwa di menu alat tersebut tidak ada fitur Create music untuk membuat lagu. Mari kita kupas satu per satu!"
+      },
+
+      // SLIDE 23
+      {
+        id: 23,
+        module: "MODUL 04",
+        timeTag: "06.30 Pagi — Sebelum Kelas",
+        title: "Fenomena Pagi: \"Si Paling Gak Siap\"",
+        subtitle: "Materi Sudah Ada di Buku, Tapi Ide Mengajarnya Belum Terbayang",
+        visualType: "clock-scene",
+        clockTime: "06.30",
+        sceneMood: "Sebelum Kelas Dimulai",
+        analogy: "Bahan masakan sudah ada di meja dapur, tetapi kita butuh inspirasi resep cepat agar siswa antusias menyantap materi hari ini.",
+        highlights: [
+          { icon: "fa-mug-hot", title: "Tantangan Pagi Hari Guru", desc: "Waktu terbatas sebelum bel masuk berbunyi, sementara materi di buku teks terasa kering jika hanya dibacakan." },
+          { icon: "fa-bolt-lightning", title: "Peran Gemini Sebagai Mitra Brainstorming", desc: "Membantu merancang skenario pembuka kelas (ice breaking), pertanyaan pemantik, dan langkah kegiatan inti dalam hitungan detik." },
+          { icon: "fa-compass-drafting", title: "Fokus pada Kualitas Pedagogis", desc: "Guru tidak lagi habis waktu mengetik format tabel dari nol, melainkan fokus memilih aktivitas terbaik." }
+        ],
+        narration: "Pukul setengah tujuh pagi sebelum masuk kelas. Pernahkah Bapak Ibu mengalami momen materi pelajaran sudah ada di buku, tetapi ide cara mengajarkannya agar menarik belum terbayang? Di sinilah Gemini hadir membantu persiapan pagi kita."
+      },
+
+      // SLIDE 24
+      {
+        id: 24,
+        module: "MODUL 04",
+        timeTag: "06.30 Pagi — Evaluasi Prompt",
+        title: "Fenomena \"Si Kok Hasilnya Gini\"",
+        subtitle: "Sudah Pakai AI, Tapi Mengapa Hasilnya Belum Sesuai Harapan?",
+        visualType: "clock-scene",
+        clockTime: "06.35",
+        sceneMood: "Mengatasi Keluaran AI yang Terlalu Umum",
+        analogy: "Jika kita hanya memesan 'makanan enak' di restoran tanpa menyebut detailnya, koki akan bingung. Begitu pula saat kita memberi instruksi terlalu singkat ke AI.",
+        highlights: [
+          { icon: "fa-file-circle-question", title: "Penyebab Hasil Kurang Tepat", desc: "Prompt terlalu pendek, tidak mencantumkan jenjang kelas, tidak menyebutkan pendekatan kurikulum, dan tidak melampirkan dokumen acuan." },
+          { icon: "fa-key", title: "Solusi 1: Terapkan Kerangka PARTS", desc: "Berikan identitas Persona, Tujuan, Target Siswa, Tema Pembelajaran Mendalam, dan Struktur Tabel." },
+          { icon: "fa-file-arrow-up", title: "Solusi 2: Lampirkan File Referensi", desc: "Unggah langsung buku teks PDF atau panduan kurikulum agar AI merujuk pada materi resmi." }
+        ],
+        narration: "Sering kali guru mengeluh: sudah mencoba pakai AI, tapi kok hasilnya tidak sesuai harapan? Penyebabnya hampir selalu karena instruksi yang diberikan belum memiliki konteks dan dokumen referensi yang tepat."
+      },
+
+      // SLIDE 25
+      {
+        id: 25,
+        module: "MODUL 04",
+        timeTag: "06.30 Pagi — Bedah PARTS SMP",
+        title: "Menyusun RPP dengan Kerangka PARTS (Contoh IPA SMP)",
+        subtitle: "Memetakan 5 Elemen Instruksi untuk Materi Gelombang dan Cahaya",
+        visualType: "parts-table-smp",
+        analogy: "Cetakan Kue Presisi: Memastikan RPP yang keluar dari Gemini langsung memiliki komponen Pembelajaran Mendalam yang utuh.",
+        highlights: [
+          { icon: "fa-user-graduate", title: "Persona, Aim & Recipients", desc: "Persona: Guru dan ahli pembuat RPP/Modul Ajar. Aim: Buat RPP materi Gelombang dan Cahaya (IPA). Recipients: Siswa Kelas 8 SMP." },
+          { icon: "fa-heart-pulse", title: "Theme (Pendekatan Pembelajaran)", desc: "Menggunakan pendekatan Pembelajaran Mendalam (Deep Learning) yang berkesadaran, bermakna, dan menggembirakan." },
+          { icon: "fa-table", title: "Structure (Format Dokumen)", desc: "Disajikan dalam bentuk tabel terstruktur dan poin-poin langkah pembelajaran yang jelas." }
+        ],
+        narration: "Dengan kembali menerapkan kerangka PARTS pada Slide dua puluh lima, kita menetapkan Persona sebagai guru, Aim membuat RPP Gelombang dan Cahaya materi IPA, Recipients untuk kelas delapan SMP, Theme menggunakan pendekatan pembelajaran mendalam yang menarik, serta Structure dalam bentuk tabel dan poin yang jelas."
+      },
+
+      // SLIDE 26
+      {
+        id: 26,
+        module: "MODUL 04",
+        timeTag: "06.30 Pagi — Bedah PARTS SD",
+        title: "Menyusun Modul Ajar dengan Kerangka PARTS (Contoh IPA SD)",
+        subtitle: "Transformasi Prompt Materi Sistem Pencernaan Manusia Kelas 6 SD",
+        visualType: "parts-comparison",
+        analogy: "Satu paragraf instruksi yang lengkap menghemat berjam-jam waktu penyusunan perangkat ajar.",
+        highlights: [
+          { icon: "fa-xmark", title: "Prompt Dasar (Kurang Spesifik)", desc: "'Buat RPP/Modul Ajar Sistem Pencernaan Manusia materi IPA.' (Hasilnya sering terlalu umum dan tidak sesuai jenjang)." },
+          { icon: "fa-check", title: "Prompt PARTS Lengkap (Kelas 6 SD)", desc: "'Bertindaklah sebagai guru dan ahli pembuat RPP/Modul Ajar. Buat Modul Ajar Sistem Pencernaan Manusia materi IPA untuk Kelas 6 SD menggunakan pendekatan pembelajaran mendalam yang menarik dalam bentuk tabel dan poin yang jelas.'" },
+          { icon: "fa-sliders", title: "Mudah Diadaptasi Lintas Mata Pelajaran", desc: "Guru cukup mengganti topik materi dan jenjang kelas sesuai kebutuhan masing-masing." }
+        ],
+        narration: "Begitu pula untuk jenjang Sekolah Dasar pada Slide dua puluh enam. Kita dapat merangkai satu paragraf prompt PARTS yang utuh untuk menyusun Modul Ajar Sistem Pencernaan Manusia bagi siswa Kelas Enam SD dengan pendekatan pembelajaran mendalam berbentuk tabel."
+      },
+
+      // SLIDE 27
+      {
+        id: 27,
+        module: "MODUL 04",
+        timeTag: "Bedah Fitur #1 — Unggah File",
+        title: "Membuat RPP dengan Melampirkan File Buku & Panduan",
+        subtitle: "Menggabungkan Prompt PARTS dengan Dokumen Referensi Resmi",
+        visualType: "feature-4grid",
+        featureName: "Fitur Unggah File Referensi (+ Upload Files)",
+        analogy: "Memberikan buku cetak resmi ke meja asisten AI agar ia tidak mengarang materi di luar kurikulum sekolah.",
+        featureGrid: {
+          penjelasan: "Kemampuan multimodal Gemini untuk membaca dokumen (PDF, Docs, gambar) yang dilampirkan pengguna sebagai dasar penyusunan respons.",
+          bisa: "Mengekstrak materi dari Buku Paket IPA Kelas 6 SD & Buku Panduan Pembelajaran Mendalam untuk diramu menjadi RPP yang akurat.",
+          tidakBisa: "Tidak bisa membaca isi buku fisik yang belum diunggah dan tidak boleh diandalkan tanpa tinjauan akhir (human-in-the-loop) dari guru.",
+          caraPakai: "Klik tombol '+' di bilah prompt bawah -> Pilih 'Unggah file' -> Pilih file PDF Buku Paket & Panduan -> Ketikkan prompt PARTS -> Kirim."
+        },
+        narration: "Agar Modul Ajar yang dibuat Gemini seratus persen akurat sesuai buku teks resmi, Slide dua puluh tujuh menunjukkan cara menggabungkan prompt PARTS dengan fitur Unggah File. Penjelasan fiturnya: Gemini mampu membaca dokumen PDF atau dokumen teks yang kita lampirkan sebagai acuan utama. Apa yang bisa dilakukan: mengekstrak materi dari Buku Paket IPA dan Buku Panduan Pembelajaran Mendalam untuk diramu menjadi RPP. Apa yang tidak mungkin dilakukan: Gemini tidak bisa menebak isi buku cetak yang belum pernah diunggah atau tidak tercantum di referensinya. Cara menggunakannya sangat mudah: klik tanda tambah di bilah prompt bawah, pilih Unggah File, lampirkan file buku PDF kita, lalu kirimkan prompt PARTS tadi."
+      },
+
+      // SLIDE 28
+      {
+        id: 28,
+        module: "MODUL 04",
+        timeTag: "09.00 Pagi — Di Dalam Kelas",
+        title: "Fenomena Kelas: \"Si Paling Bingung Mulai dari Mana\"",
+        subtitle: "Materi Ada, RPP Siap, Kini Butuh Bahan Tayang & Visual Menarik",
+        visualType: "clock-scene",
+        clockTime: "09.00",
+        sceneMood: "Saat Pembelajaran Berlangsung di Kelas",
+        analogy: "Menghidupkan imajinasi siswa: Mengubah teks RPP menjadi paparan visual dan ilustrasi gambar yang memikat mata.",
+        highlights: [
+          { icon: "fa-tv", title: "Kebutuhan Visual Siswa", desc: "Siswa lebih cepat memahami konsep abstrak jika didukung kerangka slide yang ringkas dan gambar ilustrasi yang kontekstual." },
+          { icon: "fa-file-powerpoint", title: "Otomasi Kerangka Presentasi", desc: "Mengubah dokumen RPP yang sudah jadi menjadi poin-poin slide per halaman dalam sekejap." },
+          { icon: "fa-image", title: "Visualisasi Instan dengan Create Image", desc: "Membuat gambar ilustrasi orisinal langsung di dalam ruang obrolan Gemini." }
+        ],
+        narration: "Pukul sembilan pagi di dalam kelas. Materi dan RPP sudah di tangan, tetapi kita membutuhkan bahan tayang presentasi dan ilustrasi visual yang mampu memikat perhatian siswa."
+      },
+
+      // SLIDE 29
+      {
+        id: 29,
+        module: "MODUL 04",
+        timeTag: "Bedah Fitur #2 — Create Image & Slide",
+        title: "Membuat Kerangka Slide & Gambar Visual (Create Image)",
+        subtitle: "Mengupas Tuntas Alat Pembuat Gambar Bawaan di Gemini",
+        visualType: "feature-4grid",
+        featureName: "Alat Resmi: Create image - Generate images",
+        analogy: "Ilustrator Pribadi Guru: Cukup deskripsikan gambar yang dibayangkan, dan Gemini akan melukiskannya untuk bahan ajar Anda.",
+        featureGrid: {
+          penjelasan: "Fitur resmi di menu Tools Gemini (Create image - Generate images) yang menghasilkan gambar visual baru dari perintah teks, serta kemampuan menyusun draf slide.",
+          bisa: "Benar-benar BISA membuat gambar ilustrasi pembelajaran orisinal menggunakan Gemini (True) dan menyusun struktur slide dari dokumen RPP.",
+          tidakBisa: "Di menu alat Gemini TIDAK tersedia fitur pembuat lagu/musik ('Create music - Create new musical songs').",
+          caraPakai: "Klik tombol Alat/Tools di bilah prompt -> Pilih 'Create image' (Buat gambar) -> Ketik deskripsi visual yang ramah siswa -> Unduh atau masukkan ke slide."
+        },
+        narration: "Pada Slide dua puluh sembilan, kita memanfaatkan Gemini untuk menyusun kerangka Slide Presentasi sekaligus menggunakan alat resmi bernama Create Image untuk menghasilkan gambar ilustrasi. Apa yang bisa dilakukan fitur ini: kita benar-benar dapat membuat gambar visual baru yang orisinal hanya dari deskripsi teks, serta membuat kerangka materi presentasi yang siap diekspor ke Google Docs atau Google Slides. Apa yang tidak mungkin dilakukan: di menu alat Gemini ini, kita tidak bisa menghasilkan file musik atau lagu baru karena tidak ada fitur Create music. Sebagai pendidik, kita dapat meminta Gemini membuat gambar ilustrasi proses sains atau sejarah yang ramah anak dengan mengeklik alat Create image di bilah prompt lalu mengetikkan deskripsi gambarnya."
+      },
+
+      // SLIDE 30
+      {
+        id: 30,
+        module: "MODUL 04",
+        timeTag: "11.30 Siang — Cek Pemahaman",
+        title: "Fenomena Siang: \"Si Paling Mau Bikin Seru\"",
+        subtitle: "Mencari Ide Evaluasi Interaktif agar Kelas Tetap Semangat",
+        visualType: "clock-scene",
+        clockTime: "11.30",
+        sceneMood: "Mengecek Tugas & Pemahaman Siswa",
+        analogy: "Mengubah ujian yang menegangkan menjadi permainan interaktif yang dinamis di layar kelas.",
+        highlights: [
+          { icon: "fa-gamepad", title: "Tantangan Jam Rawan Mengantuk", desc: "Pukul 11.30 siang membutuhkan metode evaluasi yang melibatkan interaksi fisik dan visual siswa." },
+          { icon: "fa-list-check", title: "Kuis Interaktif Otomatis", desc: "Menyusun soal latihan bertingkat lengkap dengan umpan balik instan." },
+          { icon: "fa-laptop-code", title: "Simulasi & Game Web Tanpa Coding", desc: "Memanfaatkan fitur Gemini Canvas untuk menghidupkan papan tulis interaktif di kelas." }
+        ],
+        narration: "Pukul setengah dua belas siang, saatnya mengecek pemahaman siswa. Agar suasana kelas tidak mengantuk di siang hari, kita ingin merancang aktivitas evaluasi yang seru dan interaktif."
+      },
+
+      // SLIDE 31
+      {
+        id: 31,
+        module: "MODUL 04",
+        timeTag: "11.30 Siang — Evaluasi Cepat",
+        title: "Membuat Kuis Interaktif untuk Menilai Pemahaman Siswa",
+        subtitle: "Merancang Asesmen Formatif 5 Pertanyaan dari Materi Pelajaran",
+        visualType: "quiz-preview",
+        analogy: "Asisten Penguji Cepat: Menghasilkan soal pilihan ganda beserta penjelasan jawaban benar dalam satu instruksi.",
+        highlights: [
+          { icon: "fa-clipboard-question", title: "Prompt Kuis Spesifik", desc: "'Buat kuis interaktif 5 pertanyaan tentang materi sistem pencernaan manusia untuk menilai pemahaman siswa kelas 6 SD.'" },
+          { icon: "fa-bolt", title: "Umpan Balik Langsung", desc: "Siswa dapat langsung mengetahui alasan mengapa suatu pilihan jawaban benar atau keliru." },
+          { icon: "fa-sliders", title: "Dapat Disesuaikan Tingkat Kesulitannya", desc: "Guru dapat meminta soal level pemahaman dasar hingga penalaran tinggi." }
+        ],
+        narration: "Langkah pertama pada Slide tiga puluh satu adalah meminta Gemini membuat kuis interaktif lima pertanyaan untuk menguji pemahaman siswa secara langsung beserta umpan balik jawabannya."
+      },
+
+      // SLIDE 32
+      {
+        id: 32,
+        module: "MODUL 04",
+        timeTag: "11.30 Siang — Aktivasi Canvas",
+        title: "Membuat Game untuk Papan Interaktif dengan Chip \"Canvas\"",
+        subtitle: "Mengubah Instruksi Teks Menjadi Aplikasi Permainan Kelas",
+        visualType: "canvas-chip-demo",
+        analogy: "Tombol sulap tanpa coding: Cukup aktifkan tombol 'Canvas' di bilah prompt, dan Gemini akan merakit aplikasi interaktifnya untuk Anda.",
+        highlights: [
+          { icon: "fa-wand-magic", title: "Aktifkan Chip 'Canvas' di Bilah Prompt", desc: "Klik tombol 'Canvas' di bawah kolom pengetikan prompt sebelum mengirim instruksi pembuatan game atau aplikasi." },
+          { icon: "fa-chalkboard", title: "Cocok untuk Papan Interaktif Kelas", desc: "Mintalah game edukasi yang dapat disentuh dan dimainkan langsung oleh siswa secara bergantian di depan kelas." },
+          { icon: "fa-code", title: "Pratinjau Langsung (Live Preview)", desc: "Gemini otomatis menulis kode pemrograman di belakang layar dan langsung menampilkan wujud aplikasinya." }
+        ],
+        narration: "Lebih hebat lagi, pada Slide tiga puluh dua, kita bisa mengubah materi pelajaran menjadi game atau simulasi untuk papan interaktif yang bisa dimainkan langsung oleh siswa di depan kelas! Caranya adalah dengan mengeklik chip atau tombol bernama Canvas di bilah prompt, lalu mengetikkan instruksi permainan atau simulasi yang kita inginkan."
+      },
+
+      // SLIDE 33
+      {
+        id: 33,
+        module: "MODUL 04",
+        timeTag: "Bedah Fitur #3 — GEMINI CANVAS",
+        title: "Manfaat & Kemampuan Lengkap Gemini Canvas (+ Simulasi Massa Jenis)",
+        subtitle: "Membuat Dokumen, Kuis Kustom, Situs HTML, Infografis, & Simulasi Sains",
+        visualType: "canvas-density-lab",
+        featureName: "Alat Resmi: Canvas - Create Docs and apps",
+        analogy: "Bengkel Kreatif & Laboratorium Virtual: Tempat guru merakit kuis kustom, website HTML, infografis interaktif, hingga simulasi laboratorium sains tanpa perlu keahlian coding!",
+        featureGrid: {
+          penjelasan: "Ruang kerja interaktif di Gemini (Canvas - Create Docs and apps) untuk menyusun dokumen kolaboratif sekaligus membangun aplikasi web interaktif secara langsung.",
+          bisa: "BISA digunakan untuk: 1) Create custom quizzes (Kuis kustom), 2) Create HTML websites (Situs web HTML tanpa coding), 3) Create interactive infographics (Infografis interaktif), & 4) Simulasi web interaktif.",
+          tidakBisa: "Berjalan di dalam peramban web sehingga tidak digunakan untuk menginstal aplikasi sistem operasi luar atau menggantikan verifikasi konsep oleh guru.",
+          caraPakai: "Studi Kasus Guru IPA (Konsep Massa Jenis/Density): Minta Gemini membuat aplikasi berbasis web dengan Canvas yang memungkinkan siswa mengatur sendiri massa dan volume benda untuk melihat bagaimana massa jenisnya berubah dan apakah benda tersebut terapung atau tenggelam!"
+        },
+        narration: "Mari kita bedah tuntas fitur Gemini Canvas pada Slide tiga puluh tiga agar tidak ada kesalahpahaman. Canvas adalah ruang kerja interaktif di dalam Gemini untuk membuat dokumen maupun aplikasi web secara langsung. Apa saja yang BISA dilakukan dengan Gemini Canvas? Pertama, membuat kuis kustom yang interaktif atau Create custom quizzes. Kedua, membuat situs web berbasis HTML lengkap tanpa perlu mengerti coding atau Create HTML websites. Ketiga, mendesain infografis interaktif yang menarik atau Create interactive infographics. Keempat, mengembangkan ide, draf dokumen, dan aplikasi pembelajaran. Apa yang TIDAK mungkin dilakukan: Canvas berjalan di dalam peramban web sehingga tidak bisa menginstal perangkat lunak sistem operasi luar. Contoh terbaik bagi pendidik adalah ketika guru IPA ingin mengajarkan konsep massa jenis atau mengapa benda terapung dan tenggelam; guru dapat meminta Gemini menggunakan Canvas untuk membuat aplikasi simulasi berbasis web di mana siswa bisa menggeser nilai massa dan volume benda, lalu melihat langsung perubahan massa jenisnya dan apakah benda tersebut terapung atau tenggelam!"
+      },
+
+      // SLIDE 34
+      {
+        id: 34,
+        module: "MODUL 04",
+        timeTag: "13.00 Siang — Administrasi",
+        title: "Fenomena Siang: \"Si Paling Deadline\"",
+        subtitle: "Menghadapi Tugas Administrasi dan Pembuatan Perangkat Ajar yang Berulang",
+        visualType: "clock-scene",
+        clockTime: "13.00",
+        sceneMood: "Menyelesaikan Administrasi Sekolah",
+        analogy: "Mengapa harus mengetik instruksi panjang yang sama setiap hari jika kita bisa melatih asisten khusus yang sudah hafal SOP kita?",
+        highlights: [
+          { icon: "fa-folder-tree", title: "Beban Tugas Berulang Guru", desc: "Menyusun modul ajar, kisi-kisi soal, rubrik penilaian, dan surat sekolah dengan format yang sama berulang kali." },
+          { icon: "fa-stopwatch", title: "Kebutuhan Efisiensi Waktu", desc: "Mengetik ulang prompt PARTS dari nol setiap hari tentu menyita waktu istirahat guru." },
+          { icon: "fa-gem", title: "Solusi Otomasi: Fitur Gems", desc: "Menyimpan instruksi khusus dan referensi kurikulum ke dalam satu asisten AI permanen." }
+        ],
+        narration: "Pukul satu siang, waktunya mengurus administrasi sekolah yang padat. Bagaimana agar kita tidak kelelahan mengetik prompt yang panjang berulang-ulang setiap kali hendak membuat dokumen rutin?"
+      },
+
+      // SLIDE 35
+      {
+        id: 35,
+        module: "MODUL 04",
+        timeTag: "13.00 Siang — Pengenalan Gems",
+        title: "Buat Custom AI Anda Sendiri dengan GEMS",
+        subtitle: "Asisten AI Spesialis yang Disesuaikan dengan Kebutuhan Unik Pendidik",
+        visualType: "gems-intro",
+        analogy: "Jika Gemini standar adalah asisten umum serba bisa, maka Gem adalah asisten spesialis pribadi Anda yang sudah menghafal kurikulum, gaya bahasa, dan format tabel favorit Anda di luar kepala.",
+        highlights: [
+          { icon: "fa-gem", title: "Apa itu Gems?", desc: "Versi custom dari Gemini yang dapat dipersonalisasi dengan instruksi tetap dan dokumen pengetahuan khusus." },
+          { icon: "fa-user-gear", title: "Dirancang Sesuai Peran Spesifik", desc: "Bisa diatur menjadi Pakar Kurikulum Sekolah, Korektor Bahasa, atau Perancang Asesmen." },
+          { icon: "fa-bolt", title: "Siap Pakai Kapan Saja", desc: "Begitu dibuka, guru tinggal mengetik topik materi tanpa perlu mengulang prompt panjang." }
+        ],
+        narration: "Jawabannya ada pada Slide tiga puluh lima, yaitu fitur Gems! Gems adalah versi Gemini yang dapat kita personalisasi sendiri. Analoginya, jika Gemini biasa adalah asisten umum yang harus diberi pengarahan dari awal setiap hari, maka Gem adalah asisten spesialis yang sudah menghafal seluruh standar operasional dan format favorit kita."
+      },
+
+      // SLIDE 36
+      {
+        id: 36,
+        module: "MODUL 04",
+        timeTag: "13.00 Siang — Navigasi Side Menu",
+        title: "Cara Akses Gems & Mengenal Menu Samping (Side Menu) Gemini",
+        subtitle: "Memahami 3 Elemen Resmi di Panel Kiri vs Pemanggilan Google Drive",
+        visualType: "sidemenu-anatomy",
+        analogy: "Laci Navigasi Kiri: Di dalam Side Menu sebelah kiri hanya tersimpan New chat, Recent chats, dan Gems.",
+        highlights: [
+          { icon: "fa-bars-staggered", title: "3 Menu yang Dapat Diakses di Side Menu (Panel Kiri)", desc: "Di dalam menu samping (Side Menu) Gemini, kita dapat mengakses: 1) New chat (Obrolan baru), 2) Recent chats (Riwayat obrolan terakhir), dan 3) Gems (Asisten AI kustom)." },
+          { icon: "fa-ban", title: "Batas Side Menu: Bukan Daftar File Google Drive", desc: "Daftar 'Google Drive files' TIDAK terletak di dalam daftar navigasi menu samping kiri Gemini." },
+          { icon: "fa-at", title: "Cara Memanggil File Google Drive", desc: "File Google Drive dipanggil melalui tombol '+' (Unggah) atau mengetik ekstensi '@Google Drive' langsung di kolom pengetikan prompt." }
+        ],
+        narration: "Mari kita perhatikan cara mengakses Gems sekaligus memahami anatomi Menu Samping atau Side Menu di sebelah kiri layar Gemini pada Slide tiga puluh enam. Di dalam menu samping Gemini, terdapat tiga hal utama yang dapat diakses langsung, yaitu memulai obrolan baru atau New chat, melihat riwayat obrolan terakhir atau Recent chats, serta mengakses asisten kustom atau Gems. Perlu diingat bahwa daftar file Google Drive tidak terletak di menu samping tersebut, melainkan dipanggil melalui tombol tambah atau ekstensi Google Drive di bilah pengetikan prompt."
+      },
+
+      // SLIDE 37
+      {
+        id: 37,
+        module: "MODUL 04",
+        timeTag: "Bedah Fitur #4 — GEMS",
+        title: "Manfaat & Batasan Fitur Gems bagi Pendidik",
+        subtitle: "Menghemat Waktu, Menjaga Konsistensi, dan Berbagi Praktik Baik",
+        visualType: "feature-4grid",
+        featureName: "Fitur Menu Samping: Gems (Custom AI)",
+        analogy: "Cetakan SOP Cerdas yang bisa digandakan dan dibagikan kepada rekan guru satu sekolah atau satu komunitas belajar.",
+        featureGrid: {
+          penjelasan: "Fitur di menu samping Gemini untuk membuat dan menyimpan asisten AI kustom dengan instruksi perilaku serta dokumen acuan permanen.",
+          bisa: "1) Membuat asisten AI khusus sesuai kebutuhan, 2) Menghemat waktu tanpa mengulang prompt panjang, 3) Memberikan jawaban yang konsisten, 4) Dapat dibagikan ke guru lain.",
+          tidakBisa: "Gem tidak berjalan sendiri di luar sesi percakapan tanpa dipanggil pengguna, dan kualitasnya tetap bergantung pada kejelasan instruksi awal pembuatnya.",
+          caraPakai: "Buka Side Menu -> Klik Gems -> Klik Buat Gem Baru -> Beri nama, isi Instruksi (kerangka PARTS), lampirkan file panduan kurikulum -> Simpan & Bagikan."
+        },
+        narration: "Pada Slide tiga puluh tujuh, kita rangkum kemampuan Gems. Apa yang bisa dilakukan: membuat asisten AI khusus sesuai kebutuhan spesifik guru, menghemat waktu tanpa mengulang prompt panjang, memberikan format jawaban yang konsisten, serta dapat dibagikan kepada rekan guru lain. Apa yang tidak mungkin dilakukan: Gem tetap membutuhkan instruksi sistem awal yang jelas saat pertama kali dibuat dan tidak bisa bekerja otomatis di luar percakapan tanpa kita panggil. Cara menggunakannya cukup dengan menyimpan instruksi detail dan dokumen acuan satu kali saja di pengaturan Gem."
+      },
+
+      // SLIDE 38
+      {
+        id: 38,
+        module: "MODUL 04",
+        timeTag: "13.00 Siang — Studi Kasus Gems",
+        title: "Contoh Nyata: Gem \"Asisten Pembelajaran Mendalam\"",
+        subtitle: "Inovasi Berbagi Asisten AI Kustom untuk Rekan Sejawat",
+        visualType: "gem-showcase",
+        analogy: "Satu guru merancang Gem berkualitas, puluhan guru lain di komunitas belajar ikut merasakan kemudahannya.",
+        highlights: [
+          { icon: "fa-star", title: "Gem Asisten Pembelajaran Mendalam", desc: "Contoh Gem yang telah dibekali panduan penyusunan RPP Pembelajaran Mendalam (bit.ly/asistenpm)." },
+          { icon: "fa-comments", title: "Cukup Ketik Mata Pelajaran & Kelas", desc: "Guru tidak perlu lagi mengetik rumus PARTS yang panjang; cukup ketik 'IPA Kelas 6 Sistem Pencernaan', dan Gem langsung menyusun tabel lengkapnya." },
+          { icon: "fa-share-nodes", title: "Kolaborasi Komunitas Guru", desc: "Sangat ideal diterapkan di tingkat sekolah maupun Kelompok Kerja Guru." }
+        ],
+        narration: "Slide tiga puluh delapan menampilkan contoh nyata sebuah Gem bernama Asisten Pembelajaran Mendalam yang dapat diakses pada tautan bit.ly/asistenpm. Di dalam Gem ini sudah ditanamkan instruksi terperinci mengenai kurikulum dan pendekatan pembelajaran mendalam, sehingga kapan pun guru membutuhkan RPP atau asesmen baru, guru cukup mengetikkan topik materinya saja."
+      },
+
+      // SLIDE 39
+      {
+        id: 39,
+        module: "MODUL 04",
+        timeTag: "Bedah Fitur #5 — Guided Learning",
+        title: "Buat Gem & Pembelajaran dengan Guided Learning",
+        subtitle: "Alat Pembelajaran Terpandu untuk Memahami Topik Secara Bertahap",
+        visualType: "feature-4grid",
+        featureName: "Alat Resmi: Guided learning - Learn and understand topics",
+        analogy: "Tutor Sokratis yang Sabar: Bukan pemberi contekan jawaban instan, melainkan pembimbing yang menuntun siswa memahami konsep langkah demi langkah.",
+        featureGrid: {
+          penjelasan: "Alat resmi di Gemini (Guided learning - Learn and understand topics) yang dirancang untuk memandu proses belajar dan pemahaman topik secara bertahap dan interaktif.",
+          bisa: "Mengajarkan konsep rumit secara bertahap, memberikan pertanyaan pemantik, mengecek pemahaman pengguna, dan menjadi tutor pendamping di dalam Gem.",
+          tidakBisa: "Bukan dirancang untuk langsung memberikan seluruh kunci jawaban tugas tanpa proses berpikir dari siswa.",
+          caraPakai: "Pilih alat 'Guided learning' di bilah alat Gemini atau integrasikan instruksi pembelajaran terpandu ke dalam Gem khusus siswa untuk belajar mandiri."
+        },
+        narration: "Slide ketiga puluh sembilan memperkenalkan fitur penting lainnya di ekosistem Gemini, yaitu Guided learning atau Pembelajaran Terpandu. Penjelasan fiturnya: Guided learning adalah alat resmi di Gemini yang dirancang untuk membantu pengguna mempelajari dan memahami suatu topik secara bertahap layaknya seorang tutor pendamping. Apa yang bisa dilakukan: menuntun siswa memahami konsep langkah demi langkah lewat pertanyaan pemantik dan petunjuk, bukan sekadar memberikan contekan jawaban akhir. Apa yang tidak dilakukan: fitur ini sengaja menahan diri agar tidak langsung membocorkan seluruh jawaban instan supaya proses berpikir siswa tetap berjalan. Pendidik dapat mengaktifkan alat Guided learning di bilah Gemini atau memasangnya di dalam Gem sebagai tutor belajar mandiri bagi siswa."
+      },
+
+      // SLIDE 40 (SUPLEMEN 1)
+      {
+        id: 40,
+        module: "SUPLEMEN",
+        timeTag: "Bedah Fitur #6 — Gemini Notebook",
+        title: "Mengenal Gemini Notebook (NotebookLM) & Sintesis Dokumen",
+        subtitle: "Asisten Riset dan Analisis Dokumen yang Berfokus Penuh pada Sumber Anda",
+        visualType: "feature-4grid",
+        featureName: "Ekosistem Gemini: Gemini Notebook (NotebookLM)",
+        analogy: "Perpustakaan Umum vs Meja Studi Privat: Jika Gemini biasa mengambil pengetahuan dari seluruh samudra internet, maka Gemini Notebook adalah meja kerja tertutup yang 100% hanya membaca dan menjawab dari dokumen yang Anda letakkan di atas meja tersebut.",
+        featureGrid: {
+          penjelasan: "Aplikasi buku catatan berbasis AI dari Google Gemini yang mengunci sumber jawabannya 100% hanya pada dokumen (PDF, Google Docs, Slides) yang diunggah pengguna.",
+          bisa: "Jika memiliki beberapa artikel PDF untuk proyek riset kelas dan ingin cepat memahami poin utamanya, unggah seluruh artikel PDF tersebut sekaligus ke dalam satu Gemini Notebook, lalu minta AI membuat ringkasan (summaries) dan mengidentifikasi topik kunci.",
+          tidakBisa: "1) TIDAK digunakan untuk mencari sumber informasi lain dari internet luar. 2) TIDAK perlu mengonversi PDF ke Google Docs terlebih dahulu dan tidak perlu memisahkannya ke notebook terpisah.",
+          caraPakai: "Buka notebooklm.google.com -> Buat Notebook baru -> Unggah semua file PDF rujukan -> Minta ringkasan, konsep kunci, Study Guide, atau FAQ."
+        },
+        narration: "Bapak dan Ibu Guru Hebat, untuk melengkapi penguasaan kita atas seluruh ekosistem Gemini untuk Pendidikan, mari kita pelajari fitur luar biasa bernama Gemini Notebook atau NotebookLM pada Slide empat puluh. Analoginya sangat mudah: jika Gemini biasa adalah perpustakaan raksasa dunia yang mengambil informasi dari seluruh internet, maka Gemini Notebook adalah meja kerja privat yang tertutup. AI di dalam Gemini Notebook seratus persen hanya membaca, menganalisis, dan menjawab berdasarkan dokumen yang kita unggah ke dalamnya. Jika seorang pendidik memiliki beberapa artikel PDF untuk proyek riset kelas dan ingin cepat memahami poin utamanya, metode paling efisien adalah langsung mengunggah seluruh artikel PDF tersebut ke dalam satu Gemini Notebook, lalu memintanya membuat ringkasan dan mengidentifikasi topik-topik kunci. Kita tidak perlu repot mengonversi PDF ke Google Docs terlebih dahulu, tidak perlu memisahkannya ke notebook berbeda, dan jangan menggunakannya untuk mencari sumber lain di internet luar karena fokusnya adalah mengupas dokumen yang sudah kita unggah."
+      },
+
+      // SLIDE 41 (SUPLEMEN 2)
+      {
+        id: 41,
+        module: "SUPLEMEN",
+        timeTag: "Bedah Fitur #7 — Audio Overview",
+        title: "Audio Overview, Study Guide, & FAQ di Gemini Notebook",
+        subtitle: "Memahami Dokumen Kebijakan Sekolah & Mengunduh Diskusi Audio",
+        visualType: "notebook-analogy",
+        analogy: "Studio Podcast Instan: Mengubah tumpukan dokumen kebijakan sekolah menjadi diskusi suara menarik yang bisa diunduh dan didengarkan secara offline!",
+        highlights: [
+          { icon: "fa-school", title: "3 Fitur untuk Memahami Dokumen Kebijakan Sekolah Baru", desc: "Saat guru baru ingin memahami kumpulan dokumen kebijakan sekolah di Gemini Notebook, gunakan 3 fitur ini: 1) Audio Overview (mendengarkan poin utama), 2) Study Guide (panduan belajar isi dokumen), dan 3) FAQ (daftar tanya jawab isi dokumen)." },
+          { icon: "fa-download", title: "Audio Overview BISA Diunduh (True)", desc: "Hasil Audio Overview di Gemini Notebook dapat diunduh (downloaded) untuk digunakan atau dibagikan di luar aplikasi notebook secara offline." },
+          { icon: "fa-compass-slash", title: "Bukan Mesin Pencari Konten Serupa di Internet", desc: "Hindari menggunakan fitur pencari sumber internet luar ketika tujuan utamanya adalah menguasai isi kebijakan internal yang sudah diunggah." }
+        ],
+        narration: "Pada Slide empat puluh satu, kita melihat bagaimana Gemini Notebook membantu seorang guru baru yang harus memahami banyak dokumen kebijakan di sekolah barunya. Ada tiga fitur utama yang sangat tepat digunakan dari dokumen yang diunggah tersebut: pertama, membuat Study Guide atau panduan belajar; kedua, membuat FAQ atau daftar tanya jawab; dan ketiga, menggunakan Audio Overview untuk mendengarkan pembahasan poin-poin utama kebijakan tersebut layaknya diskusi podcast. Satu fakta penting yang wajib diingat: Audio Overview di Gemini Notebook ini BISA diunduh atau didownload untuk digunakan dan dibagikan di luar notebook secara offline!"
+      },
+
+      // SLIDE 42 (SUPLEMEN 3 & PENUTUP)
+      {
+        id: 42,
+        module: "SUPLEMEN",
+        timeTag: "Strategi Pedagogis & Penutup",
+        title: "Praktik Terbaik Pendidik Menggunakan Gemini Notebook di Kelas",
+        subtitle: "Ekstraksi Kosakata Kunci & Diferensiasi Tingkat Kemampuan Membaca Siswa",
+        visualType: "closing-mastery",
+        analogy: "Teknologi sebagai jembatan empati: Mengadaptasi satu cerita yang sama menjadi berbagai tingkat keterbacaan agar tidak ada satu pun siswa yang tertinggal di kelas.",
+        highlights: [
+          { icon: "fa-spell-check", title: "Skenario 1: Memahami Istilah Kunci Artikel (Siklus Kupu-Kupu)", desc: "Saat mengunggah artikel 1 halaman tentang siklus hidup kupu-kupu, cara paling efektif membantu siswa memahami istilah kunci adalah meminta Gemini Notebook: 'Generate a list of 5 key vocabulary words from the article and provide their definitions in simple terms' (Buat daftar 5 kosakata kunci dari artikel dan berikan definisinya dengan bahasa sederhana)." },
+          { icon: "fa-book-open", title: "Skenario 2: Diferensiasi Kemampuan Membaca Berbeda", desc: "Saat guru mengunggah cerita karangannya sendiri untuk siswa dengan kemampuan membaca yang beragam (different reading abilities), cara terbaik mendukung semua pembelajar adalah meminta Gemini Notebook menghasilkan beberapa versi ringkasan cerita yang masing-masing disesuaikan dengan tingkat kemampuan membaca yang berbeda." },
+          { icon: "fa-hands-clapping", title: "Terima Kasih — Iwan Sutiawan & Asisten AI", desc: "Mari berinovasi dengan aman, kritis, dan humanis bersama Google Gemini demi kemajuan pendidikan Indonesia!" }
+        ],
+        narration: "Sebagai penutup pada Slide empat puluh dua, bagaimana praktik terbaik bagi pendidik saat menggunakan Gemini Notebook untuk pengajaran di kelas? Contoh pertama: ketika guru mengunggah artikel satu halaman tentang siklus hidup kupu-kupu dan ingin membantu siswa memahami istilah-istilah penting, cara paling efektif adalah memberikan prompt spesifik: Buatkan daftar lima kosakata kunci dari artikel tersebut dan berikan definisinya dengan bahasa yang sederhana. Contoh kedua: ketika guru Bahasa Inggris mengunggah cerita karangannya sendiri dan ingin mendukung siswa di kelas yang memiliki kemampuan membaca berbeda-beda atau different reading abilities, cara terbaik untuk merangkul semua siswa adalah meminta Gemini Notebook menghasilkan beberapa versi ringkasan cerita yang masing-masing disesuaikan dengan tingkat kemampuan membaca yang berbeda. Bapak dan Ibu Guru Hebat, demikianlah seluruh rangkaian materi Pengimbasan Gemini Academy hari ini. Saya, Asisten AI Pak Iwan, mengucapkan terima kasih atas perhatian luar biasa Bapak dan Ibu. Selanjutnya saya kembalikan kepada Bapak Iwan Sutiawan. Selamat berinovasi dengan Gemini, dan salam pendidikan!"
+      }
+    ];
+
+    // =========================================================================
+    // 3. STATE APLIKASI, TEMA TERANG/GELAP, & SISTEM AUDIO HIBRIDA
+    // =========================================================================
+    let currentSlideIndex = 0;
+    let isSpeaking = false;
+    let autoAdvance = false;
+    let showTeleprompter = true;
+    let isDarkMode = true;
+
+    // Mode Suara: 'AI_FEMALE' | 'AI_MALE' | 'MP3_RECORDING'
+    let currentVoiceMode = 'AI_FEMALE';
+    let speechRate = 1.0;
+    let speechPitch = 1.0;
+    let selectedVoice = null;
+    let availableVoices = [];
+    let localMp3Map = {}; // Menyimpan blob URL jika Pak Iwan memuat file MP3 lokal dari komputer
+
+    let sentenceQueue = [];
+    let currentSentenceIdx = 0;
+    let autoAdvanceTimeout = null;
+    let activeUtterance = null;
+
+    window.onload = function () {
+      initSpeechSynthesis();
+      updateVoiceModeUI();
+      renderSlide(currentSlideIndex);
+      renderDrawerItems('ALL');
+      setupKeyboardShortcuts();
+    };
+
+    // TOGGLE MODE TERANG & MODE GELAP
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      const htmlEl = document.documentElement;
+      const iconEl = document.getElementById('themeToggleIcon');
+      const labelEl = document.getElementById('themeToggleLabel');
+
+      if (isDarkMode) {
+        htmlEl.classList.remove('light');
+        htmlEl.classList.add('dark');
+        iconEl.className = "fa-solid fa-sun text-amber-400";
+        labelEl.textContent = "Mode Terang";
+      } else {
+        htmlEl.classList.remove('dark');
+        htmlEl.classList.add('light');
+        iconEl.className = "fa-solid fa-moon text-indigo-600";
+        labelEl.textContent = "Mode Gelap";
+      }
+    }
+
+    // DETEKSI SUARA BROWSER (TTS)
+    function initSpeechSynthesis() {
+      if (!('speechSynthesis' in window)) {
+        document.getElementById('aiStatusText').textContent = "TTS Tidak Didukung Browser";
+        return;
+      }
+
+      function populateVoices() {
+        availableVoices = window.speechSynthesis.getVoices();
+        const voiceSelect = document.getElementById('voiceSelect');
+        if (!voiceSelect || availableVoices.length === 0) return;
+
+        voiceSelect.innerHTML = '';
+
+        const idVoices = availableVoices.filter(v =>
+          v.lang.toLowerCase().includes('id') ||
+          v.name.toLowerCase().includes('indonesia') ||
+          v.name.toLowerCase().includes('gadis') ||
+          v.name.toLowerCase().includes('andika') ||
+          v.name.toLowerCase().includes('ardi')
+        );
+
+        const otherVoices = availableVoices.filter(v => !idVoices.includes(v));
+        const sortedVoices = [...idVoices, ...otherVoices];
+
+        sortedVoices.forEach(voice => {
+          const opt = document.createElement('option');
+          opt.value = voice.name;
+          const isId = idVoices.includes(voice);
+          const isMale = voice.name.toLowerCase().includes('andika') || voice.name.toLowerCase().includes('ardi') || voice.name.toLowerCase().includes('male');
+          opt.textContent = `${isId ? '🇮🇩 ' : ''}${voice.name} (${voice.lang})${isMale ? ' [Laki-Laki]' : ''}`;
+          voiceSelect.appendChild(opt);
+        });
+
+        applyVoiceForCurrentMode();
+      }
+
+      populateVoices();
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = populateVoices;
+      }
+    }
+
+    function applyVoiceForCurrentMode() {
+      const idVoices = availableVoices.filter(v =>
+        v.lang.toLowerCase().includes('id') ||
+        v.name.toLowerCase().includes('indonesia') ||
+        v.name.toLowerCase().includes('gadis') ||
+        v.name.toLowerCase().includes('andika') ||
+        v.name.toLowerCase().includes('ardi')
+      );
+
+      if (currentVoiceMode === 'AI_MALE') {
+        // Cari apakah ada suara laki-laki Indonesia asli (Andika / Ardi)
+        const maleIdVoice = idVoices.find(v =>
+          v.name.toLowerCase().includes('andika') ||
+          v.name.toLowerCase().includes('ardi') ||
+          v.name.toLowerCase().includes('male')
+        );
+        if (maleIdVoice) {
+          selectedVoice = maleIdVoice;
+          speechPitch = 1.0;
+          speechRate = 1.0;
+        } else {
+          // Jika hanya ada Google Bahasa Indonesia (Perempuan), gunakan pitch bariton agar lebih berat
+          selectedVoice = idVoices[0] || availableVoices[0] || null;
+          speechPitch = 0.78;
+          speechRate = 0.98;
+        }
+      } else if (currentVoiceMode === 'AI_FEMALE') {
+        const femaleIdVoice = idVoices.find(v =>
+          v.name.toLowerCase().includes('google') ||
+          v.name.toLowerCase().includes('gadis')
+        ) || idVoices[0];
+        selectedVoice = femaleIdVoice || availableVoices[0] || null;
+        speechPitch = 1.0;
+        speechRate = 1.0;
+      }
+
+      // Sinkronkan UI Slider & Select
+      const voiceSelect = document.getElementById('voiceSelect');
+      if (voiceSelect && selectedVoice) {
+        voiceSelect.value = selectedVoice.name;
+      }
+      const pitchRange = document.getElementById('pitchRange');
+      const rateRange = document.getElementById('rateRange');
+      if (pitchRange) {
+        pitchRange.value = speechPitch;
+        document.getElementById('pitchValueLabel').textContent = speechPitch.toFixed(2);
+      }
+      if (rateRange) {
+        rateRange.value = speechRate;
+        document.getElementById('rateValueLabel').textContent = speechRate.toFixed(2) + 'x';
+      }
+    }
+
+    function handleQuickVoiceModeChange(mode) {
+      currentVoiceMode = mode;
+      const quickSelect = document.getElementById('quickVoiceModeSelect');
+      if (quickSelect && quickSelect.value !== mode) {
+        quickSelect.value = mode;
+      }
+      applyVoiceForCurrentMode();
+      updateVoiceModeUI();
+
+      if (isSpeaking) {
+        replayNarration();
+      }
+    }
+
+    function updateVoiceModeUI() {
+      const indicator = document.getElementById('audioSourceIndicator');
+      const narratorTitle = document.getElementById('narratorTitleLabel');
+      const avatarIcon = document.getElementById('narratorAvatarIcon');
+      const teleprompterTitle = document.getElementById('teleprompterHeaderTitle');
+
+      const btnFemale = document.getElementById('modalBtnAiFemale');
+      const btnMale = document.getElementById('modalBtnAiMale');
+      const btnMp3 = document.getElementById('modalBtnMp3');
+
+      [btnFemale, btnMale, btnMp3].forEach(b => {
+        if (b) b.className = "p-2.5 rounded-xl border border-slate-500/30 text-left transition flex flex-col justify-between opacity-75 hover:opacity-100";
+      });
+
+      if (currentVoiceMode === 'MP3_RECORDING') {
+        indicator.textContent = "Mode: Rekaman Asli Pak Iwan (MP3)";
+        indicator.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-300";
+        narratorTitle.textContent = "Suara Asli Pak Iwan";
+        avatarIcon.className = "fa-solid fa-user-tie text-white text-xs";
+        teleprompterTitle.textContent = "Naskah Narasi Presentasi Pak Iwan (Mode Rekaman MP3: audio/slide" + (currentSlideIndex + 1) + ".mp3)";
+        if (btnMp3) btnMp3.className = "p-2.5 rounded-xl border-2 border-emerald-500 bg-emerald-500/10 text-left transition flex flex-col justify-between";
+      } else if (currentVoiceMode === 'AI_MALE') {
+        indicator.textContent = "Mode: AI Laki-Laki (Fonetik Halus)";
+        indicator.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-sky-500/20 text-sky-600 dark:text-sky-300";
+        narratorTitle.textContent = "Asisten AI (Laki-Laki)";
+        avatarIcon.className = "fa-solid fa-robot text-white text-xs";
+        teleprompterTitle.textContent = "Naskah Suara Asisten AI Pak Iwan (Mode Laki-Laki + Fonetik Aktif)";
+        if (btnMale) btnMale.className = "p-2.5 rounded-xl border-2 border-sky-500 bg-sky-500/10 text-left transition flex flex-col justify-between";
+      } else {
+        indicator.textContent = "Mode: AI Perempuan (Fonetik Halus)";
+        indicator.className = "text-[11px] font-semibold px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-600 dark:text-indigo-300";
+        narratorTitle.textContent = "Asisten AI Pak Iwan";
+        avatarIcon.className = "fa-solid fa-robot text-white text-xs";
+        teleprompterTitle.textContent = "Naskah Suara Asisten AI Pak Iwan (Mode Perempuan + Fonetik Aktif)";
+        if (btnFemale) btnFemale.className = "p-2.5 rounded-xl border-2 border-indigo-500 bg-indigo-500/10 text-left transition flex flex-col justify-between";
+      }
+    }
+
+    function handleManualVoiceSelect() {
+      const name = document.getElementById('voiceSelect').value;
+      selectedVoice = availableVoices.find(v => v.name === name) || selectedVoice;
+      if (isSpeaking) replayNarration();
+    }
+
+    function handleRateChange(val) {
+      speechRate = parseFloat(val);
+      document.getElementById('rateValueLabel').textContent = speechRate.toFixed(2) + 'x';
+      if (isSpeaking) replayNarration();
+    }
+
+    function handlePitchChange(val) {
+      speechPitch = parseFloat(val);
+      document.getElementById('pitchValueLabel').textContent = speechPitch.toFixed(2);
+      if (isSpeaking) replayNarration();
+    }
+
+    function togglePhoneticDictionary(checked) {
+      usePhoneticDictionary = checked;
+      if (isSpeaking) replayNarration();
+    }
+
+    // MUAT FILE MP3 LOKAL (UNTUK TES SEBELUM PUSH KE GITHUB)
+    function handleLocalAudioFiles(fileList) {
+      if (!fileList || fileList.length === 0) return;
+      let count = 0;
+      for (const file of fileList) {
+        const lowerName = file.name.toLowerCase();
+        const match = lowerName.match(/slide(\d+)\.(mp3|wav|ogg|m4a)$/);
+        if (match) {
+          const slideNum = parseInt(match[1], 10);
+          localMp3Map[slideNum] = URL.createObjectURL(file);
+          count++;
+        }
+      }
+      const badge = document.getElementById('localMp3CountBadge');
+      if (count > 0) {
+        badge.textContent = `${count} File MP3 Lokal Siap Diputar!`;
+        badge.className = "px-2 py-0.5 rounded bg-emerald-500 text-white text-[10px] font-bold";
+        handleQuickVoiceModeChange('MP3_RECORDING');
+      } else {
+        badge.textContent = "Pastikan nama file: slide1.mp3 s.d. slide42.mp3";
+      }
+    }
+
+    function testVoiceSample() {
+      stopSpeech();
+      const rawSample = "Halo Bapak dan Ibu Guru Hebat! Saya adalah Asisten AI dari Bapak Iwan Sutiawan. Hari ini kita akan mempelajari Artificial Intelligence, Large Language Models, kerangka Prompting, Gemini Canvas, Guided Learning, dan Audio Overview di Gemini Notebook menggunakan akun belajar.id.";
+      const spokenSample = toPhoneticSpeech(rawSample);
+      const u = new SpeechSynthesisUtterance(spokenSample);
+      u.lang = 'id-ID';
+      if (selectedVoice) u.voice = selectedVoice;
+      u.rate = speechRate;
+      u.pitch = speechPitch;
+      window.speechSynthesis.speak(u);
+    }
+
+    // =========================================================================
+    // 4. PEMUTAR SUARA HIBRIDA (MP3 RECORDING & SENTENCE-BY-SENTENCE TTS)
+    // =========================================================================
+    function splitIntoSentences(text) {
+      const raw = text.match(/[^.!?]+[.!?]+|\s*[^.!?]+$/g) || [text];
+      return raw.map(s => s.trim()).filter(s => s.length > 0);
+    }
+
+    function renderTeleprompter(sentences, activeIdx = -1) {
+      const container = document.getElementById('teleprompterText');
+      const badge = document.getElementById('sentenceProgressBadge');
+      if (!container) return;
+
+      badge.textContent = activeIdx >= 0
+        ? `Kalimat ${activeIdx + 1} / ${sentences.length}`
+        : `${sentences.length} Kalimat Narasi`;
+
+      container.innerHTML = sentences.map((sentence, idx) => {
+        if (idx === activeIdx) {
+          return `<span id="activeSentenceSpan" class="bg-indigo-500/30 text-indigo-950 dark:text-white font-bold px-1.5 py-0.5 rounded-lg border border-indigo-500/50 transition-all">${sentence}</span>`;
+        } else if (idx < activeIdx) {
+          return `<span class="opacity-60">${sentence}</span>`;
+        }
+        return `<span>${sentence}</span>`;
+      }).join(' ');
+
+      const activeSpan = document.getElementById('activeSentenceSpan');
+      if (activeSpan) {
+        activeSpan.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function setSpeakingUI(speakingState, customStatusText = null) {
+      isSpeaking = speakingState;
+      const waveContainer = document.getElementById('soundWaveContainer');
+      const pulseRing = document.getElementById('aiPulseRing');
+      const statusText = document.getElementById('aiStatusText');
+      const playIcon = document.getElementById('playNarrationIcon');
+      const playLabel = document.getElementById('playNarrationLabel');
+
+      if (speakingState) {
+        waveContainer.classList.add('speaking');
+        pulseRing.classList.remove('hidden');
+        statusText.textContent = customStatusText || `Menjelaskan Slide ${currentSlideIndex + 1}...`;
+        statusText.className = "text-[10px] text-emerald-500 dark:text-emerald-400 font-bold mt-0.5";
+        playIcon.className = "fa-solid fa-pause";
+        playLabel.textContent = "Jeda Suara";
+      } else {
+        waveContainer.classList.remove('speaking');
+        pulseRing.classList.add('hidden');
+        statusText.textContent = customStatusText || "Siap Memandu Materi";
+        statusText.className = "text-[10px] theme-text-muted mt-0.5";
+        playIcon.className = "fa-solid fa-volume-high";
+        playLabel.textContent = "Putar Suara Presentasi";
+      }
+    }
+
+    function stopSpeech() {
+      if (autoAdvanceTimeout) {
+        clearTimeout(autoAdvanceTimeout);
+        autoAdvanceTimeout = null;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      const audioPlayer = document.getElementById('recordedAudioPlayer');
+      if (audioPlayer) {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+      }
+      setSpeakingUI(false);
+    }
+
+    function startNarrationForCurrentSlide() {
+      stopSpeech();
+      const slide = slidesData[currentSlideIndex];
+      sentenceQueue = splitIntoSentences(slide.narration);
+      currentSentenceIdx = 0;
+
+      // JIKA MODE REKAMAN MP3 PAK IWAN AKTIF
+      if (currentVoiceMode === 'MP3_RECORDING') {
+        playRecordedMp3ForSlide(slide.id);
+        return;
+      }
+
+      // JIKA MODE SUARA AI (PEREMPUAN / LAKI-LAKI) AKTIF
+      if (sentenceQueue.length === 0) return;
+      setSpeakingUI(true);
+      speakNextSentence();
+    }
+
+    function playRecordedMp3ForSlide(slideNumber) {
+      const audioPlayer = document.getElementById('recordedAudioPlayer');
+      const mp3Src = localMp3Map[slideNumber] || `audio/slide${slideNumber}.mp3`;
+
+      audioPlayer.src = mp3Src;
+      setSpeakingUI(true, `Memutar audio/slide${slideNumber}.mp3...`);
+      renderTeleprompter(sentenceQueue, 0);
+
+      audioPlayer.onended = function () {
+        setSpeakingUI(false);
+        renderTeleprompter(sentenceQueue, -1);
+        triggerAutoAdvanceIfNeeded();
+      };
+
+      audioPlayer.onerror = function () {
+        // Fallback otomatis ke Suara AI Fonetik jika file MP3 belum tersedia di folder audio/
+        setSpeakingUI(true, `MP3 slide${slideNumber} belum ada -> AI Fonetik`);
+        speakNextSentence();
+      };
+
+      audioPlayer.play().catch(() => {
+        // Jika gagal memutar MP3 karena file belum ada, jalankan fallback TTS
+        setSpeakingUI(true, `MP3 slide${slideNumber} belum ada -> AI Fonetik`);
+        speakNextSentence();
+      });
+    }
+
+    function speakNextSentence() {
+      if (!isSpeaking) return;
+      if (currentSentenceIdx >= sentenceQueue.length) {
+        setSpeakingUI(false);
+        renderTeleprompter(sentenceQueue, -1);
+        triggerAutoAdvanceIfNeeded();
+        return;
+      }
+
+      // Tampilkan kalimat asli di Teleprompter, namun ucapkan versi Fonetik di TTS
+      renderTeleprompter(sentenceQueue, currentSentenceIdx);
+      const originalSentence = sentenceQueue[currentSentenceIdx];
+      const phoneticSentence = toPhoneticSpeech(originalSentence);
+
+      activeUtterance = new SpeechSynthesisUtterance(phoneticSentence);
+      activeUtterance.lang = 'id-ID';
+      if (selectedVoice) {
+        activeUtterance.voice = selectedVoice;
+      }
+      activeUtterance.rate = speechRate;
+      activeUtterance.pitch = speechPitch;
+
+      activeUtterance.onend = function () {
+        if (!isSpeaking) return;
+        currentSentenceIdx++;
+        speakNextSentence();
+      };
+
+      activeUtterance.onerror = function () {
+        setSpeakingUI(false);
+      };
+
+      window.speechSynthesis.speak(activeUtterance);
+    }
+
+    function triggerAutoAdvanceIfNeeded() {
+      if (autoAdvance && currentSlideIndex < slidesData.length - 1) {
+        const statusText = document.getElementById('aiStatusText');
+        statusText.textContent = "Melanjutkan ke slide berikutnya...";
+        autoAdvanceTimeout = setTimeout(() => {
+          nextSlide(true);
+        }, 1400);
+      }
+    }
+
+    function toggleNarration() {
+      if (isSpeaking) {
+        stopSpeech();
+      } else {
+        startNarrationForCurrentSlide();
+      }
+    }
+
+    function replayNarration() {
+      startNarrationForCurrentSlide();
+    }
+
+    function toggleAutoAdvance() {
+      const checkbox = document.getElementById('autoAdvanceToggle');
+      autoAdvance = checkbox.checked;
+    }
+
+    function toggleTeleprompter() {
+      showTeleprompter = !showTeleprompter;
+      const panel = document.getElementById('teleprompterPanel');
+      const btn = document.getElementById('btnToggleScript');
+      if (showTeleprompter) {
+        panel.classList.remove('hidden');
+        btn.classList.add('bg-indigo-600/20', 'border-indigo-500/40');
+      } else {
+        panel.classList.add('hidden');
+        btn.classList.remove('bg-indigo-600/20', 'border-indigo-500/40');
+      }
+    }
+
+    // =========================================================================
+    // 5. NAVIGASI & RENDER VISUAL 42 SLIDE
+    // =========================================================================
+    function nextSlide(keepSpeaking = false) {
+      const wasSpeaking = isSpeaking || keepSpeaking;
+      if (currentSlideIndex < slidesData.length - 1) {
+        currentSlideIndex++;
+        renderSlide(currentSlideIndex);
+        updateVoiceModeUI();
+        if (wasSpeaking) {
+          startNarrationForCurrentSlide();
+        }
+      }
+    }
+
+    function prevSlide() {
+      const wasSpeaking = isSpeaking;
+      if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        renderSlide(currentSlideIndex);
+        updateVoiceModeUI();
+        if (wasSpeaking) {
+          startNarrationForCurrentSlide();
+        }
+      }
+    }
+
+    function goToSlide(idx) {
+      const wasSpeaking = isSpeaking;
+      currentSlideIndex = idx;
+      renderSlide(currentSlideIndex);
+      updateVoiceModeUI();
+      document.getElementById('slideDrawerModal').classList.add('hidden');
+      if (wasSpeaking) {
+        startNarrationForCurrentSlide();
+      }
+    }
+
+    function getVisualIllustrationHTML(slide) {
+      switch (slide.visualType) {
+        case "hero-cover":
+          return `
+            <div class="visual-box-dark relative flex flex-col items-center justify-center p-6 rounded-3xl bg-gradient-to-br from-indigo-950/80 via-slate-900/90 to-purple-950/80 border border-indigo-500/30 shadow-2xl h-full min-h-[260px]">
+              <div class="relative w-28 h-28 flex items-center justify-center float-slow">
+                <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 blur-xl opacity-60 pulse-soft"></div>
+                <div class="relative w-24 h-24 rounded-3xl bg-slate-900 border border-indigo-400/40 flex items-center justify-center shadow-2xl">
+                  <i class="fa-solid fa-wand-magic-sparkles text-5xl gemini-gradient-text"></i>
+                </div>
+              </div>
+              <div class="mt-5 text-center">
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <i class="fa-solid fa-microphone-lines mr-1"></i> Audio Hibrida &amp; Fonetik Aktif
+                </span>
+                <h3 class="mt-3 text-lg font-extrabold text-white">Iwan Sutiawan</h3>
+                <p class="text-xs text-indigo-300 font-semibold">SDN 1 Sukahaji — Pemateri Pengimbasan</p>
+                <p class="text-[11px] text-slate-400 mt-1">Materi Slide: Heris Apriadi, M.Pd. (SDN 3 Sukahurip)</p>
+              </div>
+            </div>
+          `;
+
+        case "module-banner":
+          return `
+            <div class="visual-box-dark relative flex flex-col items-center justify-center p-6 rounded-3xl bg-gradient-to-br from-blue-950/80 via-indigo-950/80 to-slate-900 border border-blue-500/30 h-full min-h-[250px] overflow-hidden">
+              <div class="text-7xl sm:text-8xl font-black gemini-gradient-text opacity-95 float-slow">${slide.moduleNumber}</div>
+              <div class="mt-2 text-xs font-bold uppercase tracking-widest text-sky-300">${slide.module}</div>
+              <div class="mt-4 flex items-center gap-3">
+                <span class="w-10 h-10 rounded-2xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-300 pulse-soft">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </span>
+                <span class="w-10 h-10 rounded-2xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center text-purple-300 pulse-soft">
+                  <i class="fa-solid fa-graduation-cap"></i>
+                </span>
+                <span class="w-10 h-10 rounded-2xl bg-pink-500/20 border border-pink-400/30 flex items-center justify-center text-pink-300 pulse-soft">
+                  <i class="fa-solid fa-lightbulb"></i>
+                </span>
+              </div>
+            </div>
+          `;
+
+        case "concentric-ai":
+          return `
+            <div class="visual-box-dark relative flex items-center justify-center p-6 rounded-3xl bg-slate-900/80 border border-indigo-500/30 h-full min-h-[250px]">
+              <div class="w-56 h-56 rounded-full border-2 border-dashed border-blue-500/50 bg-blue-500/10 flex flex-col items-center justify-start pt-3 relative">
+                <span class="text-[11px] font-bold text-blue-300">Machine Learning (ML)</span>
+                <div class="w-40 h-40 rounded-full border-2 border-purple-500/50 bg-purple-500/15 flex flex-col items-center justify-start pt-3 mt-2">
+                  <span class="text-[11px] font-bold text-purple-300">LLM (Bahasa)</span>
+                  <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-indigo-600 to-pink-500 flex flex-col items-center justify-center text-center p-2 mt-2 shadow-lg pulse-soft">
+                    <i class="fa-solid fa-wand-magic-sparkles text-white text-lg"></i>
+                    <span class="text-[10px] font-extrabold text-white leading-tight mt-1">Generative AI (Gemini)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+
+        case "bias-scale":
+          return `
+            <div class="visual-box-dark flex flex-col items-center justify-center p-6 rounded-3xl bg-gradient-to-b from-amber-950/40 to-slate-900/90 border border-amber-500/30 h-full min-h-[250px] text-center">
+              <div class="w-20 h-20 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 text-4xl float-slow">
+                <i class="fa-solid fa-scale-unbalanced"></i>
+              </div>
+              <h4 class="mt-4 text-sm font-bold text-amber-200">Waspada Bias Sistemik</h4>
+              <p class="text-xs text-slate-300 mt-1 max-w-xs">
+                Data Pelatihan yang Berprasangka &rarr; Hasil AI yang Berat Sebelah (Systematically Prejudiced).
+              </p>
+              <div class="mt-3 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-[11px] text-emerald-300 font-semibold">
+                Solusi: Evaluasi Kritis &amp; Inklusivitas Guru
+              </div>
+            </div>
+          `;
+
+        case "hallucination-plant":
+          return `
+            <div class="visual-box-dark flex flex-col items-center justify-center p-5 rounded-3xl bg-gradient-to-b from-rose-950/40 to-slate-900/90 border border-rose-500/30 h-full min-h-[250px]">
+              <div class="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 text-3xl float-slow">
+                <i class="fa-solid fa-seedling"></i>
+              </div>
+              <div class="mt-3 w-full space-y-2 text-xs">
+                <div class="p-2.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-200 flex items-center justify-between">
+                  <span><i class="fa-solid fa-circle-xmark mr-1.5 text-rose-500"></i> <em>Zamioculcas zamioculcas</em></span>
+                  <span class="text-[10px] font-bold uppercase bg-rose-500/30 px-2 py-0.5 rounded">Halusinasi AI</span>
+                </div>
+                <div class="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-200 flex items-center justify-between">
+                  <span><i class="fa-solid fa-circle-check mr-1.5 text-emerald-500"></i> <em>Zamioculcas zamiifolia</em></span>
+                  <span class="text-[10px] font-bold uppercase bg-emerald-500/30 px-2 py-0.5 rounded">Fakta Ilmiah</span>
+                </div>
+              </div>
+            </div>
+          `;
+
+        case "aaa-human-loop":
+          return `
+            <div class="visual-box-dark flex flex-col justify-between p-5 rounded-3xl bg-slate-900/90 border border-indigo-500/30 h-full min-h-[250px]">
+              <div class="grid grid-cols-3 gap-2 text-center">
+                <div class="p-2.5 rounded-2xl bg-blue-500/15 border border-blue-400/30">
+                  <div class="text-lg font-black text-blue-300">A</div>
+                  <div class="text-[11px] font-bold text-white">Accurate</div>
+                  <div class="text-[10px] text-slate-400">Akurat</div>
+                </div>
+                <div class="p-2.5 rounded-2xl bg-purple-500/15 border border-purple-400/30">
+                  <div class="text-lg font-black text-purple-300">A</div>
+                  <div class="text-[11px] font-bold text-white">Aligned</div>
+                  <div class="text-[10px] text-slate-400">Sesuai</div>
+                </div>
+                <div class="p-2.5 rounded-2xl bg-pink-500/15 border border-pink-400/30">
+                  <div class="text-lg font-black text-pink-300">A</div>
+                  <div class="text-[11px] font-bold text-white">Appropriate</div>
+                  <div class="text-[10px] text-slate-400">Layak</div>
+                </div>
+              </div>
+              <div class="my-3 p-3 rounded-2xl bg-indigo-500/15 border border-indigo-400/30 text-center">
+                <div class="text-xs font-bold text-indigo-200"><i class="fa-solid fa-user-check mr-1"></i> Human-in-the-Loop</div>
+                <p class="text-[11px] text-slate-300 mt-0.5">Tinjau, Edit &amp; Adaptasi Draf AI dengan Penilaian Profesional Guru</p>
+              </div>
+              <div class="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-[11px] text-emerald-200 flex items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-emerald-400 text-base"></i>
+                <span>Cek keaslian tugas siswa lewat <strong>Version History</strong> di Google Docs</span>
+              </div>
+            </div>
+          `;
+
+        case "sidemenu-anatomy":
+          return `
+            <div class="visual-box-dark p-4 rounded-3xl bg-slate-900/95 border border-slate-700 h-full min-h-[250px] flex flex-col justify-between text-xs">
+              <div class="text-[11px] font-bold text-indigo-300 uppercase tracking-wider mb-2">
+                Simulasi Antarmuka Gemini
+              </div>
+              <div class="grid grid-cols-12 gap-2 flex-1">
+                <div class="col-span-5 bg-slate-800/90 rounded-2xl p-2.5 border border-emerald-500/40 flex flex-col justify-between">
+                  <div>
+                    <div class="text-[10px] font-bold text-emerald-300 mb-2">SIDE MENU (KIRI)</div>
+                    <div class="space-y-1.5">
+                      <div class="p-1.5 rounded-lg bg-slate-700/80 text-white flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus text-sky-400"></i> <span>New chat</span>
+                      </div>
+                      <div class="p-1.5 rounded-lg bg-slate-700/80 text-white flex items-center gap-1.5">
+                        <i class="fa-regular fa-message text-purple-400"></i> <span>Recent chats</span>
+                      </div>
+                      <div class="p-1.5 rounded-lg bg-slate-700/80 text-white flex items-center gap-1.5">
+                        <i class="fa-regular fa-gem text-pink-400"></i> <span>Gems</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="text-[9px] text-emerald-300 font-bold mt-2">✓ 3 Menu Resmi Side Menu</div>
+                </div>
+                <div class="col-span-7 bg-slate-950/80 rounded-2xl p-2.5 border border-slate-800 flex flex-col justify-between">
+                  <div class="text-[10px] text-slate-400">
+                    Area Percakapan Utama Gemini
+                  </div>
+                  <div class="p-2 rounded-xl bg-slate-800/80 border border-indigo-500/30">
+                    <div class="text-[10px] text-slate-300">Ketik Prompt (Instruksi/Tugas)...</div>
+                    <div class="flex items-center gap-1.5 mt-1.5 text-[9px] text-sky-300">
+                      <span class="px-1.5 py-0.5 rounded bg-slate-700">+ Unggah File</span>
+                      <span class="px-1.5 py-0.5 rounded bg-slate-700">@Google Drive</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+
+        case "canvas-density-lab":
+          return `
+            <div class="visual-box-dark p-4 rounded-3xl bg-slate-900/95 border border-sky-500/40 h-full flex flex-col justify-between">
+              <div class="flex items-center justify-between border-b border-slate-500/20 pb-2">
+                <span class="text-xs font-bold text-sky-300 flex items-center gap-1.5">
+                  <i class="fa-solid fa-flask-vial"></i> Demo Aplikasi Web Gemini Canvas: Lab Massa Jenis
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-bold">Interaktif!</span>
+              </div>
+              <div class="my-2 grid grid-cols-2 gap-3 items-center">
+                <div class="space-y-2 text-xs">
+                  <div>
+                    <label class="flex justify-between text-[11px] text-slate-300">
+                      <span>Massa Benda:</span> <strong id="demoMassLabel">60 g</strong>
+                    </label>
+                    <input type="range" id="demoMassSlider" min="10" max="150" value="60" oninput="updateDensityDemo()" class="w-full accent-sky-500">
+                  </div>
+                  <div>
+                    <label class="flex justify-between text-[11px] text-slate-300">
+                      <span>Volume Benda:</span> <strong id="demoVolLabel">100 ml</strong>
+                    </label>
+                    <input type="range" id="demoVolSlider" min="30" max="150" value="100" oninput="updateDensityDemo()" class="w-full accent-purple-500">
+                  </div>
+                  <div class="p-2 rounded-xl bg-slate-800/90 border border-slate-700 text-[11px]">
+                    <div>Massa Jenis: <strong id="demoDensityValue" class="text-sky-300">0.60 g/ml</strong></div>
+                    <div>Status di Air (1.0 g/ml): <strong id="demoFloatStatus" class="text-emerald-400">TERAPUNG</strong></div>
+                  </div>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                  <div class="w-28 h-32 rounded-b-2xl border-2 border-t-0 border-slate-400 bg-gradient-to-b from-transparent via-sky-500/25 to-blue-600/40 relative overflow-hidden flex justify-center">
+                    <div class="absolute top-6 inset-x-0 border-t border-dashed border-sky-400/60 text-[8px] text-sky-300 pl-1">Permukaan Air</div>
+                    <div id="demoObjectBox" class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 border border-white/60 shadow-lg flex items-center justify-center text-[9px] font-bold text-slate-950 transition-all duration-500" style="margin-top: 14px;">
+                      0.60
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-[10px] text-slate-400 text-center">
+                Dibuat dengan fitur <strong>Canvas</strong>: Kuis Kustom, Website HTML, Infografis &amp; Simulasi Interaktif.
+              </div>
+            </div>
+          `;
+
+        case "notebook-analogy":
+          return `
+            <div class="visual-box-dark p-5 rounded-3xl bg-slate-900/90 border border-teal-500/30 h-full flex flex-col justify-center space-y-3">
+              <div class="p-3 rounded-2xl bg-slate-800/70 border border-slate-700 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-300 flex items-center justify-center text-lg shrink-0">
+                  <i class="fa-solid fa-globe"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-white">Gemini Standar = Perpustakaan Dunia</div>
+                  <div class="text-[11px] text-slate-400">Menjelajahi informasi luas dari internet terbuka.</div>
+                </div>
+              </div>
+              <div class="p-3.5 rounded-2xl bg-gradient-to-r from-teal-950/80 to-emerald-950/60 border border-teal-400/40 flex items-center gap-3 shadow-lg">
+                <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-300 flex items-center justify-center text-lg shrink-0 pulse-soft">
+                  <i class="fa-solid fa-headphones-simple"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-teal-200">Audio Overview Gemini Notebook</div>
+                  <div class="text-[11px] text-slate-200">Diskusi suara dari dokumen unggahan Anda yang <strong>BISA DIUNDUH (Downloaded)</strong> untuk pemakaian offline!</div>
+                </div>
+              </div>
+            </div>
+          `;
+
+        case "clock-scene":
+          return `
+            <div class="visual-box-dark flex flex-col items-center justify-center p-6 rounded-3xl bg-gradient-to-br from-indigo-950/60 via-slate-900 to-slate-900 border border-indigo-500/30 h-full min-h-[250px] text-center">
+              <div class="w-16 h-16 rounded-full bg-indigo-500/20 border-2 border-indigo-400 flex items-center justify-center text-indigo-300 text-2xl float-slow">
+                <i class="fa-regular fa-clock"></i>
+              </div>
+              <div class="mt-3 text-4xl font-black text-white tracking-tight">${slide.clockTime || "08.00"}</div>
+              <div class="mt-1 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold">
+                ${slide.sceneMood || "Transformasi Harian Guru"}
+              </div>
+            </div>
+          `;
+
+        default:
+          return `
+            <div class="visual-box-dark flex flex-col items-center justify-center p-6 rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/25 h-full min-h-[250px] text-center">
+              <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-blue-600/30 via-indigo-500/30 to-purple-500/30 border border-indigo-400/40 flex items-center justify-center text-3xl text-indigo-300 float-slow shadow-xl">
+                <i class="fa-solid ${slide.highlights && slide.highlights[0] ? slide.highlights[0].icon : 'fa-wand-magic-sparkles'}"></i>
+              </div>
+              <h4 class="mt-4 text-sm font-bold text-white">${slide.module}</h4>
+              <p class="text-xs text-indigo-300 mt-1">${slide.timeTag}</p>
+              <div class="mt-4 flex items-center gap-1.5 text-[11px] text-emerald-300 bg-emerald-500/15 px-3 py-1 rounded-full border border-emerald-500/30 font-semibold">
+                <i class="fa-solid fa-check-circle"></i> Materi Utuh &amp; Bebas Miskonsepsi
+              </div>
+            </div>
+          `;
+      }
+    }
+
+    function updateDensityDemo() {
+      const massEl = document.getElementById('demoMassSlider');
+      const volEl = document.getElementById('demoVolSlider');
+      if (!massEl || !volEl) return;
+
+      const mass = parseFloat(massEl.value);
+      const vol = parseFloat(volEl.value);
+      const density = mass / vol;
+
+      document.getElementById('demoMassLabel').textContent = `${mass} g`;
+      document.getElementById('demoVolLabel').textContent = `${vol} ml`;
+      document.getElementById('demoDensityValue').textContent = `${density.toFixed(2)} g/ml`;
+
+      const statusEl = document.getElementById('demoFloatStatus');
+      const boxEl = document.getElementById('demoObjectBox');
+      boxEl.textContent = density.toFixed(2);
+
+      if (density < 0.98) {
+        statusEl.textContent = "TERAPUNG (Massa Jenis < Air)";
+        statusEl.className = "text-emerald-500 dark:text-emerald-400 font-bold";
+        boxEl.style.marginTop = "12px";
+      } else if (density <= 1.05) {
+        statusEl.textContent = "MELAYANG (Massa Jenis ≈ Air)";
+        statusEl.className = "text-amber-500 dark:text-amber-300 font-bold";
+        boxEl.style.marginTop = "42px";
+      } else {
+        statusEl.textContent = "TENGGELAM (Massa Jenis > Air)";
+        statusEl.className = "text-rose-500 dark:text-rose-400 font-bold";
+        boxEl.style.marginTop = "76px";
+      }
+    }
+
+    function renderSlide(index) {
+      const slide = slidesData[index];
+      const stage = document.getElementById('slideStage');
+
+      document.getElementById('headerModuleBadge').textContent = slide.module;
+      document.getElementById('slideCounterBadge').textContent = `${index + 1} / ${slidesData.length}`;
+      const progressPct = ((index + 1) / slidesData.length) * 100;
+      document.getElementById('slideProgressBar').style.width = `${progressPct}%`;
+
+      document.getElementById('btnPrevSlide').disabled = index === 0;
+      document.getElementById('btnNextSlide').disabled = index === slidesData.length - 1;
+
+      let mainBodyHTML = '';
+
+      if (slide.visualType === 'feature-4grid' || slide.visualType === 'canvas-density-lab') {
+        const fg = slide.featureGrid;
+        mainBodyHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+            <div class="glass-card rounded-2xl p-3.5 border-l-4 border-l-blue-500">
+              <div class="text-xs font-bold text-blue-600 dark:text-blue-300 uppercase flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-info"></i> 1. Penjelasan Fitur
+              </div>
+              <p class="text-xs sm:text-sm theme-text-secondary mt-1 leading-relaxed">${fg.penjelasan}</p>
+            </div>
+            <div class="glass-card rounded-2xl p-3.5 border-l-4 border-l-emerald-500">
+              <div class="text-xs font-bold text-emerald-600 dark:text-emerald-300 uppercase flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-check"></i> 2. Apa yang BISA Dilakukan
+              </div>
+              <p class="text-xs sm:text-sm theme-text-secondary mt-1 leading-relaxed">${fg.bisa}</p>
+            </div>
+            <div class="glass-card rounded-2xl p-3.5 border-l-4 border-l-rose-500">
+              <div class="text-xs font-bold text-rose-600 dark:text-rose-300 uppercase flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-xmark"></i> 3. Batas Fitur (Tidak Mungkin Dilakukan)
+              </div>
+              <p class="text-xs sm:text-sm theme-text-secondary mt-1 leading-relaxed">${fg.tidakBisa}</p>
+            </div>
+            <div class="glass-card rounded-2xl p-3.5 border-l-4 border-l-purple-500">
+              <div class="text-xs font-bold text-purple-600 dark:text-purple-300 uppercase flex items-center gap-1.5">
+                <i class="fa-solid fa-chalkboard-user"></i> 4. Peran Pendidik &amp; Cara Menggunakan
+              </div>
+              <p class="text-xs sm:text-sm theme-text-secondary mt-1 leading-relaxed">${fg.caraPakai}</p>
+            </div>
+          </div>
+        `;
+      } else if (slide.highlights) {
+        mainBodyHTML = `
+          <div class="space-y-3 mt-4">
+            ${slide.highlights.map(item => `
+              <div class="glass-card rounded-2xl p-3.5 flex items-start gap-3.5">
+                <div class="w-10 h-10 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-600 dark:text-indigo-300 shrink-0 mt-0.5">
+                  <i class="fa-solid ${item.icon}"></i>
+                </div>
+                <div>
+                  <h3 class="text-xs sm:text-sm font-bold theme-text-primary">${item.title}</h3>
+                  <p class="text-xs sm:text-sm theme-text-secondary mt-0.5 leading-relaxed">${item.desc}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      stage.innerHTML = `
+        <div class="slide-animate flex-1 flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div class="flex items-center gap-2">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30">
+                  Slide ${slide.id} / ${slidesData.length}
+                </span>
+                <span class="text-xs font-semibold text-sky-600 dark:text-sky-400">${slide.timeTag}</span>
+              </div>
+              ${slide.featureName ? `
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                  <i class="fa-solid fa-cube mr-1"></i> ${slide.featureName}
+                </span>
+              ` : ''}
+            </div>
+
+            <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold theme-text-primary tracking-tight leading-snug">
+              ${slide.title}
+            </h2>
+            <p class="text-xs sm:text-sm theme-text-muted mt-1">${slide.subtitle}</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 my-4 items-stretch">
+            <div class="lg:col-span-7 flex flex-col justify-between">
+              <div class="analogy-box p-3.5 rounded-2xl border border-amber-500/30 flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-300 flex items-center justify-center shrink-0 mt-0.5">
+                  <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div class="text-xs sm:text-sm leading-relaxed">
+                  <strong class="analogy-title">Analogi &amp; Inti Pemahaman:</strong> ${slide.analogy}
+                </div>
+              </div>
+
+              ${mainBodyHTML}
+            </div>
+
+            <div class="lg:col-span-5 flex flex-col">
+              ${getVisualIllustrationHTML(slide)}
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-slate-500/20 flex flex-wrap items-center justify-between text-[11px] theme-text-muted gap-2">
+            <span><i class="fa-solid fa-chalkboard-user text-indigo-500 mr-1"></i> Pemateri: <strong>Iwan Sutiawan (SDN 1 Sukahaji)</strong> &amp; Asisten AI</span>
+            <span>Materi Gemini Academy — Heris Apriadi, M.Pd. (SDN 3 Sukahurip)</span>
+          </div>
+        </div>
+      `;
+
+      sentenceQueue = splitIntoSentences(slide.narration);
+      renderTeleprompter(sentenceQueue, -1);
+    }
+
+    function toggleSlideDrawer() {
+      const modal = document.getElementById('slideDrawerModal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        renderDrawerItems('ALL');
+      }
+    }
+
+    function filterDrawer(moduleFilter) {
+      renderDrawerItems(moduleFilter);
+    }
+
+    function renderDrawerItems(moduleFilter) {
+      const grid = document.getElementById('slideDrawerGrid');
+      const filtered = moduleFilter === 'ALL'
+        ? slidesData
+        : slidesData.filter(s => s.module.includes(moduleFilter));
+
+      grid.innerHTML = filtered.map(slide => {
+        const isCurrent = slide.id - 1 === currentSlideIndex;
+        return `
+          <button onclick="goToSlide(${slide.id - 1})" class="text-left p-3.5 rounded-2xl border transition flex flex-col justify-between ${
+            isCurrent
+              ? 'bg-indigo-600/25 border-indigo-500 shadow-lg'
+              : 'glass-card hover:border-indigo-400'
+          }">
+            <div>
+              <div class="flex items-center justify-between text-[11px] font-bold">
+                <span class="text-indigo-600 dark:text-indigo-300">Slide ${slide.id}</span>
+                <span class="px-2 py-0.5 rounded theme-bg-subtle theme-text-secondary border">${slide.module}</span>
+              </div>
+              <div class="text-xs font-bold theme-text-primary mt-1.5 line-clamp-2">${slide.title}</div>
+            </div>
+            <div class="text-[10px] theme-text-muted mt-2 truncate">${slide.timeTag}</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function toggleVoiceModal() {
+      document.getElementById('voiceModal').classList.toggle('hidden');
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        document.getElementById('fullscreenIcon').className = "fa-solid fa-compress";
+      } else {
+        document.exitFullscreen().catch(() => {});
+        document.getElementById('fullscreenIcon').className = "fa-solid fa-expand";
+      }
+    }
+
+    function setupKeyboardShortcuts() {
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+        if (e.key === 'ArrowRight') {
+          nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+          prevSlide();
+        } else if (e.key === ' ') {
+          e.preventDefault();
+          toggleNarration();
+        }
+      });
+    }
+  </script>
+</body>
+</html>
