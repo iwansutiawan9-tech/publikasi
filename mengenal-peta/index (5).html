@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Ajar Interaktif: Mengenal Peta & Pemetaan</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    
+    <style>
+        :root {
+            --primary: #2563EB;
+            --primary-soft: #EFF6FF;
+            --primary-border: #BFDBFE;
+            --emerald: #059669;
+            --emerald-soft: #ECFDF5;
+            --amber: #D97706;
+            --amber-soft: #FFFBEB;
+            --purple: #7C3AED;
+            --purple-soft: #F5F3FF;
+            --rose: #E11D48;
+            --slate-900: #0F172A;
+            --slate-700: #334155;
+            --slate-500: #64748B;
+            --slate-200: #E2E8F0;
+            --bg-body: #F1F5F9;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--slate-700);
+            line-height: 1.65;
+            padding-bottom: 60px;
+        }
+
+        /* HEADER & NAVIGASI */
+        header {
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 60%, #3B82F6 100%);
+            color: white;
+            padding: 48px 24px 64px;
+            text-align: center;
+            position: relative;
+        }
+
+        .badge-header {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(6px);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        header h1 {
+            font-size: 2.35rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 1.05rem;
+            opacity: 0.92;
+        }
+
+        .nav-bar {
+            max-width: 1080px;
+            margin: -28px auto 32px;
+            background: white;
+            border-radius: 14px;
+            padding: 10px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+            position: sticky;
+            top: 12px;
+            z-index: 1000;
+            border: 1px solid var(--slate-200);
+        }
+
+        .nav-btn {
+            text-decoration: none;
+            color: var(--slate-700);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* SECTION CARD */
+        .section-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+            border: 1px solid var(--slate-200);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--primary-soft);
+        }
+
+        .section-num {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            color: var(--slate-900);
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+
+        h3.sub-title {
+            color: var(--slate-900);
+            font-size: 1.2rem;
+            margin: 26px 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* GRID & BOXES */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-top: 14px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 14px;
+        }
+
+        .info-card {
+            background: var(--primary-soft);
+            border: 1px solid var(--primary-border);
+            border-left: 5px solid var(--primary);
+            padding: 18px 20px;
+            border-radius: var(--radius-md);
+        }
+
+        .info-card h4 {
+            color: var(--slate-900);
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+        }
+
+        .info-card p, .info-card ul {
+            font-size: 0.94rem;
+            color: var(--slate-700);
+        }
+
+        .info-card ul {
+            padding-left: 18px;
+            margin-top: 6px;
+        }
+
+        /* TABEL SKALA */
+        .table-wrap {
+            overflow-x: auto;
+            margin-top: 12px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--slate-200);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.93rem;
+        }
+
+        th {
+            background: #F8FAFC;
+            color: var(--slate-900);
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 700;
+            border-bottom: 2px solid var(--slate-200);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--slate-200);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* PETA TEMATIK (BAGIAN 2) */
+        .thematic-map-box {
+            position: relative;
+            width: 100%;
+            height: 520px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 2px solid #CBD5E1;
+            margin-top: 12px;
+            background: #E6F0EA;
+        }
+
+        .map-Status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #F8FAFC;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--slate-200);
+            margin-bottom: 10px;
+            font-size: 0.88rem;
+        }
+
+        .btn-action {
+            background: white;
+            border: 1px solid #CBD5E1;
+            color: var(--slate-700);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-action:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* GAYA PIN & LABEL SEPERTI GOOGLE SEARCH */
+        .gmap-pin-sd {
+            width: 22px;
+            height: 22px;
+            background: #EA4335;
+            border: 2.5px solid #FFFFFF;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gmap-pin-sd::after {
+            content: "";
+            width: 7px;
+            height: 7px;
+            background: #FFFFFF;
+            border-radius: 50%;
+        }
+
+        .gmap-pin-wisata {
+            width: 24px;
+            height: 24px;
+            background: #059669;
+            border: 2.5px solid #FFFFFF;
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .leaflet-tooltip.gmap-label {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            pointer-events: none;
+        }
+
+        .leaflet-tooltip.gmap-label::before {
+            display: none;
+        }
+
+        .gmap-label-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #1E293B;
+            line-height: 1.15;
+            text-shadow:
+                -1.5px -1.5px 0 #FFFFFF,
+                 1.5px -1.5px 0 #FFFFFF,
+                -1.5px  1.5px 0 #FFFFFF,
+                 1.5px  1.5px 0 #FFFFFF,
+                 0px    0px   4px #FFFFFF;
+        }
+
+        .gmap-label-sub {
+            font-size: 9.8px;
+            font-weight: 500;
+            color: #475569;
+            line-height: 1.15;
+            text-shadow:
+                -1.2px -1.2px 0 #FFFFFF,
+                 1.2px -1.2px 0 #FFFFFF,
+                -1.2px  1.2px 0 #FFFFFF,
+                 1.2px  1.2px 0 #FFFFFF;
+        }
+
+        .kec-watermark {
+            font-size: 14px;
+            font-weight: 800;
+            color: #475569;
+            letter-spacing: 0.12em;
+            text-align: center;
+            opacity: 0.75;
+            text-shadow: -1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px 1.5px 0 #fff, 1.5px 1.5px 0 #fff;
+        }
+
+        /* =====================================================
+           BAGIAN 3: 10 KOMPONEN PETA INTERAKTIF (KAB. CIAMIS)
+           ===================================================== */
+        .parts-selector {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .part-btn {
+            background: #F8FAFC;
+            border: 1.5px solid var(--slate-200);
+            border-radius: 10px;
+            padding: 10px 10px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--slate-700);
+        }
+
+        .part-btn span.num {
+            background: #E2E8F0;
+            color: var(--slate-900);
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.78rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .part-btn:hover, .part-btn.active {
+            background: var(--primary-soft);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .part-btn.active span.num {
+            background: var(--primary);
+            color: white;
+        }
+
+        .part-detail-banner {
+            background: linear-gradient(90deg, #EFF6FF 0%, #F8FAFC 100%);
+            border: 1.5px solid var(--primary-border);
+            border-left: 6px solid var(--primary);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .part-detail-banner h4 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .part-detail-banner p {
+            font-size: 0.95rem;
+            color: var(--slate-700);
+        }
+
+        /* BINGKAI PETA CIAMIS (GARIS TEPI) */
+        .carto-frame {
+            position: relative;
+            width: 100%;
+            height: 570px;
+            background: #FFFFFF;
+            padding: 26px;
+            border: 4px solid #0F172A;
+            outline: 2px solid #0F172A;
+            outline-offset: -10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        #map-bagian-ciamis {
+            width: 100%;
+            height: 100%;
+            border: 1.5px solid #334155;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* EFEK HIGHLIGHT BERKEDIP SAAT BAGIAN PETA DIKLIK */
+        @keyframes pulse-highlight {
+            0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.8), 0 0 0 4px #E11D48; }
+            70% { box-shadow: 0 0 0 14px rgba(225, 29, 72, 0), 0 0 0 4px #E11D48; }
+            100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0), 0 0 0 4px #E11D48; }
+        }
+
+        .highlight-active {
+            animation: pulse-highlight 1.5s infinite !important;
+            border-color: #E11D48 !important;
+            z-index: 500 !important;
+        }
+
+        /* OVERLAY KOMPONEN DI ATAS PETA CIAMIS */
+        .carto-overlay {
+            position: absolute;
+            z-index: 400;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1.5px solid #334155;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .carto-overlay:hover {
+            border-color: var(--primary);
+        }
+
+        /* 1. Judul Peta */
+        .comp-judul {
+            top: 38px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 22px;
+            text-align: center;
+        }
+        .comp-judul h5 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: 0.05em;
+        }
+        .comp-judul span {
+            font-size: 0.75rem;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        /* 2. Skala Peta */
+        .comp-skala {
+            bottom: 38px;
+            left: 38px;
+            padding: 10px 14px;
+            font-size: 0.76rem;
+            min-width: 195px;
+        }
+        .scale-bar-graphic {
+            display: flex;
+            margin: 5px 0 3px;
+            border: 1px solid #0F172A;
+            height: 8px;
+            width: 140px;
+        }
+        .scale-bar-graphic div {
+            flex: 1;
+        }
+        .scale-bar-graphic div:nth-child(odd) { background: #0F172A; }
+        .scale-bar-graphic div:nth-child(even) { background: #FFFFFF; }
+
+        /* 3. Orientasi */
+        .comp-orientasi {
+            top: 38px;
+            right: 38px;
+            width: 68px;
+            height: 78px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+        }
+
+        /* 4. Legenda */
+        .comp-legenda {
+            bottom: 38px;
+            right: 38px;
+            padding: 10px 14px;
+            width: 215px;
+            font-size: 0.75rem;
+        }
+        .comp-legenda h6 {
+            font-size: 0.8rem;
+            font-weight: 800;
+            border-bottom: 1px solid #CBD5E1;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        /* 10. Peta Inset */
+        .comp-inset {
+            top: 38px;
+            left: 38px;
+            width: 175px;
+            height: 125px;
+            padding: 4px;
+            display: flex;
+            flex-direction: column;
+        }
+        .comp-inset-title {
+            font-size: 0.68rem;
+            font-weight: 800;
+            text-align: center;
+            background: #F1F5F9;
+            padding: 2px;
+            margin-bottom: 3px;
+            border-bottom: 1px solid #CBD5E1;
+        }
+        #map-inset-jawa {
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Label Derajat di Bingkai Peta (Garis Tepi & Astronomis) */
+        .frame-coord {
+            position: absolute;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #0F172A;
+            z-index: 410;
+            background: #FFFFFF;
+            padding: 0 4px;
+        }
+
+        /* LETTERING DEMO DI PETA CIAMIS */
+        .lettering-darat {
+            font-size: 13px;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-shadow: -1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px 1.5px 0 #fff, 1.5px 1.5px 0 #fff;
+            white-space: nowrap;
+        }
+
+        .lettering-air {
+            font-size: 12px;
+            font-style: italic;
+            font-weight: 700;
+            color: #0284C7;
+            text-shadow: -1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff, -1.5px 1.5px 0 #fff, 1.5px 1.5px 0 #fff;
+            white-space: nowrap;
+        }
+
+        /* =====================================================
+           BAGIAN 4: VISUALISASI LINTANG & BUJUR DESA SUKAHAJI
+           ===================================================== */
+        .coord-frame-wrapper {
+            position: relative;
+            padding: 34px 48px;
+            background: #1E293B;
+            border-radius: 16px;
+            margin-top: 16px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+        }
+
+        #map-sukahaji-astro {
+            width: 100%;
+            height: 460px;
+            border: 2px solid #94A3B8;
+            border-radius: 6px;
+            z-index: 1;
+        }
+
+        .edge-tick {
+            position: absolute;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 4px;
+            z-index: 20;
+            white-space: nowrap;
+        }
+
+        .tick-lintang {
+            background: #FFFBEB;
+            color: #B45309;
+            border: 1px solid #F59E0B;
+        }
+
+        .tick-bujur {
+            background: #F5F3FF;
+            color: #6D28D9;
+            border: 1px solid #8B5CF6;
+        }
+
+        .astro-badge-lintang {
+            background: #D97706 !important;
+            color: white !important;
+            border: 2px solid white !important;
+            font-weight: 700 !important;
+            font-size: 12px !important;
+            padding: 4px 10px !important;
+            border-radius: 6px !important;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.25) !important;
+        }
+
+        .astro-badge-bujur {
+            background: #7C3AED !important;
+            color: white !important;
+            border: 2px solid white !important;
+            font-weight: 700 !important;
+            font-size: 12px !important;
+            padding: 4px 10px !important;
+            border-radius: 6px !important;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.25) !important;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .parts-selector { grid-template-columns: repeat(2, 1fr); }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .section-card { padding: 22px; }
+            .comp-inset { width: 130px; height: 95px; }
+            .comp-legenda { width: 175px; }
+            .coord-frame-wrapper { padding: 28px 18px; }
+            .edge-tick { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="badge-header">MEDIA PEMBELAJARAN INTERAKTIF</div>
+        <h1>Mengenal Peta, Komponen, & Letak Astronomis</h1>
+        <p>Disusun Oleh: <b>Iwan Sutiawan, S.Pd.I., Gr.</b> &mdash; SD Negeri 1 Sukahaji, Kec. Cihaurbeuti</p>
+    </header>
+
+    <!-- NAVIGASI CEPAT -->
+    <nav class="nav-bar">
+        <a href="#materi-1" class="nav-btn">📘 1. Jenis-Jenis Peta</a>
+        <a href="#materi-2" class="nav-btn">📍 2. Contoh Peta Tematik</a>
+        <a href="#materi-3" class="nav-btn">🧭 3. 10 Bagian Peta (Interaktif)</a>
+        <a href="#materi-4" class="nav-btn">🌐 4. Garis Lintang & Bujur (Desa Sukahaji)</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- =========================================================
+             MATERI 1: MENGENAL JENIS-JENIS PETA
+             ========================================================= -->
+        <section id="materi-1" class="section-card">
+            <div class="section-header">
+                <div class="section-num">1</div>
+                <div>
+                    <h2>Mengenal Jenis-Jenis Peta</h2>
+                    <p style="font-size:0.92rem; color:var(--slate-500);">Pengertian serta pengelompokan peta berdasarkan isi, skala, dan bentuk fisiknya.</p>
+                </div>
+            </div>
+
+            <p>
+                <b>Peta</b> adalah gambaran sebagian atau seluruh permukaan bumi pada bidang datar yang diperkecil dengan menggunakan skala tertentu dan dilengkapi dengan simbol-simbol. Ilmu yang mempelajari pembuatan peta disebut <b>Kartografi</b>, sedangkan orang yang ahli membuat peta disebut <b>Kartografer</b>.
+            </p>
+
+            <h3 class="sub-title">A. Jenis Peta Berdasarkan Isinya</h3>
+            <div class="grid-2">
+                <div class="info-card">
+                    <h4>1. Peta Umum</h4>
+                    <p>Peta yang menggambarkan seluruh kenampakan yang ada di suatu wilayah secara umum, baik kenampakan alam (gunung, sungai, danau) maupun buatan manusia (jalan raya, permukiman, batas wilayah).</p>
+                    <ul>
+                        <li><b>Peta Topografi:</b> Menggambarkan relief/tinggi-rendah permukaan bumi dengan garis kontur.</li>
+                        <li><b>Peta Korografi:</b> Menggambarkan wilayah yang luas seperti provinsi atau negara dengan skala sedang/kecil.</li>
+                        <li><b>Peta Dunia:</b> Menggambarkan seluruh bagian permukaan bumi dalam satu bidang datar.</li>
+                    </ul>
+                </div>
+                <div class="info-card" style="background:var(--emerald-soft); border-color:#A7F3D0; border-left-color:var(--emerald);">
+                    <h4>2. Peta Khusus (Peta Tematik)</h4>
+                    <p>Peta yang <b>hanya menampilkan satu tema atau informasi khusus</b> saja dan meniadakan informasi lain yang tidak berkaitan agar pembaca fokus pada tema tersebut.</p>
+                    <ul>
+                        <li><b>Contoh 1:</b> Peta Sebaran Sekolah Dasar di Kecamatan Cihaurbeuti.</li>
+                        <li><b>Contoh 2:</b> Peta Sebaran Objek Wisata di Kabupaten Ciamis.</li>
+                        <li><b>Contoh Lain:</b> Peta Curah Hujan, Peta Kepadatan Penduduk, Peta Rawan Bencana.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="sub-title">B. Jenis Peta Berdasarkan Skalanya</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Jenis Peta</th>
+                            <th>Rentang Skala</th>
+                            <th>Cakupan Wilayah & Contoh Penggunaan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>1. Peta Kadaster (Sangat Besar)</b></td>
+                            <td>1 : 100 s.d. 1 : 5.000</td>
+                            <td>Wilayah sangat sempit & sangat detail. Contoh: Peta sertifikat tanah, denah desa.</td>
+                        </tr>
+                        <tr>
+                            <td><b>2. Peta Skala Besar</b></td>
+                            <td>1 : 5.000 s.d. 1 : 250.000</td>
+                            <td>Wilayah desa, kecamatan, atau kota. Contoh: Peta Kecamatan Cihaurbeuti.</td>
+                        </tr>
+                        <tr>
+                            <td><b>3. Peta Skala Sedang</b></td>
+                            <td>1 : 250.000 s.d. 1 : 500.000</td>
+                            <td>Wilayah kabupaten besar atau provinsi. Contoh: Peta Provinsi Jawa Barat.</td>
+                        </tr>
+                        <tr>
+                            <td><b>4. Peta Skala Kecil</b></td>
+                            <td>1 : 500.000 s.d. 1 : 1.000.000</td>
+                            <td>Wilayah negara atau kumpulan pulau. Contoh: Peta Negara Indonesia.</td>
+                        </tr>
+                        <tr>
+                            <td><b>5. Peta Geografis (Sangat Kecil)</b></td>
+                            <td>Lebih kecil dari 1 : 1.000.000</td>
+                            <td>Wilayah benua atau seluruh dunia. Contoh: Peta Benua Asia, Peta Dunia.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="sub-title">C. Jenis Peta Berdasarkan Bentuknya</h3>
+            <div class="grid-3">
+                <div class="info-card">
+                    <h4>1. Peta Datar (2 Dimensi)</h4>
+                    <p>Dibuat di atas bidang datar seperti kertas, kain, atau papan. Hanya memiliki ukuran panjang dan lebar.</p>
+                </div>
+                <div class="info-card">
+                    <h4>2. Peta Timbul / Relief (3D)</h4>
+                    <p>Dibuat sesuai bentuk permukaan bumi sebenarnya; gunung tampak menonjol dan lembah tampak cekung sehingga bisa diraba.</p>
+                </div>
+                <div class="info-card">
+                    <h4>3. Peta Digital</h4>
+                    <p>Ditampilkan melalui layar komputer atau gawai. Bersifat interaktif, dapat diperbesar (*zoom*), dan diperbarui dengan cepat.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             MATERI 2: CONTOH PETA TEMATIK EKSKLUSIF
+             ========================================================= -->
+        <section id="materi-2" class="section-card">
+            <div class="section-header">
+                <div class="section-num">2</div>
+                <div>
+                    <h2>Contoh Peta Tematik Interaktif</h2>
+                    <p style="font-size:0.92rem; color:var(--slate-500);">Peta di bawah ini meniadakan informasi umum yang tidak perlu dan memfokuskan tampilan khusus pada wilayah serta tema yang dipilih.</p>
+                </div>
+            </div>
+
+            <!-- PETA 2A: SEBARAN SD KEC. CIHAURBEUTI -->
+            <h3 class="sub-title">A. Peta Sebaran Sekolah Dasar (SD) se-Kecamatan Cihaurbeuti</h3>
+            <div class="map-Status-bar">
+                <span>🎯 <b>Fokus Wilayah:</b> Hanya Kecamatan Cihaurbeuti &mdash; Informasi selain sebaran SD ditiadakan.</span>
+                <div>
+                    <button class="btn-action" onclick="resetViewCihaurbeuti()">Pusatkan Peta</button>
+                    <button class="btn-action" onclick="toggleMaskCihaurbeuti()">Ubah Ketebalan Masking Luar</button>
+                </div>
+            </div>
+            <div id="map-sd-cihaurbeuti" class="thematic-map-box"></div>
+
+            <!-- PETA 2B: SEBARAN OBJEK WISATA KAB. CIAMIS -->
+            <h3 class="sub-title" style="margin-top:38px;">B. Peta Sebaran Objek Wisata di Kabupaten Ciamis</h3>
+            <div class="map-Status-bar">
+                <span>🌴 <b>Fokus Wilayah:</b> Hanya Kabupaten Ciamis &mdash; Informasi selain objek wisata ditiadakan.</span>
+                <div>
+                    <button class="btn-action" onclick="resetViewWisataCiamis()">Pusatkan Peta</button>
+                    <button class="btn-action" onclick="toggleMaskWisataCiamis()">Ubah Ketebalan Masking Luar</button>
+                </div>
+            </div>
+            <div id="map-wisata-ciamis" class="thematic-map-box"></div>
+        </section>
+
+        <!-- =========================================================
+             MATERI 3: 10 BAGIAN-BAGIAN PETA INTERAKTIF (PETA KAB. CIAMIS)
+             ========================================================= -->
+        <section id="materi-3" class="section-card">
+            <div class="section-header">
+                <div class="section-num">3</div>
+                <div>
+                    <h2>Mengenal 10 Bagian-Bagian Peta Beserta Fungsinya</h2>
+                    <p style="font-size:0.92rem; color:var(--slate-500);">Klik tombol nomor 1 s.d. 10 di bawah ini (atau klik langsung elemen pada Peta Kabupaten Ciamis) untuk melihat letak dan fungsinya!</p>
+                </div>
+            </div>
+
+            <!-- TOMBOL PEMILIH 10 BAGIAN PETA -->
+            <div class="parts-selector" id="parts-buttons">
+                <button class="part-btn active" onclick="selectMapPart(1)"><span class="num">1</span> Judul Peta</button>
+                <button class="part-btn" onclick="selectMapPart(2)"><span class="num">2</span> Skala Peta</button>
+                <button class="part-btn" onclick="selectMapPart(3)"><span class="num">3</span> Orientasi</button>
+                <button class="part-btn" onclick="selectMapPart(4)"><span class="num">4</span> Legenda</button>
+                <button class="part-btn" onclick="selectMapPart(5)"><span class="num">5</span> Simbol Peta</button>
+                <button class="part-btn" onclick="selectMapPart(6)"><span class="num">6</span> Warna Peta</button>
+                <button class="part-btn" onclick="selectMapPart(7)"><span class="num">7</span> Garis Tepi</button>
+                <button class="part-btn" onclick="selectMapPart(8)"><span class="num">8</span> Garis Astronomis</button>
+                <button class="part-btn" onclick="selectMapPart(9)"><span class="num">9</span> Lettering</button>
+                <button class="part-btn" onclick="selectMapPart(10)"><span class="num">10</span> Peta Inset</button>
+            </div>
+
+            <!-- KOTAK PENJELASAN DINAMIS -->
+            <div class="part-detail-banner" id="part-info-box">
+                <div>
+                    <h4 id="part-title">1. Judul Peta</h4>
+                    <p id="part-desc">Menunjukkan jenis atau isi utama peta (misalnya: Peta Wilayah Kabupaten Ciamis), biasanya diletakkan di bagian atas tengah dengan huruf kapital tegas.</p>
+                </div>
+                <button class="btn-action" onclick="showAllPartsOverview()" style="flex-shrink:0;">Tampilkan Ringkasan Semua</button>
+            </div>
+
+            <!-- KANVAS PETA KABUPATEN CIAMIS DENGAN 10 KOMPONEN LENGKAP -->
+            <div class="carto-frame" id="comp-7-garistepi" onclick="if(event.target === this) selectMapPart(7)">
+                
+                <!-- Label Angka Koordinat di Garis Tepi (Bagian 7 & 8) -->
+                <span class="frame-coord" style="top:4px; left:22%;">108°15' BT</span>
+                <span class="frame-coord" style="top:4px; left:52%;">108°25' BT</span>
+                <span class="frame-coord" style="top:4px; left:80%;">108°35' BT</span>
+                <span class="frame-coord" style="bottom:4px; left:22%;">108°15' BT</span>
+                <span class="frame-coord" style="bottom:4px; left:52%;">108°25' BT</span>
+                <span class="frame-coord" style="bottom:4px; left:80%;">108°35' BT</span>
+                <span class="frame-coord" style="left:2px; top:25%;">7°10' LS</span>
+                <span class="frame-coord" style="left:2px; top:52%;">7°20' LS</span>
+                <span class="frame-coord" style="left:2px; top:78%;">7°30' LS</span>
+
+                <!-- 1. JUDUL PETA -->
+                <div class="carto-overlay comp-judul highlight-active" id="comp-1-judul" onclick="selectMapPart(1)">
+                    <h5>PETA WILAYAH KABUPATEN CIAMIS</h5>
+                    <span>PROVINSI JAWA BARAT</span>
+                </div>
+
+                <!-- 10. PETA INSET -->
+                <div class="carto-overlay comp-inset" id="comp-10-inset" onclick="selectMapPart(10)">
+                    <div class="comp-inset-title">PETA INSET (PULAU JAWA)</div>
+                    <div id="map-inset-jawa"></div>
+                </div>
+
+                <!-- 3. ORIENTASI (ARAH MATA ANGIN) -->
+                <div class="carto-overlay comp-orientasi" id="comp-3-orientasi" onclick="selectMapPart(3)" title="Klik untuk penjelasan Orientasi">
+                    <span style="font-size:0.75rem; font-weight:800; color:#E11D48; line-height:1;">U</span>
+                    <svg width="42" height="42" viewBox="0 0 64 64">
+                        <polygon points="32,4 40,32 32,26 24,32" fill="#E11D48"/>
+                        <polygon points="32,60 40,32 32,38 24,32" fill="#334155"/>
+                        <polygon points="4,32 32,24 26,32 32,40" fill="#94A3B8"/>
+                        <polygon points="60,32 32,24 38,32 32,40" fill="#94A3B8"/>
+                        <circle cx="32" cy="32" r="3" fill="#FFFFFF" stroke="#0F172A" stroke-width="1.5"/>
+                    </svg>
+                    <div style="display:flex; justify-content:space-between; width:100%; font-size:0.62rem; font-weight:700; padding:0 4px;">
+                        <span>B</span><span>S</span><span>T</span>
+                    </div>
+                </div>
+
+                <!-- 2. SKALA PETA -->
+                <div class="carto-overlay comp-skala" id="comp-2-skala" onclick="selectMapPart(2)">
+                    <div style="font-weight:800; color:#0F172A;">SKALA 1 : 250.000 <span style="font-weight:400; color:#64748B;">(Numerik)</span></div>
+                    <div class="scale-bar-graphic">
+                        <div></div><div></div><div></div><div></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; width:145px; font-size:0.66rem; font-weight:700;">
+                        <span>0</span><span>2.5</span><span>5</span><span>7.5</span><span>10 km</span>
+                    </div>
+                    <div style="font-size:0.68rem; color:#475569; margin-top:2px;"><b>Verbal:</b> 1 cm di peta = 2,5 km</div>
+                </div>
+
+                <!-- 4. LEGENDA -->
+                <div class="carto-overlay comp-legenda" id="comp-4-legenda" onclick="selectMapPart(4)">
+                    <h6>LEGENDA PETA</h6>
+                    <div class="legend-row"><span style="display:inline-block; width:12px; height:12px; background:#E11D48; border-radius:50%; border:2px solid #0F172A;"></span> Ibukota Kabupaten</div>
+                    <div class="legend-row"><span style="display:inline-block; width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; border-bottom:13px solid #B45309;"></span> Gunung (Gn. Sawal)</div>
+                    <div class="legend-row"><span style="display:inline-block; width:16px; height:3px; background:#0284C7;"></span> Aliran Sungai</div>
+                    <div class="legend-row"><span style="display:inline-block; width:16px; height:2px; border-top:2px dashed #0F172A;"></span> Batas Kabupaten</div>
+                    <div class="legend-row"><span style="display:inline-block; width:14px; height:10px; background:#22C55E; opacity:0.65; border:1px solid #15803D;"></span> Dataran Rendah (Hijau)</div>
+                    <div class="legend-row"><span style="display:inline-block; width:14px; height:10px; background:#D97706; opacity:0.65; border:1px solid #92400E;"></span> Pegunungan (Cokelat)</div>
+                    <div class="legend-row"><span style="display:inline-block; width:14px; height:10px; background:#38BDF8; opacity:0.85; border:1px solid #0369A1;"></span> Perairan / Danau (Biru)</div>
+                </div>
+
+                <!-- KANVAS UTAMA PETA BAGIAN CIAMIS -->
+                <div id="map-bagian-ciamis"></div>
+            </div>
+
+            <!-- DAFTAR LENGKAP 10 BAGIAN PETA (UNTUK BACAAN DETAIL / CETAK) -->
+            <div class="grid-2" style="margin-top:24px;">
+                <div class="info-card">
+                    <h4>1. Judul Peta & 2. Skala Peta</h4>
+                    <ul>
+                        <li><b>Judul Peta:</b> Menunjukkan jenis atau isi utama peta (misalnya, Peta Wilayah Kabupaten Ciamis), biasanya diletakkan di bagian atas tengah.</li>
+                        <li><b>Skala Peta:</b> Menunjukkan perbandingan jarak di peta dengan jarak sesungguhnya di lapangan (dapat berupa skala angka/numerik, skala garis, atau skala verbal).</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h4>3. Orientasi & 4. Legenda</h4>
+                    <ul>
+                        <li><b>Orientasi (Arah Mata Angin):</b> Berfungsi untuk menunjukkan arah utara (U), selatan (S), barat (B), dan timur (T) pada peta.</li>
+                        <li><b>Legenda:</b> Kotak keterangan yang berisi arti dari simbol-simbol dan warna yang digunakan dalam peta.</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h4>5. Simbol Peta & 6. Warna Peta</h4>
+                    <ul>
+                        <li><b>Simbol Peta:</b> Tanda atau gambar yang mewakili objek di permukaan bumi (bisa berupa simbol titik, simbol garis, atau simbol area).</li>
+                        <li><b>Warna Peta:</b> Digunakan untuk mempertegas atau membedakan objek (<b>biru</b> untuk perairan, <b>hijau</b> untuk dataran rendah/vegetasi, <b>cokelat</b> untuk pegunungan/relief).</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h4>7. Garis Tepi & 8. Garis Astronomis</h4>
+                    <ul>
+                        <li><b>Garis Tepi (Bingkai):</b> Garis di bagian pinggir peta yang membatasi wilayah gambar peta dan tempat penulisan angka koordinat.</li>
+                        <li><b>Garis Astronomis (Lintang & Bujur):</b> Garis khayal yang digunakan untuk menentukan posisi absolut suatu wilayah di permukaan bumi.</li>
+                    </ul>
+                </div>
+                <div class="info-card" style="grid-column: 1 / -1;">
+                    <h4>9. Lettering & 10. Peta Inset</h4>
+                    <ul>
+                        <li><b>Lettering:</b> Tata cara penulisan huruf atau angka pada peta untuk mempertegas nama objek (misalnya <b>HURUF TEGAK</b> untuk nama daratan/kota dan <i><span style="color:#0284C7;">huruf miring berwarna biru</span></i> untuk nama perairan/sungai).</li>
+                        <li><b>Peta Inset:</b> Peta sisipan berukuran lebih kecil yang disajikan untuk memperjelas posisi wilayah utama (Kabupaten Ciamis) terhadap daerah yang lebih luas di sekitarnya (Pulau Jawa).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             MATERI 4: GARIS LINTANG & GARIS BUJUR (DESA SUKAHAJI)
+             ========================================================= -->
+        <section id="materi-4" class="section-card">
+            <div class="section-header">
+                <div class="section-num">4</div>
+                <div>
+                    <h2>Mengenal Garis Lintang dan Garis Bujur pada Peta</h2>
+                    <p style="font-size:0.92rem; color:var(--slate-500);">Visualisasi langsung letak astronomis (pertemuan Garis Lintang dan Garis Bujur) di wilayah Desa Sukahaji, Kecamatan Cihaurbeuti.</p>
+                </div>
+            </div>
+
+            <div class="map-Status-bar">
+                <span>🎯 <b>Titik Koordinat Desa Sukahaji:</b> Lintang <code>7°17'29" LS (-7.2915°)</code> &amp; Bujur <code>108°12'16" BT (108.2045°)</code></span>
+                <div>
+                    <button class="btn-action" onclick="resetSukahajiAstro()">Kembali ke Titik Desa Sukahaji</button>
+                </div>
+            </div>
+            <p style="font-size:0.9rem; color:var(--slate-500); margin-bottom:6px;">
+                💡 <i>Tips Interaktif: Anda juga dapat <b>mengeklik titik mana saja</b> di dalam peta Desa Sukahaji di bawah ini untuk menggeser perpotongan Garis Lintang dan Garis Bujur secara langsung!</i>
+            </p>
+
+            <!-- BINGKAI KOORDINAT DESA SUKAHAJI -->
+            <div class="coord-frame-wrapper">
+                <!-- Label Angka Bujur (Atas & Bawah) -->
+                <span class="edge-tick tick-bujur" style="top:6px; left:22%;">108.1950° BT</span>
+                <span class="edge-tick tick-bujur" style="top:6px; left:48%; background:#7C3AED; color:white;">108.2045° BT (Sukahaji)</span>
+                <span class="edge-tick tick-bujur" style="top:6px; left:76%;">108.2150° BT</span>
+
+                <span class="edge-tick tick-bujur" style="bottom:6px; left:22%;">108.1950° BT</span>
+                <span class="edge-tick tick-bujur" style="bottom:6px; left:48%; background:#7C3AED; color:white;">108.2045° BT</span>
+                <span class="edge-tick tick-bujur" style="bottom:6px; left:76%;">108.2150° BT</span>
+
+                <!-- Label Angka Lintang (Kiri & Kanan) -->
+                <span class="edge-tick tick-lintang" style="left:6px; top:24%;">-7.2850° LS</span>
+                <span class="edge-tick tick-lintang" style="left:6px; top:50%; background:#D97706; color:white;">-7.2915° LS</span>
+                <span class="edge-tick tick-lintang" style="left:6px; top:76%;">-7.2980° LS</span>
+
+                <span class="edge-tick tick-lintang" style="right:6px; top:24%;">-7.2850° LS</span>
+                <span class="edge-tick tick-lintang" style="right:6px; top:50%; background:#D97706; color:white;">-7.2915° LS</span>
+                <span class="edge-tick tick-lintang" style="right:6px; top:76%;">-7.2980° LS</span>
+
+                <!-- Kanvas Peta Bersih Desa Sukahaji -->
+                <div id="map-sukahaji-astro"></div>
+            </div>
+
+            <div class="grid-2" style="margin-top:24px;">
+                <div class="info-card" style="background:var(--amber-soft); border-color:#FDE68A; border-left-color:var(--amber);">
+                    <h4 style="color:#B45309;">━ Garis Lintang (Latitude) &mdash; Garis Oranye Mendatar</h4>
+                    <ul>
+                        <li>Garis khayal yang melingkar secara <b>mendatar (horizontal)</b> dari arah Barat ke Timur.</li>
+                        <li>Garis Lintang 0° disebut <b>Garis Khatulistiwa (Ekuator)</b> yang membagi bumi menjadi Lintang Utara (LU) dan Lintang Selatan (LS).</li>
+                        <li><b>Desa Sukahaji</b> terletak di sebelah selatan khatulistiwa pada garis lintang <b>-7.2915° (7°17'29" LS)</b>.</li>
+                        <li><b>Fungsi Utama:</b> Menentukan pembagian zona iklim matahari (Indonesia beriklim tropis karena berada di antara 23,5° LU – 23,5° LS).</li>
+                    </ul>
+                </div>
+                <div class="info-card" style="background:var(--purple-soft); border-color:#DDD6FE; border-left-color:var(--purple);">
+                    <h4 style="color:#6D28D9;">┃ Garis Bujur (Longitude) &mdash; Garis Ungu Tegak</h4>
+                    <ul>
+                        <li>Garis khayal yang membujur secara <b>tegak lurus (vertikal)</b> menghubungkan Kutub Utara hingga Kutub Selatan.</li>
+                        <li>Garis Bujur 0° berada di <b>Greenwich, Inggris</b> yang membagi bumi menjadi Bujur Barat (BB) dan Bujur Timur (BT).</li>
+                        <li><b>Desa Sukahaji</b> terletak di belahan timur pada garis bujur <b>108.2045° (108°12'16" BT)</b>.</li>
+                        <li><b>Fungsi Utama:</b> Menentukan pembagian daerah waktu (Desa Sukahaji masuk zona <b>WIB / Waktu Indonesia Barat</b>).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- LEAFLET JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+    <script>
+        // =========================================================================
+        // KONFIGURASI BASEMAP BERSIH (TANPA API KEY & TANPA LABEL TOKO/JALAN KECIL)
+        // Menggunakan Esri Terrain Base + Esri World Shaded Relief (100% Gratis)
+        // =========================================================================
+        function addCleanTerrainBasemap(mapInstance) {
+            // Lapisan dasar permukaan bumi bersih tanpa teks
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 17,
+                attribution: 'Tiles &copy; Esri &mdash; Clean Terrain'
+            }).addTo(mapInstance);
+
+            // Lapisan relief lekukan pegunungan halus
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 17,
+                opacity: 0.32
+            }).addTo(mapInstance);
+        }
+
+        // Koordinat Dunia untuk membuat Masking Putih di luar wilayah yang dipilih
+        const worldOuterRing = [
+            [-90, -180], [90, -180], [90, 180], [-90, 180]
+        ];
+
+        // =========================================================================
+        // DATA POLIGON CADANGAN (FALLBACK) JIKA OFFLINE
+        // =========================================================================
+        // Poligon Wilayah Kecamatan Cihaurbeuti (Bentuk menyerupai peta Google Search)
+        const fallbackPolygonCihaurbeuti = [
+            [-7.198, 108.205], [-7.202, 108.215], [-7.199, 108.228], [-7.205, 108.242],
+            [-7.196, 108.258], [-7.208, 108.268], [-7.225, 108.266], [-7.242, 108.258],
+            [-7.256, 108.240], [-7.265, 108.224], [-7.278, 108.216], [-7.295, 108.214],
+            [-7.305, 108.205], [-7.296, 108.194], [-7.278, 108.192], [-7.262, 108.188],
+            [-7.245, 108.190], [-7.228, 108.192], [-7.210, 108.196]
+        ];
+
+        // Poligon Wilayah Kabupaten Ciamis
+        const fallbackPolygonCiamis = [
+            [-7.055, 108.250], [-7.045, 108.355], [-7.080, 108.450], [-7.120, 108.530],
+            [-7.190, 108.560], [-7.280, 108.545], [-7.360, 108.580], [-7.445, 108.660],
+            [-7.510, 108.640], [-7.495, 108.510], [-7.435, 108.420], [-7.390, 108.340],
+            [-7.355, 108.240], [-7.310, 108.190], [-7.240, 108.185], [-7.150, 108.205]
+        ];
+
+        // Poligon Wilayah Desa Sukahaji
+        const fallbackPolygonSukahaji = [
+            [-7.2835, 108.1980], [-7.2825, 108.2065], [-7.2865, 108.2125],
+            [-7.2945, 108.2130], [-7.3005, 108.2060], [-7.2985, 108.1975],
+            [-7.2910, 108.1950]
+        ];
+
+        // Fungsi pembantu untuk mengubah GeoJSON Nominatim menjadi koordinat Leaflet [lat, lng]
+        function extractLargestRingLatLngs(geojsonGeometry) {
+            if (!geojsonGeometry) return null;
+            if (geojsonGeometry.type === 'Polygon') {
+                return geojsonGeometry.coordinates[0].map(pt => [pt[1], pt[0]]);
+            } else if (geojsonGeometry.type === 'MultiPolygon') {
+                let longest = [];
+                geojsonGeometry.coordinates.forEach(poly => {
+                    if (poly[0].length > longest.length) longest = poly[0];
+                });
+                return longest.map(pt => [pt[1], pt[0]]);
+            }
+            return null;
+        }
+
+        // =========================================================================
+        // 1. PETA TEMATIK SEBARAN SD SE-KECAMATAN CIHAURBEUTI
+        // =========================================================================
+        const mapSDCihaurbeuti = L.map('map-sd-cihaurbeuti', {
+            center: [-7.2500, 108.2220],
+            zoom: 13
+        });
+        addCleanTerrainBasemap(mapSDCihaurbeuti);
+
+        let maskLayerCihaurbeuti = null;
+        let borderLayerCihaurbeuti = null;
+        let isMaskOpaqueCihaurbeuti = true;
+
+        function drawBoundaryCihaurbeuti(coordsLatLng) {
+            if (maskLayerCihaurbeuti) mapSDCihaurbeuti.removeLayer(maskLayerCihaurbeuti);
+            if (borderLayerCihaurbeuti) mapSDCihaurbeuti.removeLayer(borderLayerCihaurbeuti);
+
+            // Masking area di luar Kecamatan Cihaurbeuti agar hanya Cihaurbeuti yang menonjol
+            maskLayerCihaurbeuti = L.polygon([worldOuterRing, coordsLatLng], {
+                stroke: false,
+                fillColor: '#F1F5F9',
+                fillOpacity: 0.88,
+                interactive: false
+            }).addTo(mapSDCihaurbeuti);
+
+            // Garis Batas Tegas Kecamatan Cihaurbeuti (Persis gaya Google Search)
+            borderLayerCihaurbeuti = L.polygon(coordsLatLng, {
+                color: '#475569',
+                weight: 2.5,
+                fillColor: '#86EFAC',
+                fillOpacity: 0.18,
+                interactive: false
+            }).addTo(mapSDCihaurbeuti);
+        }
+
+        // Gambar poligon cadangan terlebih dahulu (instan), lalu perbarui dengan GeoJSON presisi OSM jika online
+        drawBoundaryCihaurbeuti(fallbackPolygonCihaurbeuti);
+        fetch('https://nominatim.openstreetmap.org/search?q=Cihaurbeuti,+Ciamis&format=geojson&polygon_geojson=1&limit=1')
+            .then(r => r.json())
+            .then(data => {
+                if (data.features && data.features.length > 0) {
+                    const ring = extractLargestRingLatLngs(data.features[0].geometry);
+                    if (ring && ring.length > 10) drawBoundaryCihaurbeuti(ring);
+                }
+            }).catch(() => {});
+
+        // Label Teks Wilayah "KEC. CIHAURBEUTI"
+        L.marker([-7.2810, 108.2045], {
+            icon: L.divIcon({
+                className: '',
+                html: '<div class="kec-watermark">KEC.<br>CIHAURBEUTI</div>',
+                iconSize: [120, 36],
+                iconAnchor: [60, 18]
+            }),
+            interactive: false
+        }).addTo(mapSDCihaurbeuti);
+
+        // Data Titik Koordinat Sekolah Dasar di Kecamatan Cihaurbeuti
+        const daftarSDCihaurbeuti = [
+            { nama: "SDN 1 SUKAHAJI", ket: "Sekolah Dasar Negeri di Sukahaji", lat: -7.2915, lng: 108.2045, dir: "bottom" },
+            { nama: "SDN 1 CIJULANG", ket: "Sekolah Dasar Negeri di Cijulang", lat: -7.2740, lng: 108.2032, dir: "top" },
+            { nama: "SDN 1 SUMBERJAYA", ket: "Sekolah Dasar Negeri di Sumberjaya", lat: -7.2565, lng: 108.2042, dir: "right" },
+            { nama: "SDN 2 Cihaurbeuti", ket: "Sekolah Dasar Negeri di Cihaurbeuti", lat: -7.2450, lng: 108.2078, dir: "bottom" },
+            { nama: "SDN 1 Cihaurbeuti", ket: "Sekolah Dasar Negeri di pusat Cihaurbeuti", lat: -7.2385, lng: 108.2068, dir: "left" },
+            { nama: "SDN 4 Cihaurbeuti, Ciamis", ket: "Sekolah Dasar Negeri Cihaurbeuti 4", lat: -7.2430, lng: 108.2275, dir: "right" },
+            { nama: "SDN Pasirtamiang 1", ket: "Sekolah Dasar Negeri di Pasirtamiang", lat: -7.2245, lng: 108.2175, dir: "right" },
+            { nama: "SDN 1 PADAMULYA", ket: "Sekolah Dasar Negeri di Padamulya", lat: -7.2135, lng: 108.2225, dir: "right" },
+            { nama: "SDN 1 Pamokolan", ket: "Sekolah Dasar Negeri di Pamokolan", lat: -7.2095, lng: 108.2072, dir: "left" },
+            { nama: "SDN 1 Sukamulya", ket: "Sekolah Dasar Negeri di Sukamulya", lat: -7.2630, lng: 108.1945, dir: "left" },
+            { nama: "SDN 3 Sukamaju", ket: "Sekolah Dasar Negeri di Sukamaju", lat: -7.2185, lng: 108.2380, dir: "right" }
+        ];
+
+        const iconPinSD = L.divIcon({
+            className: '',
+            html: '<div class="gmap-pin-sd"></div>',
+            iconSize: [22, 22],
+            iconAnchor: [11, 11]
+        });
+
+        daftarSDCihaurbeuti.forEach(sd => {
+            const m = L.marker([sd.lat, sd.lng], { icon: iconPinSD }).addTo(mapSDCihaurbeuti);
+            m.bindTooltip(
+                `<div class="gmap-label-title">${sd.nama}</div><div class="gmap-label-sub">${sd.ket}</div>`,
+                {
+                    permanent: true,
+                    direction: sd.dir,
+                    className: 'gmap-label',
+                    offset: sd.dir === 'right' ? [12, 0] : sd.dir === 'left' ? [-12, 0] : sd.dir === 'top' ? [0, -10] : [0, 12]
+                }
+            );
+            m.bindPopup(`<b>${sd.nama}</b><br>${sd.ket}<br><small>Koordinat: ${sd.lat}, ${sd.lng}</small>`);
+        });
+
+        function resetViewCihaurbeuti() {
+            mapSDCihaurbeuti.setView([-7.2500, 108.2220], 13);
+        }
+
+        function toggleMaskCihaurbeuti() {
+            if (!maskLayerCihaurbeuti) return;
+            isMaskOpaqueCihaurbeuti = !isMaskOpaqueCihaurbeuti;
+            maskLayerCihaurbeuti.setStyle({ fillOpacity: isMaskOpaqueCihaurbeuti ? 0.92 : 0.45 });
+        }
+
+        // =========================================================================
+        // 2. PETA TEMATIK SEBARAN OBJEK WISATA KABUPATEN CIAMIS
+        // =========================================================================
+        const mapWisataCiamis = L.map('map-wisata-ciamis', {
+            center: [-7.2650, 108.3950],
+            zoom: 10
+        });
+        addCleanTerrainBasemap(mapWisataCiamis);
+
+        let maskLayerWisata = null;
+        let borderLayerWisata = null;
+        let isMaskOpaqueWisata = true;
+
+        function drawBoundaryWisataCiamis(coordsLatLng) {
+            if (maskLayerWisata) mapWisataCiamis.removeLayer(maskLayerWisata);
+            if (borderLayerWisata) mapWisataCiamis.removeLayer(borderLayerWisata);
+
+            maskLayerWisata = L.polygon([worldOuterRing, coordsLatLng], {
+                stroke: false,
+                fillColor: '#F1F5F9',
+                fillOpacity: 0.90,
+                interactive: false
+            }).addTo(mapWisataCiamis);
+
+            borderLayerWisata = L.polygon(coordsLatLng, {
+                color: '#047857',
+                weight: 2.5,
+                fillColor: '#6EE7B7',
+                fillOpacity: 0.16,
+                interactive: false
+            }).addTo(mapWisataCiamis);
+        }
+
+        drawBoundaryWisataCiamis(fallbackPolygonCiamis);
+
+        const daftarWisataCiamis = [
+            { nama: "Situ Lengkong Panjalu", ket: "Wisata Danau & Sejarah (Panjalu)", lat: -7.1292, lng: 108.2778, dir: "left" },
+            { nama: "Curug Tujuh Cibolang", ket: "Wisata Air Terjun (Panjalu)", lat: -7.1517, lng: 108.2575, dir: "left" },
+            { nama: "Astana Gede Kawali", ket: "Situs Peninggalan Kerajaan Galuh", lat: -7.1895, lng: 108.3615, dir: "right" },
+            { nama: "Situ Wangi Kawali", ket: "Wisata Alam Danau (Kawali)", lat: -7.1750, lng: 108.3780, dir: "top" },
+            { nama: "Puncak Bangku", ket: "Wisata Negeri di Atas Awan (Rancah)", lat: -7.1680, lng: 108.4850, dir: "right" },
+            { nama: "Kampung Adat Kuta", ket: "Wisata Budaya & Hutan Keramat (Tambaksari)", lat: -7.2450, lng: 108.5320, dir: "left" },
+            { nama: "Hutan Pinus Darmacaang", ket: "Wisata Alam Pegunungan (Cikoneng)", lat: -7.2690, lng: 108.2680, dir: "left" },
+            { nama: "Cadas Ngampar", ket: "Wisata Sungai Batu Alam (Sadananya)", lat: -7.2785, lng: 108.3280, dir: "right" },
+            { nama: "Alun-Alun Ciamis", ket: "Wisata Taman Pusat Kota Ciamis", lat: -7.3274, lng: 108.3524, dir: "bottom" },
+            { nama: "Situs Ciung Wanara", ket: "Wisata Sejarah Karangkamulyan", lat: -7.3450, lng: 108.4820, dir: "right" }
+        ];
+
+        const iconPinWisata = L.divIcon({
+            className: '',
+            html: '<div class="gmap-pin-wisata">★</div>',
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        });
+
+        daftarWisataCiamis.forEach(w => {
+            const m = L.marker([w.lat, w.lng], { icon: iconPinWisata }).addTo(mapWisataCiamis);
+            m.bindTooltip(
+                `<div class="gmap-label-title">${w.nama}</div><div class="gmap-label-sub">${w.ket}</div>`,
+                {
+                    permanent: true,
+                    direction: w.dir,
+                    className: 'gmap-label',
+                    offset: w.dir === 'right' ? [12, 0] : w.dir === 'left' ? [-12, 0] : w.dir === 'top' ? [0, -10] : [0, 12]
+                }
+            );
+            m.bindPopup(`<b>${w.nama}</b><br>${w.ket}`);
+        });
+
+        function resetViewWisataCiamis() {
+            mapWisataCiamis.setView([-7.2650, 108.3950], 10);
+        }
+
+        function toggleMaskWisataCiamis() {
+            if (!maskLayerWisata) return;
+            isMaskOpaqueWisata = !isMaskOpaqueWisata;
+            maskLayerWisata.setStyle({ fillOpacity: isMaskOpaqueWisata ? 0.90 : 0.40 });
+        }
+
+        // =========================================================================
+        // 3. SIMULASI 10 BAGIAN-BAGIAN PETA PADA PETA KABUPATEN CIAMIS
+        // =========================================================================
+        const mapBagianCiamis = L.map('map-bagian-ciamis', {
+            center: [-7.2650, 108.3850],
+            zoom: 10,
+            zoomControl: false
+        });
+        addCleanTerrainBasemap(mapBagianCiamis);
+
+        // Masking & Batas Wilayah Ciamis pada Peta Bagian-Bagian Peta
+        L.polygon([worldOuterRing, fallbackPolygonCiamis], {
+            stroke: false,
+            fillColor: '#FFFFFF',
+            fillOpacity: 0.85,
+            interactive: false
+        }).addTo(mapBagianCiamis);
+
+        const ciamisAdminBorder = L.polygon(fallbackPolygonCiamis, {
+            color: '#0F172A',
+            weight: 2.5,
+            dashArray: '8, 4',
+            fillColor: '#22C55E',
+            fillOpacity: 0.18
+        }).addTo(mapBagianCiamis);
+
+        // Fetch GeoJSON asli Kabupaten Ciamis dari Nominatim untuk Peta 2B & Peta 3
+        fetch('https://nominatim.openstreetmap.org/search?q=Kabupaten+Ciamis&format=geojson&polygon_geojson=1&limit=1')
+            .then(r => r.json())
+            .then(data => {
+                if (data.features && data.features.length > 0) {
+                    const ring = extractLargestRingLatLngs(data.features[0].geometry);
+                    if (ring && ring.length > 20) {
+                        drawBoundaryWisataCiamis(ring);
+                        ciamisAdminBorder.setLatLngs(ring);
+                    }
+                }
+            }).catch(() => {});
+
+        // --- KOMPONEN 6: WARNA PETA (Zona Pegunungan Cokelat, Dataran Rendah Hijau, Perairan Biru) ---
+        const groupWarnaPeta = L.layerGroup().addTo(mapBagianCiamis);
+        // Zona Pegunungan Gunung Sawal & Utara (Cokelat)
+        const polyPegunungan = L.polygon([
+            [-7.14, 108.21], [-7.12, 108.31], [-7.19, 108.34], [-7.25, 108.29], [-7.23, 108.20]
+        ], { color: '#92400E', weight: 1, fillColor: '#D97706', fillOpacity: 0.45 }).addTo(groupWarnaPeta);
+
+        // Zona Dataran Rendah Ciamis Selatan/Timur (Hijau)
+        const polyDataranRendah = L.polygon([
+            [-7.29, 108.30], [-7.26, 108.50], [-7.44, 108.60], [-7.38, 108.33]
+        ], { color: '#15803D', weight: 1, fillColor: '#22C55E', fillOpacity: 0.35 }).addTo(groupWarnaPeta);
+
+        // Zona Perairan Situ Lengkong (Biru)
+        const polyPerairan = L.circle([-7.1292, 108.2778], {
+            radius: 2200, color: '#0369A1', weight: 1.5, fillColor: '#38BDF8', fillOpacity: 0.8
+        }).addTo(groupWarnaPeta);
+
+        // --- KOMPONEN 5: SIMBOL PETA (Titik, Garis, Area) ---
+        const groupSimbolPeta = L.layerGroup().addTo(mapBagianCiamis);
+        // Simbol Titik: Ibukota Kabupaten Ciamis
+        const simbolIbukota = L.circleMarker([-7.3274, 108.3524], {
+            radius: 8, color: '#0F172A', weight: 2.5, fillColor: '#E11D48', fillOpacity: 1
+        }).addTo(groupSimbolPeta).bindPopup("<b>Simbol Titik:</b> Ibukota Kabupaten Ciamis");
+
+        // Simbol Titik: Gunung Sawal (Segitiga)
+        const simbolGunung = L.marker([-7.2150, 108.2650], {
+            icon: L.divIcon({
+                className: '',
+                html: '<div style="width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:18px solid #B45309;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.4));"></div>',
+                iconSize: [20, 18], iconAnchor: [10, 9]
+            })
+        }).addTo(groupSimbolPeta).bindPopup("<b>Simbol Titik:</b> Gunung Sawal (1.764 mdpl)");
+
+        // Simbol Garis: Aliran Sungai Citanduy
+        const simbolSungai = L.polyline([
+            [-7.210, 108.190], [-7.280, 108.220], [-7.345, 108.310], [-7.365, 108.450], [-7.450, 108.620]
+        ], { color: '#0284C7', weight: 3.5 }).addTo(groupSimbolPeta).bindPopup("<b>Simbol Garis:</b> Aliran Sungai Citanduy");
+
+        // --- KOMPONEN 8: GARIS ASTRONOMIS (Jaring Lintang & Bujur di Peta Ciamis) ---
+        const groupAstronomisCiamis = L.layerGroup().addTo(mapBagianCiamis);
+        const gridLinesCiamis = [
+            // Lintang
+            [[-7.166, 108.10], [-7.166, 108.70]],
+            [[-7.333, 108.10], [-7.333, 108.70]],
+            // Bujur
+            [[-7.00, 108.25], [-7.55, 108.25]],
+            [[-7.00, 108.416], [-7.55, 108.416]],
+            [[-7.00, 108.583], [-7.55, 108.583]]
+        ];
+        const astroPolylines = gridLinesCiamis.map(coords =>
+            L.polyline(coords, { color: '#64748B', weight: 1.2, dashArray: '4, 4', opacity: 0.75 }).addTo(groupAstronomisCiamis)
+        );
+
+        // --- KOMPONEN 9: LETTERING (Huruf Tegak Daratan & Huruf Miring Biru Perairan) ---
+        const labelDaratUtama = L.marker([-7.2650, 108.3850], {
+            icon: L.divIcon({
+                className: '',
+                html: '<div id="lettering-demo-1" class="lettering-darat">KABUPATEN CIAMIS</div>',
+                iconSize: [160, 24], iconAnchor: [80, 12]
+            })
+        }).addTo(mapBagianCiamis);
+
+        const labelAirUtama = L.marker([-7.3600, 108.3850], {
+            icon: L.divIcon({
+                className: '',
+                html: '<div id="lettering-demo-2" class="lettering-air">Sungai Citanduy</div>',
+                iconSize: [120, 20], iconAnchor: [60, 10]
+            })
+        }).addTo(mapBagianCiamis);
+
+        // --- KOMPONEN 10: PETA INSET (Posisi Kabupaten Ciamis di Pulau Jawa) ---
+        const mapInsetJawa = L.map('map-inset-jawa', {
+            center: [-7.15, 108.35],
+            zoom: 6,
+            zoomControl: false,
+            attributionControl: false,
+            dragging: false,
+            scrollWheelZoom: false
+        });
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}').addTo(mapInsetJawa);
+        // Kotak merah penanda lokasi Kabupaten Ciamis di Pulau Jawa
+        L.rectangle([[-7.05, 108.18], [-7.50, 108.65]], {
+            color: '#E11D48', weight: 2.5, fillColor: '#E11D48', fillOpacity: 0.35
+        }).addTo(mapInsetJawa);
+
+        // DATA PENJELASAN 10 KOMPONEN PETA
+        const data10BagianPeta = {
+            1: {
+                judul: "1. Judul Peta",
+                deskripsi: "Menunjukkan jenis atau isi utama peta (contoh: PETA WILAYAH KABUPATEN CIAMIS), diletakkan di bagian atas tengah agar pembaca langsung mengetahui identitas peta."
+            },
+            2: {
+                judul: "2. Skala Peta",
+                deskripsi: "Menunjukkan perbandingan jarak di peta dengan jarak sesungguhnya di lapangan. Ditampilkan dalam 3 bentuk sekaligus: Skala Angka (1 : 250.000), Skala Garis (batang 0–10 km), dan Skala Verbal (1 cm = 2,5 km)."
+            },
+            3: {
+                judul: "3. Orientasi (Arah Mata Angin)",
+                deskripsi: "Berfungsi untuk menunjukkan arah Utara (U), Selatan (S), Barat (B), dan Timur (T) pada peta. Jarum utama selalu menunjuk ke arah Utara di bagian atas."
+            },
+            4: {
+                judul: "4. Legenda",
+                deskripsi: "Kotak keterangan yang berisi arti dari seluruh simbol dan warna yang digunakan di dalam peta agar pembaca dapat memahami informasi peta dengan tepat."
+            },
+            5: {
+                judul: "5. Simbol Peta",
+                deskripsi: "Tanda atau gambar yang mewakili objek nyata di permukaan bumi: Simbol Titik (lingkaran merah Ibukota Ciamis & segitiga Gunung Sawal), Simbol Garis (aliran Sungai Citanduy), dan Simbol Area."
+            },
+            6: {
+                judul: "6. Warna Peta",
+                deskripsi: "Digunakan untuk mempertegas atau membedakan ketinggian dan objek di permukaan bumi: Biru untuk perairan (Situ Lengkong), Hijau untuk dataran rendah, dan Cokelat untuk pegunungan (lereng Gunung Sawal)."
+            },
+            7: {
+                judul: "7. Garis Tepi (Bingkai)",
+                deskripsi: "Garis rangkap di bagian pinggir luar peta yang membatasi wilayah gambar peta serta menjadi tempat penulisan angka derajat garis lintang dan garis bujur."
+            },
+            8: {
+                judul: "8. Garis Astronomis (Lintang & Bujur)",
+                deskripsi: "Jaring-jaring garis khayal mendatar (Lintang: 7°10' LS – 7°30' LS) dan tegak (Bujur: 108°15' BT – 108°35' BT) untuk menentukan posisi absolut wilayah Kabupaten Ciamis."
+            },
+            9: {
+                judul: "9. Lettering (Tata Penulisan Huruf)",
+                deskripsi: "Aturan penulisan teks pada peta: Nama wilayah daratan/administrasi ditulis dengan HURUF KAPITAL TEGAK (KABUPATEN CIAMIS), sedangkan nama perairan ditulis dengan huruf miring berwarna biru (Sungai Citanduy)."
+            },
+            10: {
+                judul: "10. Peta Inset",
+                deskripsi: "Peta sisipan berukuran lebih kecil di sudut kiri atas yang memperjelas posisi wilayah utama (kotak merah Kabupaten Ciamis) terhadap wilayah yang lebih luas (Pulau Jawa)."
+            }
+        };
+
+        function clearAllPartHighlights() {
+            document.querySelectorAll('.highlight-active').forEach(el => el.classList.remove('highlight-active'));
+            astroPolylines.forEach(line => line.setStyle({ color: '#64748B', weight: 1.2, dashArray: '4, 4' }));
+            polyPegunungan.setStyle({ weight: 1, fillOpacity: 0.45 });
+            polyDataranRendah.setStyle({ weight: 1, fillOpacity: 0.35 });
+            simbolSungai.setStyle({ weight: 3.5, color: '#0284C7' });
+        }
+
+        function selectMapPart(num) {
+            // Update tombol aktif
+            const buttons = document.querySelectorAll('#parts-buttons .part-btn');
+            buttons.forEach((b, idx) => b.classList.toggle('active', idx + 1 === num));
+
+            // Update teks penjelasan
+            document.getElementById('part-title').innerText = data10BagianPeta[num].judul;
+            document.getElementById('part-desc').innerText = data10BagianPeta[num].deskripsi;
+
+            clearAllPartHighlights();
+
+            // Sorot elemen yang dipilih pada peta Kabupaten Ciamis
+            if (num === 1) document.getElementById('comp-1-judul').classList.add('highlight-active');
+            if (num === 2) document.getElementById('comp-2-skala').classList.add('highlight-active');
+            if (num === 3) document.getElementById('comp-3-orientasi').classList.add('highlight-active');
+            if (num === 4) document.getElementById('comp-4-legenda').classList.add('highlight-active');
+            if (num === 5) {
+                simbolIbukota.openPopup();
+                simbolSungai.setStyle({ weight: 6, color: '#E11D48' });
+            }
+            if (num === 6) {
+                polyPegunungan.setStyle({ weight: 3, fillOpacity: 0.75 });
+                polyDataranRendah.setStyle({ weight: 3, fillOpacity: 0.65 });
+            }
+            if (num === 7) document.getElementById('comp-7-garistepi').classList.add('highlight-active');
+            if (num === 8) {
+                astroPolylines.forEach(line => line.setStyle({ color: '#E11D48', weight: 3, dashArray: null }));
+            }
+            if (num === 9) {
+                const l1 = document.getElementById('lettering-demo-1');
+                const l2 = document.getElementById('lettering-demo-2');
+                if (l1) l1.classList.add('highlight-active');
+                if (l2) l2.classList.add('highlight-active');
+            }
+            if (num === 10) document.getElementById('comp-10-inset').classList.add('highlight-active');
+        }
+
+        function showAllPartsOverview() {
+            clearAllPartHighlights();
+            document.getElementById('part-title').innerText = "Seluruh 10 Komponen Peta Aktif";
+            document.getElementById('part-desc').innerText = "Peta Kabupaten Ciamis di bawah menampilkan ke-10 komponen standar kartografi secara utuh. Klik salah satu nomor di atas untuk menyorot bagian tertentu.";
+        }
+
+        // =========================================================================
+        // 4. VISUALISASI GARIS LINTANG & GARIS BUJUR DESA SUKAHAJI
+        // =========================================================================
+        const sukahajiDefaultLat = -7.2915;
+        const sukahajiDefaultLng = 108.2045;
+
+        const mapSukahajiAstro = L.map('map-sukahaji-astro', {
+            center: [sukahajiDefaultLat, sukahajiDefaultLng],
+            zoom: 15
+        });
+        addCleanTerrainBasemap(mapSukahajiAstro);
+
+        // Gambar Batas Wilayah Desa Sukahaji
+        const borderDesaSukahaji = L.polygon(fallbackPolygonSukahaji, {
+            color: '#0F172A',
+            weight: 2.5,
+            dashArray: '6, 4',
+            fillColor: '#3B82F6',
+            fillOpacity: 0.12,
+            interactive: false
+        }).addTo(mapSukahajiAstro);
+
+        // Tarik GeoJSON Desa Sukahaji jika tersedia di OSM
+        fetch('https://nominatim.openstreetmap.org/search?q=Sukahaji,+Cihaurbeuti,+Ciamis&format=geojson&polygon_geojson=1&limit=1')
+            .then(r => r.json())
+            .then(data => {
+                if (data.features && data.features.length > 0) {
+                    const ring = extractLargestRingLatLngs(data.features[0].geometry);
+                    if (ring && ring.length > 6) borderDesaSukahaji.setLatLngs(ring);
+                }
+            }).catch(() => {});
+
+        // Jaring-jaring Grid Lintang & Bujur Pendukung di sekitar Desa Sukahaji
+        [-7.2800, -7.2850, -7.2980, -7.3030].forEach(lat => {
+            L.polyline([[lat, 108.1700], [lat, 108.2400]], {
+                color: '#F59E0B', weight: 1, dashArray: '5, 5', opacity: 0.6, interactive: false
+            }).addTo(mapSukahajiAstro);
+        });
+
+        [108.1900, 108.1950, 108.2150, 108.2200].forEach(lng => {
+            L.polyline([[-7.2650, lng], [-7.3150, lng]], {
+                color: '#8B5CF6', weight: 1, dashArray: '5, 5', opacity: 0.6, interactive: false
+            }).addTo(mapSukahajiAstro);
+        });
+
+        // GARIS LINTANG UTAMA DESA SUKAHAJI (Horizontal - Oranye)
+        const mainLintangLine = L.polyline([[sukahajiDefaultLat, 108.1600], [sukahajiDefaultLat, 108.2500]], {
+            color: '#D97706', weight: 4.5, opacity: 0.95
+        }).addTo(mapSukahajiAstro);
+
+        mainLintangLine.bindTooltip(`GARIS LINTANG: ${sukahajiDefaultLat.toFixed(4)}° LS`, {
+            permanent: true,
+            direction: 'top',
+            className: 'astro-badge-lintang',
+            offset: [-110, -6]
+        });
+
+        // GARIS BUJUR UTAMA DESA SUKAHAJI (Vertikal - Ungu)
+        const mainBujurLine = L.polyline([[-7.2600, sukahajiDefaultLng], [-7.3200, sukahajiDefaultLng]], {
+            color: '#7C3AED', weight: 4.5, opacity: 0.95
+        }).addTo(mapSukahajiAstro);
+
+        mainBujurLine.bindTooltip(`GARIS BUJUR: ${sukahajiDefaultLng.toFixed(4)}° BT`, {
+            permanent: true,
+            direction: 'right',
+            className: 'astro-badge-bujur',
+            offset: [8, -85]
+        });
+
+        // Titik Perpotongan (Desa Sukahaji / SDN 1 Sukahaji)
+        const markerAstroSukahaji = L.circleMarker([sukahajiDefaultLat, sukahajiDefaultLng], {
+            radius: 10,
+            color: '#FFFFFF',
+            weight: 3,
+            fillColor: '#E11D48',
+            fillOpacity: 1
+        }).addTo(mapSukahajiAstro);
+
+        markerAstroSukahaji.bindPopup(
+            `<b>Titik Letak Astronomis Desa Sukahaji</b><br>` +
+            `Garis Lintang: <b>${sukahajiDefaultLat.toFixed(4)}° LS</b><br>` +
+            `Garis Bujur: <b>${sukahajiDefaultLng.toFixed(4)}° BT</b>`
+        ).openPopup();
+
+        // Fitur Interaktif: Siswa bisa mengeklik titik mana pun di peta untuk melihat perubahan Lintang & Bujur
+        mapSukahajiAstro.on('click', function(e) {
+            const newLat = e.latlng.lat;
+            const newLng = e.latlng.lng;
+
+            mainLintangLine.setLatLngs([[newLat, 108.1600], [newLat, 108.2500]]);
+            mainLintangLine.setTooltipContent(`GARIS LINTANG: ${newLat.toFixed(4)}° LS`);
+
+            mainBujurLine.setLatLngs([[-7.2600, newLng], [-7.3200, newLng]]);
+            mainBujurLine.setTooltipContent(`GARIS BUJUR: ${newLng.toFixed(4)}° BT`);
+
+            markerAstroSukahaji.setLatLng([newLat, newLng]);
+            markerAstroSukahaji.setPopupContent(
+                `<b>Titik Koordinat Pilihan Anda</b><br>` +
+                `Garis Lintang: <b>${newLat.toFixed(4)}° LS</b><br>` +
+                `Garis Bujur: <b>${newLng.toFixed(4)}° BT</b>`
+            ).openPopup();
+        });
+
+        function resetSukahajiAstro() {
+            mapSukahajiAstro.setView([sukahajiDefaultLat, sukahajiDefaultLng], 15);
+            mainLintangLine.setLatLngs([[sukahajiDefaultLat, 108.1600], [sukahajiDefaultLat, 108.2500]]);
+            mainLintangLine.setTooltipContent(`GARIS LINTANG: ${sukahajiDefaultLat.toFixed(4)}° LS`);
+            mainBujurLine.setLatLngs([[-7.2600, sukahajiDefaultLng], [-7.3200, sukahajiDefaultLng]]);
+            mainBujurLine.setTooltipContent(`GARIS BUJUR: ${sukahajiDefaultLng.toFixed(4)}° BT`);
+            markerAstroSukahaji.setLatLng([sukahajiDefaultLat, sukahajiDefaultLng]);
+            markerAstroSukahaji.setPopupContent(
+                `<b>Titik Letak Astronomis Desa Sukahaji</b><br>` +
+                `Garis Lintang: <b>${sukahajiDefaultLat.toFixed(4)}° LS</b><br>` +
+                `Garis Bujur: <b>${sukahajiDefaultLng.toFixed(4)}° BT</b>`
+            ).openPopup();
+        }
+    </script>
+</body>
+</html>
